@@ -1,4 +1,20 @@
-# UnityCare Platform — Sovereign Hospital Management & Telemedicine Monorepo
+<p align="center">
+  <h1 align="center">UnityCare Platform</h1>
+  <p align="center"><strong>Sovereign Hospital Management & Telemedicine Monorepo</strong></p>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build">
+  <img src="https://img.shields.io/badge/license-proprietary-red" alt="License">
+  <img src="https://img.shields.io/github/issues/Elmahrosa/UnityCare-Platform" alt="Issues">
+  <img src="https://img.shields.io/github/stars/Elmahrosa/UnityCare-Platform" alt="Stars">
+  <img src="https://img.shields.io/badge/HIPAA-ready-blue" alt="HIPAA">
+  <img src="https://img.shields.io/badge/GDPR-compliant-blue" alt="GDPR">
+  <img src="https://img.shields.io/badge/Docker-ready-2496ED?logo=docker" alt="Docker">
+  <img src="https://img.shields.io/badge/Vercel-deploy-black?logo=vercel" alt="Vercel">
+</p>
+
+---
 
 **Elmahrosa International delivers sovereign healthcare IT operations with HIPAA/GDPR compliance, blockchain-backed audit trails, and deterministic AI safety. UnityCare provides end-to-end hospital management, telemedicine, pharmacy integration, emergency dispatch, and institutional deployment support — positioned as the compliance infrastructure layer for next-generation biomedical AI pipelines.**
 
@@ -104,6 +120,16 @@ docker-compose up --build
 
 ---
 
+<p align="center">
+  <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build">
+  <img src="https://img.shields.io/badge/license-proprietary-red" alt="License">
+  <img src="https://img.shields.io/github/issues/Elmahrosa/UnityCare-Platform" alt="Issues">
+  <img src="https://img.shields.io/badge/HIPAA-ready-blue" alt="HIPAA">
+  <img src="https://img.shields.io/badge/GDPR-compliant-blue" alt="GDPR">
+</p>
+
+---
+
 ## 📡 API Modules
 
 | Module | Endpoints | Source |
@@ -143,7 +169,13 @@ docker-compose up --build
 
 ---
 
-## 🏛️ Elmahrosa International
-
-Founder: Ayman Seif
-Institutional: https://uch.teosegypt.com
+<p align="center">
+  <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build">
+  <img src="https://img.shields.io/github/stars/Elmahrosa/UnityCare-Platform" alt="Stars">
+  <img src="https://img.shields.io/badge/Docker-ready-2496ED?logo=docker" alt="Docker">
+  <img src="https://img.shields.io/badge/Vercel-deploy-black?logo=vercel" alt="Vercel">
+  <br>
+  <strong>Elmahrosa International</strong> — Founder: Ayman Seif
+  <br>
+  <a href="https://uch.teosegypt.com">uch.teosegypt.com</a>
+</p>
