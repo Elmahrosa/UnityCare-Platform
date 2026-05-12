@@ -1,6 +1,8 @@
-# UnityCare Platform
+# UnityCare Platform — Sovereign Hospital Management & Telemedicine Monorepo
 
-**Hospital Management System — Telemedicine, Patient Management, Scheduling, Pharmacy, Emergency Dispatch**
+**Elmahrosa International delivers sovereign healthcare IT operations with HIPAA/GDPR compliance, blockchain-backed audit trails, and deterministic AI safety. UnityCare provides end-to-end hospital management, telemedicine, pharmacy integration, emergency dispatch, and institutional deployment support — positioned as the compliance infrastructure layer for next-generation biomedical AI pipelines.**
+
+Designed to integrate with AI drug discovery ecosystems, UnityCare enables de-identified patient data pipelines and clinical trial management support, ensuring biomedical breakthroughs are delivered safely, reproducibly, and with sovereign trust.
 
 Consolidated from 5 repositories: Unity-Care-Hospital-Sovereign, UCH-Backend, UCH-Buyer-Kit, salma-unity-care-hospital, U_C_H2.
 
