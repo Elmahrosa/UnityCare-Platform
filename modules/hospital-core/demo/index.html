@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UCH Sovereign — Hospital Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0D1117;
+  --bg2:       #161B22;
+  --bg3:       #1C2330;
+  --bg4:       #21262D;
+  --teal:      #0FA688;
+  --teal-dim:  rgba(15,166,136,0.1);
+  --teal-border:rgba(15,166,136,0.25);
+  --gold:      #C9A84C;
+  --gold-dim:  rgba(201,168,76,0.1);
+  --red:       #E05252;
+  --red-dim:   rgba(224,82,82,0.1);
+  --amber:     #D48C2A;
+  --amber-dim: rgba(212,140,42,0.1);
+  --blue:      #4A9ECC;
+  --blue-dim:  rgba(74,158,204,0.1);
+  --green:     #3DC97A;
+  --green-dim: rgba(61,201,122,0.1);
+  --white:     #E6EDF3;
+  --muted:     #7D8590;
+  --border:    rgba(255,255,255,0.08);
+  --border2:   rgba(255,255,255,0.04);
+  --shadow:    0 4px 24px rgba(0,0,0,0.4);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body {
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Lora',Georgia,serif;
+  font-size:14px;
+  line-height:1.6;
+  display:flex;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width:240px;
+  min-height:100vh;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+  position:fixed;
+  top:0;left:0;bottom:0;
+  z-index:50;
+  transition:transform 0.3s;
+}
+
+.sidebar-logo {
+  padding:24px 20px 20px;
+  border-bottom:1px solid var(--border);
+}
+
+.logo-mark {
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:18px;
+  color:var(--teal);
+  letter-spacing:0.04em;
+}
+
+.logo-sub {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;
+  letter-spacing:0.2em;
+  color:var(--muted);
+  text-transform:uppercase;
+  margin-top:2px;
+}
+
+.sidebar-user {
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.user-avatar {
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--teal-dim);
+  border:1px solid var(--teal-border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;
+  font-weight:800;font-size:13px;
+  color:var(--teal);
+  flex-shrink:0;
+}
+
+.user-name {
+  font-family:'Syne',sans-serif;
+  font-weight:600;font-size:13px;
+  color:var(--white);
+}
+
+.user-role {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.12em;
+  color:var(--muted);text-transform:uppercase;
+}
+
+.role-switcher {
+  padding:12px 20px;
+  border-bottom:1px solid var(--border);
+}
+
+.role-switcher-label {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.2em;
+  color:var(--muted);text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.role-btn {
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--muted);
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:all 0.2s;
+  width:100%;text-align:left;
+  background:none;
+  margin-bottom:4px;
+}
+.role-btn:hover { color:var(--white); background:var(--border2); }
+.role-btn.active { color:var(--teal); border-color:var(--teal-border); background:var(--teal-dim); }
+
+.role-dot {
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+}
+
+.nav-section {
+  padding:16px 20px 8px;
+}
+
+.nav-section-label {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.25em;
+  color:var(--muted);text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.nav-item {
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;
+  font-family:'Syne',sans-serif;
+  font-weight:500;font-size:13px;
+  color:var(--muted);
+  cursor:pointer;
+  border-left:2px solid transparent;
+  transition:all 0.2s;
+  border-radius:0 4px 4px 0;
+  margin-bottom:2px;
+}
+.nav-item:hover { color:var(--white); background:var(--border2); }
+.nav-item.active { color:var(--white); border-left-color:var(--teal); background:var(--teal-dim); }
+
+.nav-item .icon { font-size:15px; width:20px; text-align:center; flex-shrink:0; }
+
+.nav-badge {
+  margin-left:auto;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;
+  padding:1px 6px;
+  background:var(--red);
+  color:#fff;
+  border-radius:10px;
+}
+
+.sidebar-footer {
+  margin-top:auto;
+  padding:16px 20px;
+  border-top:1px solid var(--border);
+}
+
+.audit-live {
+  display:flex;align-items:center;gap:8px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.15em;
+  color:var(--green);text-transform:uppercase;
+}
+
+.pulse {
+  width:6px;height:6px;border-radius:50%;
+  background:var(--green);
+  animation:pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.4;transform:scale(0.8);}
+}
+
+/* ── MAIN ── */
+.main {
+  margin-left:240px;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  min-height:100vh;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  height:56px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 32px;
+  gap:16px;
+  position:sticky;top:0;z-index:40;
+}
+
+.page-title {
+  font-family:'Syne',sans-serif;
+  font-weight:700;font-size:16px;
+  color:var(--white);
+}
+
+.topbar-right {
+  margin-left:auto;
+  display:flex;align-items:center;gap:12px;
+}
+
+.topbar-date {
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.1em;
+  color:var(--muted);
+}
+
+.topbar-alert {
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:0.1em;
+  color:var(--red);
+  border:1px solid rgba(224,82,82,0.3);
+  padding:4px 10px;
+  background:var(--red-dim);
+  display:flex;align-items:center;gap:6px;
+}
+
+/* ── CONTENT ── */
+.content {
+  padding:28px 32px;
+  flex:1;
+}
+
+/* ── PAGES ── */
+.page { display:none; animation:fadeIn 0.3s ease both; }
+.page.active { display:block; }
+
+@keyframes fadeIn {
+  from{opacity:0;transform:translateY(6px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── KPI GRID ── */
+.kpi-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:28px;
+}
+
+.kpi {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  padding:20px 22px;
+  transition:border-color 0.2s;
+}
+.kpi:hover { border-color:var(--teal-border); }
+
+.kpi-label {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.25em;
+  color:var(--muted);text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.kpi-val {
+  font-family:'Syne',sans-serif;
+  font-weight:800;font-size:32px;
+  line-height:1;color:var(--white);
+}
+
+.kpi-val.teal  {color:var(--teal);}
+.kpi-val.red   {color:var(--red);}
+.kpi-val.amber {color:var(--amber);}
+.kpi-val.blue  {color:var(--blue);}
+.kpi-val.green {color:var(--green);}
+
+.kpi-sub {
+  font-size:12px;color:var(--muted);
+  margin-top:6px;font-style:italic;
+}
+
+/* ── GRID LAYOUTS ── */
+.grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px; }
+.grid-3 { display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:20px; }
+.grid-65-35 { display:grid;grid-template-columns:1.8fr 1fr;gap:20px;margin-bottom:20px; }
+.grid-35-65 { display:grid;grid-template-columns:1fr 1.8fr;gap:20px;margin-bottom:20px; }
+
+/* ── CARD ── */
+.card {
+  background:var(--bg2);
+  border:1px solid var(--border);
+  margin-bottom:20px;
+}
+
+.card-header {
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+}
+
+.card-title {
+  font-family:'Syne',sans-serif;
+  font-weight:700;font-size:13px;
+  letter-spacing:0.04em;color:var(--white);
+  display:flex;align-items:center;gap:8px;
+}
+
+.card-action {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.12em;
+  color:var(--teal);text-transform:uppercase;
+  cursor:pointer;border:none;background:none;
+  transition:opacity 0.2s;
+}
+.card-action:hover{opacity:0.7;}
+
+.card-body { padding:20px; }
+
+/* ── TABLE ── */
+.tbl {
+  width:100%;border-collapse:collapse;
+}
+
+.tbl th {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.2em;
+  text-transform:uppercase;color:var(--muted);
+  padding:10px 14px;text-align:left;
+  border-bottom:1px solid var(--border);
+  background:var(--bg3);
+}
+
+.tbl td {
+  padding:11px 14px;
+  border-bottom:1px solid var(--border2);
+  font-size:13px;vertical-align:middle;
+}
+
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:var(--border2);}
+
+.mono {
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--muted);
+}
+
+.fw6 {
+  font-family:'Syne',sans-serif;
+  font-weight:600;font-size:13px;
+}
+
+/* ── STATUS ── */
+.tag {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.1em;
+  text-transform:uppercase;
+  padding:3px 9px;border:1px solid;
+  white-space:nowrap;display:inline-block;
+}
+.tag-ok     {color:var(--green); border-color:rgba(61,201,122,0.35); background:var(--green-dim);}
+.tag-warn   {color:var(--amber); border-color:rgba(212,140,42,0.35); background:var(--amber-dim);}
+.tag-alert  {color:var(--red);   border-color:rgba(224,82,82,0.35);  background:var(--red-dim);}
+.tag-info   {color:var(--blue);  border-color:rgba(74,158,204,0.35); background:var(--blue-dim);}
+.tag-teal   {color:var(--teal);  border-color:var(--teal-border);    background:var(--teal-dim);}
+.tag-gold   {color:var(--gold);  border-color:rgba(201,168,76,0.35); background:var(--gold-dim);}
+
+/* ── AUDIT LOG TERMINAL ── */
+.terminal {
+  background:#060A0E;
+  border:1px solid var(--teal-border);
+  padding:16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  line-height:2;
+  max-height:240px;
+  overflow-y:auto;
+}
+
+.log-line {
+  display:flex;gap:12px;
+  opacity:0;
+  animation:logAppear 0.4s ease forwards;
+}
+.log-line:nth-child(1){animation-delay:0.05s;}
+.log-line:nth-child(2){animation-delay:0.2s;}
+.log-line:nth-child(3){animation-delay:0.35s;}
+.log-line:nth-child(4){animation-delay:0.5s;}
+.log-line:nth-child(5){animation-delay:0.65s;}
+.log-line:nth-child(6){animation-delay:0.8s;}
+.log-line:nth-child(7){animation-delay:0.95s;}
+.log-line:nth-child(8){animation-delay:1.1s;}
+
+@keyframes logAppear {
+  from{opacity:0;transform:translateX(-4px);}
+  to{opacity:1;transform:translateX(0);}
+}
+
+.lt { color:rgba(125,133,144,0.6); white-space:nowrap; }
+.lk { color:var(--teal); }
+.lw { color:var(--amber); }
+.li { color:var(--blue); }
+.le { color:var(--red); }
+.lm { color:rgba(230,237,243,0.65); }
+.lh { color:rgba(125,133,144,0.4); }
+
+/* ── PATIENT CARD ── */
+.pt-card {
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;
+  border:1px solid var(--border);
+  background:var(--bg3);
+  margin-bottom:8px;
+  cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;
+}
+.pt-card:hover{border-color:var(--teal-border);background:var(--teal-dim);}
+.pt-card.selected{border-color:var(--teal);background:var(--teal-dim);}
+
+.pt-av {
+  width:36px;height:36px;border-radius:50%;
+  background:var(--teal-dim);border:1px solid var(--teal-border);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:12px;
+  color:var(--teal);flex-shrink:0;
+}
+
+.pt-name {
+  font-family:'Syne',sans-serif;font-weight:600;font-size:13px;
+}
+.pt-meta {
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--muted);margin-top:2px;
+}
+
+/* ── APPOINTMENT SLOT ── */
+.appt {
+  display:flex;align-items:center;gap:14px;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  background:var(--bg3);
+  margin-bottom:8px;
+  transition:border-color 0.2s;
+}
+.appt:hover{border-color:var(--teal-border);}
+
+.appt-time {
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;font-weight:500;
+  color:var(--teal);min-width:56px;flex-shrink:0;
+}
+
+.appt-pt {font-family:'Syne',sans-serif;font-weight:600;font-size:13px;}
+.appt-type{font-size:12px;color:var(--muted);font-style:italic;}
+
+/* ── RECORD ROW ── */
+.rec {
+  display:flex;align-items:center;gap:14px;
+  padding:12px 0;
+  border-bottom:1px solid var(--border2);
+}
+.rec:last-child{border-bottom:none;}
+
+.rec-icon {
+  width:30px;height:30px;
+  background:var(--teal-dim);
+  border:1px solid var(--teal-border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;flex-shrink:0;
+}
+
+.rec-title{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;}
+.rec-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:1px;}
+
+/* ── PROGRESS ── */
+.prog-bar {
+  height:3px;background:var(--border);
+  margin-top:8px;overflow:hidden;
+}
+.prog-fill {
+  height:100%;background:var(--teal);
+  animation:progIn 1s ease both;
+}
+@keyframes progIn{from{width:0;}}
+
+/* ── STAFF ROW ── */
+.staff-av {
+  width:32px;height:32px;border-radius:50%;
+  background:var(--blue-dim);border:1px solid rgba(74,158,204,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:11px;
+  color:var(--blue);flex-shrink:0;
+}
+
+/* ── SEARCH ── */
+.search-bar {
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg3);border:1px solid var(--border);
+  padding:8px 14px;margin-bottom:16px;
+}
+.search-bar input {
+  background:none;border:none;outline:none;
+  color:var(--white);font-family:'Lora',serif;font-size:13px;
+  width:100%;
+}
+.search-bar input::placeholder{color:var(--muted);}
+.search-icon{color:var(--muted);font-size:14px;}
+
+/* ── MINI STAT ── */
+.mini-stats {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  margin-bottom:20px;
+}
+.mini-stat {
+  background:var(--bg3);border:1px solid var(--border);
+  padding:14px 16px;
+}
+.mini-val {
+  font-family:'Syne',sans-serif;font-weight:800;font-size:22px;
+  color:var(--white);
+}
+.mini-lbl {
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;
+  margin-top:2px;
+}
+
+/* ── SHIFT GRID ── */
+.shift-grid {
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+}
+.shift-cell {
+  background:var(--bg3);border:1px solid var(--border);
+  padding:12px;text-align:center;
+}
+.shift-type {
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;
+}
+.shift-count {
+  font-family:'Syne',sans-serif;font-weight:800;font-size:24px;
+  color:var(--white);
+}
+
+/* ── NDA FORM ── */
+.form-row{margin-bottom:16px;}
+.form-label {
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;
+  margin-bottom:6px;display:block;
+}
+.form-input {
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  color:var(--white);font-family:'Lora',serif;font-size:13px;
+  padding:10px 14px;outline:none;
+  transition:border-color 0.2s;
+}
+.form-input:focus{border-color:var(--teal);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+.btn-primary {
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  font-weight:500;letter-spacing:0.12em;text-transform:uppercase;
+  padding:12px 28px;background:var(--teal);color:#fff;
+  border:none;cursor:pointer;transition:opacity 0.2s;
+}
+.btn-primary:hover{opacity:0.85;}
+
+.btn-outline {
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:0.12em;text-transform:uppercase;
+  padding:12px 28px;background:none;
+  color:var(--teal);border:1px solid var(--teal-border);
+  cursor:pointer;transition:background 0.2s;
+}
+.btn-outline:hover{background:var(--teal-dim);}
+
+/* ── DEPOSIT CARD ── */
+.deposit-card {
+  background:var(--bg3);border:1px solid var(--border);
+  padding:18px 20px;margin-bottom:12px;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);}
+
+/* ── SECTION LABEL ── */
+.sec-lbl {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:0.3em;
+  color:var(--muted);text-transform:uppercase;
+  margin-bottom:12px;padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+
+/* ── HASH CHIP ── */
+.hash {
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--muted);background:var(--bg);
+  padding:2px 8px;border:1px solid var(--border);
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .grid-2,.grid-65-35,.grid-35-65{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .main{margin-left:0;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">UCH Sovereign</div>
+    <div class="logo-sub">Hospital Platform · v1.0</div>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar" id="sidebarAvatar">FA</div>
+    <div>
+      <div class="user-name" id="sidebarName">Fatima Al-Rashid</div>
+      <div class="user-role" id="sidebarRole">Administrator</div>
+    </div>
+  </div>
+
+  <!-- Role Switcher -->
+  <div class="role-switcher">
+    <div class="role-switcher-label">Active Role</div>
+    <button class="role-btn active" onclick="switchRole('admin')" id="rb-admin">
+      <div class="role-dot" style="background:#C9A84C;"></div>Administrator
+    </button>
+    <button class="role-btn" onclick="switchRole('doctor')" id="rb-doctor">
+      <div class="role-dot" style="background:#0FA688;"></div>Dr. Yusuf Hassan
+    </button>
+    <button class="role-btn" onclick="switchRole('nurse')" id="rb-nurse">
+      <div class="role-dot" style="background:#4A9ECC;"></div>Nurse Mona Fawzi
+    </button>
+  </div>
+
+  <!-- Admin Nav -->
+  <div class="nav-section" id="nav-admin">
+    <div class="nav-section-label">Administration</div>
+    <div class="nav-item active" onclick="showPage('dashboard')">
+      <span class="icon">📊</span>Overview
+    </div>
+    <div class="nav-item" onclick="showPage('patients')">
+      <span class="icon">🏥</span>Patients
+      <span class="nav-badge">1,284</span>
+    </div>
+    <div class="nav-item" onclick="showPage('staff')">
+      <span class="icon">👨‍⚕️</span>Staff
+    </div>
+    <div class="nav-item" onclick="showPage('audit')">
+      <span class="icon">🔎</span>Audit Log
+    </div>
+    <div class="nav-item" onclick="showPage('nda')">
+      <span class="icon">📋</span>NDA Queue
+      <span class="nav-badge">2</span>
+    </div>
+    <div class="nav-item" onclick="showPage('deposits')">
+      <span class="icon">💰</span>Deposits
+    </div>
+  </div>
+
+  <!-- Doctor Nav (hidden by default) -->
+  <div class="nav-section" id="nav-doctor" style="display:none;">
+    <div class="nav-section-label">Clinical</div>
+    <div class="nav-item active" onclick="showPage('doctor-dash')">
+      <span class="icon">📊</span>My Dashboard
+    </div>
+    <div class="nav-item" onclick="showPage('my-patients')">
+      <span class="icon">🏥</span>My Patients
+    </div>
+    <div class="nav-item" onclick="showPage('appointments')">
+      <span class="icon">📅</span>Appointments
+    </div>
+    <div class="nav-item" onclick="showPage('records')">
+      <span class="icon">📁</span>Medical Records
+    </div>
+    <div class="nav-item" onclick="showPage('access-log')">
+      <span class="icon">🔒</span>My Access Log
+    </div>
+  </div>
+
+  <!-- Nurse Nav (hidden by default) -->
+  <div class="nav-section" id="nav-nurse" style="display:none;">
+    <div class="nav-section-label">Ward</div>
+    <div class="nav-item active" onclick="showPage('nurse-dash')">
+      <span class="icon">📊</span>Ward Overview
+    </div>
+    <div class="nav-item" onclick="showPage('shifts')">
+      <span class="icon">⏰</span>Shift Schedule
+    </div>
+    <div class="nav-item" onclick="showPage('my-patients')">
+      <span class="icon">🏥</span>Assigned Patients
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="audit-live">
+      <div class="pulse"></div>Audit chain live
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="page-title" id="pageTitle">System Overview</div>
+    <div class="topbar-right">
+      <div class="topbar-date">Sun 29 Mar 2026 · 13:44 EET</div>
+      <div class="topbar-alert">⚠ 2 Critical Alerts</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══════════════════════════ PAGE: ADMIN DASHBOARD ══════════════════════════ -->
+    <div class="page active" id="page-dashboard">
+
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-label">Active Patients</div>
+          <div class="kpi-val teal">1,284</div>
+          <div class="kpi-sub">↑ 38 registered this week</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Today's Appointments</div>
+          <div class="kpi-val">47</div>
+          <div class="kpi-sub">6 pending confirmation</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Staff On Duty</div>
+          <div class="kpi-val blue">23</div>
+          <div class="kpi-sub">3 departments active</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Critical Alerts</div>
+          <div class="kpi-val red">2</div>
+          <div class="kpi-sub">Immediate review required</div>
+        </div>
+      </div>
+
+      <div class="grid-65-35">
+        <!-- Audit Log -->
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header">
+            <div class="card-title">🔎 Tamper-Evident Audit Log <span class="tag tag-ok" style="font-size:8px;margin-left:6px;">SHA-256 Chained</span></div>
+            <button class="card-action" onclick="showPage('audit')">View All →</button>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <div class="terminal">
+              <div class="log-line"><span class="lt">09:14:02</span><span class="lk">AUDIT</span><span class="lm">nda_submit · org: Cairo Medical Group · id: a3f9e2 · hash: 7b1c4d...</span></div>
+              <div class="log-line"><span class="lt">09:16:47</span><span class="li">ACCESS</span><span class="lm">patient_record · user: dr.hassan · resource: PT-0041 · view</span></div>
+              <div class="log-line"><span class="lt">09:22:11</span><span class="lk">AUDIT</span><span class="lm">deposit_create · org: Alexandria Health · amt: $5,000 · ref: AHA-041</span></div>
+              <div class="log-line"><span class="lt">09:31:55</span><span class="lw">WARN </span><span class="lm">login_attempt · user: unknown · ip: 41.67.x.x · BLOCKED</span></div>
+              <div class="log-line"><span class="lt">09:38:20</span><span class="lk">AUDIT</span><span class="lm">record_update · patient: PT-0041 · version: 3 · prev: 9c3d... · hash: 4a1f...</span></div>
+              <div class="log-line"><span class="lt">09:44:03</span><span class="li">ACCESS</span><span class="lm">shift_confirm · staff: nurse.mona · dept: cardiology · morning</span></div>
+              <div class="log-line"><span class="lt">09:51:18</span><span class="lk">AUDIT</span><span class="lm">nda_approve · id: AHA-039 · reviewer: fatima.admin · status: approved</span></div>
+              <div class="log-line"><span class="lt">10:02:44</span><span class="le">ERROR</span><span class="lm">record_access_denied · user: staff.khaled · resource: PT-0039 · forbidden</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NDA Queue -->
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header">
+            <div class="card-title">📋 NDA Queue</div>
+            <button class="card-action" onclick="showPage('nda')">Manage →</button>
+          </div>
+          <div class="card-body">
+            <table class="tbl">
+              <thead><tr><th>Organization</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td class="fw6">Cairo Medical Group</td><td><span class="tag tag-warn">Pending</span></td></tr>
+                <tr><td class="fw6">Alexandria Health</td><td><span class="tag tag-ok">Approved</span></td></tr>
+                <tr><td class="fw6">Gulf Sovereign Health</td><td><span class="tag tag-info">Review</span></td></tr>
+                <tr><td class="fw6">Nairobi District</td><td><span class="tag tag-alert">Rejected</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Staff Today -->
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header">
+            <div class="card-title">👨‍⚕️ Staff On Duty</div>
+            <button class="card-action" onclick="showPage('staff')">All Staff →</button>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <table class="tbl">
+              <thead><tr><th>Name</th><th>Dept</th><th>Shift</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><div class="fw6">Dr. Yusuf Hassan</div></td>
+                  <td class="mono">Cardiology</td>
+                  <td class="mono">Morning</td>
+                  <td><span class="tag tag-ok">Active</span></td>
+                </tr>
+                <tr>
+                  <td><div class="fw6">Dr. Sara Kamal</div></td>
+                  <td class="mono">Pediatrics</td>
+                  <td class="mono">Morning</td>
+                  <td><span class="tag tag-ok">Active</span></td>
+                </tr>
+                <tr>
+                  <td><div class="fw6">Nurse Mona Fawzi</div></td>
+                  <td class="mono">Cardiology</td>
+                  <td class="mono">Afternoon</td>
+                  <td><span class="tag tag-info">14:00</span></td>
+                </tr>
+                <tr>
+                  <td><div class="fw6">Dr. Ahmed Suleiman</div></td>
+                  <td class="mono">Emergency</td>
+                  <td class="mono">On-Call</td>
+                  <td><span class="tag tag-warn">On Call</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Deposit Pipeline -->
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header">
+            <div class="card-title">💰 Deposit Pipeline</div>
+            <button class="card-action" onclick="showPage('deposits')">All →</button>
+          </div>
+          <div class="card-body">
+            <div class="deposit-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span class="fw6">Alexandria Health Authority</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green);">$5,000 · Paid</span>
+              </div>
+              <div class="mono">Sovereign tier · $260,000 total · ref: AHA-2026-0041</div>
+              <div class="prog-bar"><div class="prog-fill" style="width:2%;"></div></div>
+            </div>
+            <div class="deposit-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span class="fw6">Cairo Medical Group</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--amber);">$5,000 · Awaiting</span>
+              </div>
+              <div class="mono">Foundation tier · $50,000 total · invoice sent</div>
+              <div class="prog-bar"><div class="prog-fill" style="width:0;background:var(--amber);"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: PATIENTS ══════════════════════════ -->
+    <div class="page" id="page-patients">
+      <div class="mini-stats">
+        <div class="mini-stat"><div class="mini-val teal">1,284</div><div class="mini-lbl">Total Patients</div></div>
+        <div class="mini-stat"><div class="mini-val amber">38</div><div class="mini-lbl">Registered This Week</div></div>
+        <div class="mini-stat"><div class="mini-val red">5</div><div class="mini-lbl">Critical Cases</div></div>
+      </div>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search patients by name, ID, condition...">
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header">
+          <div class="card-title">🏥 Patient Registry</div>
+          <button class="btn-primary" style="font-size:9px;padding:6px 14px;">+ New Patient</button>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="tbl">
+            <thead><tr><th>Patient ID</th><th>Name</th><th>Age</th><th>Blood</th><th>Department</th><th>Last Visit</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">PT-0041</td><td class="fw6">Khalid Mansour</td><td>54</td><td class="mono">A+</td><td class="mono">Cardiology</td><td class="mono">2026-03-29</td><td><span class="tag tag-info">Active</span></td></tr>
+              <tr><td class="mono">PT-0039</td><td class="fw6">Nadia Omar</td><td>41</td><td class="mono">O−</td><td class="mono">Cardiology</td><td class="mono">2026-03-28</td><td><span class="tag tag-alert">Alert</span></td></tr>
+              <tr><td class="mono">PT-0028</td><td class="fw6">Hana El-Masry</td><td>67</td><td class="mono">B+</td><td class="mono">Cardiology</td><td class="mono">2026-03-29</td><td><span class="tag tag-ok">Stable</span></td></tr>
+              <tr><td class="mono">PT-0055</td><td class="fw6">Ibrahim Farouk</td><td>38</td><td class="mono">AB+</td><td class="mono">Surgery</td><td class="mono">2026-03-29</td><td><span class="tag tag-warn">Post-Op</span></td></tr>
+              <tr><td class="mono">PT-0062</td><td class="fw6">Layla Amin</td><td>52</td><td class="mono">A−</td><td class="mono">Cardiology</td><td class="mono">2026-03-27</td><td><span class="tag tag-ok">Stable</span></td></tr>
+              <tr><td class="mono">PT-0071</td><td class="fw6">Omar Khalil</td><td>29</td><td class="mono">B−</td><td class="mono">Emergency</td><td class="mono">2026-03-29</td><td><span class="tag tag-alert">Critical</span></td></tr>
+              <tr><td class="mono">PT-0080</td><td class="fw6">Sara Nasser</td><td>45</td><td class="mono">O+</td><td class="mono">Pediatrics</td><td class="mono">2026-03-26</td><td><span class="tag tag-ok">Discharged</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: STAFF ══════════════════════════ -->
+    <div class="page" id="page-staff">
+      <div class="mini-stats">
+        <div class="mini-stat"><div class="mini-val">23</div><div class="mini-lbl">On Duty Today</div></div>
+        <div class="mini-stat"><div class="mini-val teal">8</div><div class="mini-lbl">Doctors Active</div></div>
+        <div class="mini-stat"><div class="mini-val blue">15</div><div class="mini-lbl">Nurses On Shift</div></div>
+      </div>
+      <div class="shift-grid" style="margin-bottom:20px;">
+        <div class="shift-cell"><div class="shift-type">Morning</div><div class="shift-count teal">12</div></div>
+        <div class="shift-cell"><div class="shift-type">Afternoon</div><div class="shift-count amber">7</div></div>
+        <div class="shift-cell"><div class="shift-type">Night</div><div class="shift-count blue">3</div></div>
+        <div class="shift-cell"><div class="shift-type">On-Call</div><div class="shift-count">1</div></div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header">
+          <div class="card-title">👨‍⚕️ Staff Directory</div>
+          <button class="btn-primary" style="font-size:9px;padding:6px 14px;">+ Add Staff</button>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="tbl">
+            <thead><tr><th>Staff ID</th><th>Name</th><th>Role</th><th>Department</th><th>License</th><th>Patients</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">SF-001</td><td><div style="display:flex;align-items:center;gap:8px;"><div class="staff-av">YH</div><div class="fw6">Dr. Yusuf Hassan</div></div></td><td class="mono">Doctor</td><td class="mono">Cardiology</td><td class="mono">EG-MED-4421</td><td class="mono">8</td><td><span class="tag tag-ok">Active</span></td></tr>
+              <tr><td class="mono">SF-002</td><td><div style="display:flex;align-items:center;gap:8px;"><div class="staff-av">SK</div><div class="fw6">Dr. Sara Kamal</div></div></td><td class="mono">Doctor</td><td class="mono">Pediatrics</td><td class="mono">EG-MED-3307</td><td class="mono">12</td><td><span class="tag tag-ok">Active</span></td></tr>
+              <tr><td class="mono">SF-003</td><td><div style="display:flex;align-items:center;gap:8px;"><div class="staff-av">MF</div><div class="fw6">Nurse Mona Fawzi</div></div></td><td class="mono">Nurse</td><td class="mono">Cardiology</td><td class="mono">EG-NUR-1182</td><td class="mono">—</td><td><span class="tag tag-info">14:00</span></td></tr>
+              <tr><td class="mono">SF-004</td><td><div style="display:flex;align-items:center;gap:8px;"><div class="staff-av">AS</div><div class="fw6">Dr. Ahmed Suleiman</div></div></td><td class="mono">Doctor</td><td class="mono">Emergency</td><td class="mono">EG-MED-2290</td><td class="mono">3</td><td><span class="tag tag-warn">On Call</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: FULL AUDIT LOG ══════════════════════════ -->
+    <div class="page" id="page-audit">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🔎 Immutable Audit Chain <span class="tag tag-teal" style="font-size:8px;margin-left:8px;">SHA-256 · HMAC-Signed · Chained</span></div>
+          <button class="btn-outline" style="font-size:9px;padding:6px 14px;">Export CSV</button>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="terminal" style="max-height:480px;">
+            <div class="log-line"><span class="lt">09:14:02</span><span class="lk">AUDIT</span><span class="lm">nda_submit</span><span class="lh">· org: Cairo Medical Group · id: a3f9e2b1 · prev: GENESIS · hash: 7b1c4d9e</span></div>
+            <div class="log-line"><span class="lt">09:16:47</span><span class="li">ACCESS</span><span class="lm">patient_view</span><span class="lh">· user: dr.hassan · resource: PT-0041 · ip: 10.0.1.22 · hash: 9f2e1a3c</span></div>
+            <div class="log-line"><span class="lt">09:18:02</span><span class="li">ACCESS</span><span class="lm">record_download</span><span class="lh">· user: dr.hassan · resource: PT-0039 lab_result · hash: 3d8b7f2a</span></div>
+            <div class="log-line"><span class="lt">09:22:11</span><span class="lk">AUDIT</span><span class="lm">deposit_create</span><span class="lh">· org: Alexandria Health · amt: 5000 USD · ref: AHA-041 · hash: c1e4b8d0</span></div>
+            <div class="log-line"><span class="lt">09:31:55</span><span class="lw">WARN </span><span class="lm">login_blocked</span><span class="lh">· user: unknown · ip: 41.67.x.x · reason: invalid_token · hash: 5a9f3e1b</span></div>
+            <div class="log-line"><span class="lt">09:38:20</span><span class="lk">AUDIT</span><span class="lm">record_update</span><span class="lh">· patient: PT-0041 · v3 · prev_hash: 9f2e... · hash: 4a1f7c8b</span></div>
+            <div class="log-line"><span class="lt">09:44:03</span><span class="li">ACCESS</span><span class="lm">shift_confirm</span><span class="lh">· staff: SF-003 · dept: cardiology · shift: morning · hash: 2b6d9e4f</span></div>
+            <div class="log-line"><span class="lt">09:51:18</span><span class="lk">AUDIT</span><span class="lm">nda_approve</span><span class="lh">· id: AHA-039 · reviewer: fatima.admin · status: approved · hash: 8e3a1c7d</span></div>
+            <div class="log-line"><span class="lt">10:02:44</span><span class="le">ERROR</span><span class="lm">access_denied</span><span class="lh">· user: staff.khaled · resource: PT-0039 · role_required: doctor · hash: 6f0b2d9a</span></div>
+            <div class="log-line"><span class="lt">10:14:22</span><span class="lk">AUDIT</span><span class="lm">prescription_sign</span><span class="lh">· doctor: SF-001 · patient: PT-0041 · med: Metoprolol 50mg · hash: 1c4e8b3f</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header">
+          <div class="card-title">Chain Integrity Verification</div>
+        </div>
+        <div class="card-body">
+          <table class="tbl">
+            <thead><tr><th>Event ID</th><th>Type</th><th>Actor</th><th>Timestamp</th><th>Hash</th><th>Chain</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">evt-001</td><td><span class="tag tag-teal">AUDIT</span></td><td class="mono">fatima.admin</td><td class="mono">09:14:02</td><td class="hash">7b1c4d9e</td><td><span class="tag tag-ok">Valid ✓</span></td></tr>
+              <tr><td class="mono">evt-002</td><td><span class="tag tag-info">ACCESS</span></td><td class="mono">dr.hassan</td><td class="mono">09:16:47</td><td class="hash">9f2e1a3c</td><td><span class="tag tag-ok">Valid ✓</span></td></tr>
+              <tr><td class="mono">evt-003</td><td><span class="tag tag-info">ACCESS</span></td><td class="mono">dr.hassan</td><td class="mono">09:18:02</td><td class="hash">3d8b7f2a</td><td><span class="tag tag-ok">Valid ✓</span></td></tr>
+              <tr><td class="mono">evt-004</td><td><span class="tag tag-teal">AUDIT</span></td><td class="mono">system</td><td class="mono">09:22:11</td><td class="hash">c1e4b8d0</td><td><span class="tag tag-ok">Valid ✓</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: NDA QUEUE ══════════════════════════ -->
+    <div class="page" id="page-nda">
+      <div class="grid-2">
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header">
+            <div class="card-title">📋 NDA Submissions</div>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <table class="tbl">
+              <thead><tr><th>Organization</th><th>Country</th><th>Submitted</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td class="fw6">Cairo Medical Group</td>
+                  <td class="mono">EG</td>
+                  <td class="mono">2026-03-29</td>
+                  <td><span class="tag tag-warn">Pending</span></td>
+                  <td>
+                    <button class="btn-primary" style="font-size:8px;padding:4px 10px;margin-right:4px;">Approve</button>
+                    <button class="btn-outline" style="font-size:8px;padding:4px 10px;">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw6">Alexandria Health Authority</td>
+                  <td class="mono">EG</td>
+                  <td class="mono">2026-03-28</td>
+                  <td><span class="tag tag-ok">Approved</span></td>
+                  <td class="mono">fatima.admin</td>
+                </tr>
+                <tr>
+                  <td class="fw6">Gulf Sovereign Health</td>
+                  <td class="mono">AE</td>
+                  <td class="mono">2026-03-27</td>
+                  <td><span class="tag tag-info">Under Review</span></td>
+                  <td>
+                    <button class="btn-primary" style="font-size:8px;padding:4px 10px;margin-right:4px;">Approve</button>
+                    <button class="btn-outline" style="font-size:8px;padding:4px 10px;">Reject</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="fw6">Nairobi District Hospital</td>
+                  <td class="mono">KE</td>
+                  <td class="mono">2026-03-25</td>
+                  <td><span class="tag tag-alert">Rejected</span></td>
+                  <td class="mono">fatima.admin</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header"><div class="card-title">New NDA Submission</div></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-row"><label class="form-label">Organization Name</label><input class="form-input" placeholder="e.g. Cairo Medical Group"></div>
+              <div class="form-row"><label class="form-label">Contact Name</label><input class="form-input" placeholder="Full name"></div>
+            </div>
+            <div class="form-row"><label class="form-label">Contact Email</label><input class="form-input" placeholder="contact@organization.com"></div>
+            <div class="form-grid">
+              <div class="form-row"><label class="form-label">Country</label><input class="form-input" placeholder="Egypt"></div>
+              <div class="form-row"><label class="form-label">Phone</label><input class="form-input" placeholder="+20 x xxxx xxxx"></div>
+            </div>
+            <div class="form-row"><label class="form-label">Purpose / Use Case</label><textarea class="form-input" rows="3" placeholder="Describe intended use of UCH Sovereign platform..."></textarea></div>
+            <button class="btn-primary">Submit NDA Request</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: DEPOSITS ══════════════════════════ -->
+    <div class="page" id="page-deposits">
+      <div class="mini-stats">
+        <div class="mini-stat"><div class="mini-val green">$5,000</div><div class="mini-lbl">Received</div></div>
+        <div class="mini-stat"><div class="mini-val amber">$5,000</div><div class="mini-lbl">Awaiting Payment</div></div>
+        <div class="mini-stat"><div class="mini-val teal">$310,000</div><div class="mini-lbl">Pipeline Value</div></div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header">
+          <div class="card-title">💰 Deposit Ledger</div>
+          <button class="btn-outline" style="font-size:9px;padding:6px 14px;">Export</button>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="tbl">
+            <thead><tr><th>Deposit ID</th><th>Organization</th><th>Amount</th><th>Tier</th><th>Total Value</th><th>Method</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="mono">DEP-0041</td>
+                <td class="fw6">Alexandria Health Authority</td>
+                <td class="mono" style="color:var(--green);">$5,000</td>
+                <td><span class="tag tag-gold">Sovereign</span></td>
+                <td class="mono">$260,000</td>
+                <td class="mono">Bank Transfer</td>
+                <td><span class="tag tag-ok">Paid</span></td>
+              </tr>
+              <tr>
+                <td class="mono">DEP-0042</td>
+                <td class="fw6">Cairo Medical Group</td>
+                <td class="mono" style="color:var(--amber);">$5,000</td>
+                <td><span class="tag tag-teal">Foundation</span></td>
+                <td class="mono">$50,000</td>
+                <td class="mono">Invoice Sent</td>
+                <td><span class="tag tag-warn">Awaiting</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: DOCTOR DASHBOARD ══════════════════════════ -->
+    <div class="page" id="page-doctor-dash">
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-label">My Patients Today</div><div class="kpi-val teal">8</div><div class="kpi-sub">2 follow-ups due</div></div>
+        <div class="kpi"><div class="kpi-label">Next Appointment</div><div class="kpi-val" style="font-size:22px;padding-top:6px;">10:30 AM</div><div class="kpi-sub">Khalid Mansour</div></div>
+        <div class="kpi"><div class="kpi-label">Pending Signatures</div><div class="kpi-val amber">3</div><div class="kpi-sub">Records awaiting sign</div></div>
+        <div class="kpi"><div class="kpi-label">Lab Alerts</div><div class="kpi-val red">1</div><div class="kpi-sub">Nadia Omar · urgent</div></div>
+      </div>
+      <div class="grid-65-35">
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header"><div class="card-title">📅 Today's Schedule</div></div>
+          <div class="card-body">
+            <div class="appt"><div class="appt-time">09:00</div><div><div class="appt-pt">Hana El-Masry</div><div class="appt-type">Cardiac follow-up · Room 204</div></div><span class="tag tag-ok" style="margin-left:auto;">Done</span></div>
+            <div class="appt"><div class="appt-time">10:30</div><div><div class="appt-pt">Khalid Mansour</div><div class="appt-type">Initial consultation · ECG required</div></div><span class="tag tag-info" style="margin-left:auto;">Next</span></div>
+            <div class="appt"><div class="appt-time">12:00</div><div><div class="appt-pt">Nadia Omar</div><div class="appt-type">Lab results review · ⚠ Urgent</div></div><span class="tag tag-alert" style="margin-left:auto;">Urgent</span></div>
+            <div class="appt"><div class="appt-time">14:00</div><div><div class="appt-pt">Ibrahim Farouk</div><div class="appt-type">Post-op check · 30 min</div></div><span class="tag tag-warn" style="margin-left:auto;">Scheduled</span></div>
+            <div class="appt"><div class="appt-time">15:30</div><div><div class="appt-pt">Layla Amin</div><div class="appt-type">Prescription renewal</div></div><span class="tag tag-warn" style="margin-left:auto;">Scheduled</span></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:0;">
+          <div class="card-header"><div class="card-title">🏥 My Patients</div></div>
+          <div class="card-body" style="padding:12px;">
+            <div class="pt-card selected"><div class="pt-av">KM</div><div class="pt-info"><div class="pt-name">Khalid Mansour</div><div class="pt-meta">PT-0041 · M · 54y · A+</div></div><span class="tag tag-info">Active</span></div>
+            <div class="pt-card"><div class="pt-av">NO</div><div class="pt-info"><div class="pt-name">Nadia Omar</div><div class="pt-meta">PT-0039 · F · 41y · O−</div></div><span class="tag tag-alert">Alert</span></div>
+            <div class="pt-card"><div class="pt-av">HE</div><div class="pt-info"><div class="pt-name">Hana El-Masry</div><div class="pt-meta">PT-0028 · F · 67y · B+</div></div><span class="tag tag-ok">Stable</span></div>
+            <div class="pt-card"><div class="pt-av">IF</div><div class="pt-info"><div class="pt-name">Ibrahim Farouk</div><div class="pt-meta">PT-0055 · M · 38y · AB+</div></div><span class="tag tag-warn">Post-Op</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: MY PATIENTS (DOCTOR) ══════════════════════════ -->
+    <div class="page" id="page-my-patients">
+      <div class="grid-35-65">
+        <div>
+          <div class="sec-lbl">Patient List</div>
+          <div class="pt-card selected" onclick="selectPt(this)"><div class="pt-av">KM</div><div class="pt-info"><div class="pt-name">Khalid Mansour</div><div class="pt-meta">PT-0041 · M · 54y · Cardiology</div></div><span class="tag tag-info">Active</span></div>
+          <div class="pt-card" onclick="selectPt(this)"><div class="pt-av">NO</div><div class="pt-info"><div class="pt-name">Nadia Omar</div><div class="pt-meta">PT-0039 · F · 41y · Cardiology</div></div><span class="tag tag-alert">Alert</span></div>
+          <div class="pt-card" onclick="selectPt(this)"><div class="pt-av">HE</div><div class="pt-info"><div class="pt-name">Hana El-Masry</div><div class="pt-meta">PT-0028 · F · 67y · Cardiology</div></div><span class="tag tag-ok">Stable</span></div>
+          <div class="pt-card" onclick="selectPt(this)"><div class="pt-av">IF</div><div class="pt-info"><div class="pt-name">Ibrahim Farouk</div><div class="pt-meta">PT-0055 · M · 38y · Surgery</div></div><span class="tag tag-warn">Post-Op</span></div>
+          <div class="pt-card" onclick="selectPt(this)"><div class="pt-av">LA</div><div class="pt-info"><div class="pt-name">Layla Amin</div><div class="pt-meta">PT-0062 · F · 52y · Cardiology</div></div><span class="tag tag-ok">Stable</span></div>
+        </div>
+        <div>
+          <div class="sec-lbl">Khalid Mansour — Patient Detail</div>
+          <div class="card" style="margin-bottom:12px;">
+            <div class="card-header"><div class="card-title">Patient Information</div></div>
+            <div class="card-body">
+              <div class="form-grid" style="margin-bottom:0;">
+                <div><div class="form-label">Full Name</div><div class="fw6">Khalid Mansour</div></div>
+                <div><div class="form-label">Patient ID</div><div class="mono">PT-0041</div></div>
+                <div><div class="form-label">Date of Birth</div><div class="mono">1972-06-14 · Age 54</div></div>
+                <div><div class="form-label">Blood Type</div><div class="mono">A+ · No allergies</div></div>
+                <div><div class="form-label">Phone</div><div class="mono">+20 100 xxx xxxx</div></div>
+                <div><div class="form-label">Insurance</div><div class="mono">Misr Insurance · MI-4421</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-bottom:0;">
+            <div class="card-header"><div class="card-title">📁 Medical Records</div><button class="btn-primary" style="font-size:8px;padding:4px 10px;">+ New Record</button></div>
+            <div class="card-body">
+              <div class="rec"><div class="rec-icon">🫀</div><div class="rec-body"><div class="rec-title">ECG Report — Sinus Tachycardia</div><div class="rec-meta">diagnosis · 2026-03-22 · v2 · hash: 4a1f7c8b</div></div><span class="tag tag-ok">Signed</span></div>
+              <div class="rec"><div class="rec-icon">💊</div><div class="rec-body"><div class="rec-title">Prescription — Metoprolol 50mg</div><div class="rec-meta">prescription · 2026-03-22 · v1 · hash: 1c4e8b3f</div></div><span class="tag tag-ok">Signed</span></div>
+              <div class="rec"><div class="rec-icon">🔬</div><div class="rec-body"><div class="rec-title">Blood Panel — Complete Metabolic</div><div class="rec-meta">lab_result · 2026-03-28 · v1 · hash: 2e7b9d1a</div></div><span class="tag tag-warn">Pending</span></div>
+              <div class="rec"><div class="rec-icon">📋</div><div class="rec-body"><div class="rec-title">Initial Consultation Notes</div><div class="rec-meta">note · 2026-03-15 · v1 · hash: 8f0a3c2e</div></div><span class="tag tag-ok">Signed</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: APPOINTMENTS ══════════════════════════ -->
+    <div class="page" id="page-appointments">
+      <div class="mini-stats">
+        <div class="mini-stat"><div class="mini-val">47</div><div class="mini-lbl">Today Total</div></div>
+        <div class="mini-stat"><div class="mini-val teal">5</div><div class="mini-lbl">My Appointments</div></div>
+        <div class="mini-stat"><div class="mini-val amber">6</div><div class="mini-lbl">Pending Confirm</div></div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header"><div class="card-title">📅 Appointment Schedule — Dr. Yusuf Hassan</div><button class="btn-primary" style="font-size:9px;padding:6px 14px;">+ New Appointment</button></div>
+        <div class="card-body" style="padding:0;">
+          <table class="tbl">
+            <thead><tr><th>Time</th><th>Patient</th><th>Type</th><th>Room</th><th>Duration</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="mono" style="color:var(--teal);">09:00</td><td class="fw6">Hana El-Masry</td><td class="mono">Cardiac Follow-up</td><td class="mono">Room 204</td><td class="mono">30 min</td><td><span class="tag tag-ok">Completed</span></td></tr>
+              <tr><td class="mono" style="color:var(--teal);">10:30</td><td class="fw6">Khalid Mansour</td><td class="mono">Initial Consultation</td><td class="mono">Room 204</td><td class="mono">45 min</td><td><span class="tag tag-info">Next</span></td></tr>
+              <tr><td class="mono">12:00</td><td class="fw6">Nadia Omar</td><td class="mono">Lab Review</td><td class="mono">Room 204</td><td class="mono">30 min</td><td><span class="tag tag-alert">Urgent</span></td></tr>
+              <tr><td class="mono">14:00</td><td class="fw6">Ibrahim Farouk</td><td class="mono">Post-Op Check</td><td class="mono">Ward 3</td><td class="mono">30 min</td><td><span class="tag tag-warn">Scheduled</span></td></tr>
+              <tr><td class="mono">15:30</td><td class="fw6">Layla Amin</td><td class="mono">Prescription Renewal</td><td class="mono">Room 204</td><td class="mono">20 min</td><td><span class="tag tag-warn">Scheduled</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: ACCESS LOG ══════════════════════════ -->
+    <div class="page" id="page-access-log">
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header">
+          <div class="card-title">🔒 My HIPAA Access Trail — Dr. Yusuf Hassan</div>
+          <button class="btn-outline" style="font-size:9px;padding:6px 14px;">Export</button>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="tbl">
+            <thead><tr><th>Time</th><th>Record</th><th>Patient</th><th>Action</th><th>IP</th><th>Integrity Hash</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">09:16:47</td><td class="mono">PT-0041 ECG</td><td class="fw6">Khalid Mansour</td><td><span class="tag tag-info">View</span></td><td class="mono">10.0.1.22</td><td class="hash">4a1f...c82e</td></tr>
+              <tr><td class="mono">09:18:02</td><td class="mono">PT-0039 Lab</td><td class="fw6">Nadia Omar</td><td><span class="tag tag-warn">Download</span></td><td class="mono">10.0.1.22</td><td class="hash">3d8b...7f2a</td></tr>
+              <tr><td class="mono">09:21:30</td><td class="mono">PT-0028 Rx</td><td class="fw6">Hana El-Masry</td><td><span class="tag tag-info">View</span></td><td class="mono">10.0.1.22</td><td class="hash">9c3d...a11b</td></tr>
+              <tr><td class="mono">09:38:20</td><td class="mono">PT-0041 Record</td><td class="fw6">Khalid Mansour</td><td><span class="tag tag-teal">Update</span></td><td class="mono">10.0.1.22</td><td class="hash">4a1f...7c8b</td></tr>
+              <tr><td class="mono">10:14:22</td><td class="mono">PT-0041 Rx</td><td class="fw6">Khalid Mansour</td><td><span class="tag tag-ok">Sign</span></td><td class="mono">10.0.1.22</td><td class="hash">1c4e...8b3f</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: NURSE DASHBOARD ══════════════════════════ -->
+    <div class="page" id="page-nurse-dash">
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kpi-label">Ward Patients</div><div class="kpi-val teal">14</div><div class="kpi-sub">Cardiology ward</div></div>
+        <div class="kpi"><div class="kpi-label">My Shift</div><div class="kpi-val" style="font-size:20px;padding-top:6px;">Afternoon</div><div class="kpi-sub">14:00 – 22:00</div></div>
+        <div class="kpi"><div class="kpi-label">Medication Due</div><div class="kpi-val amber">6</div><div class="kpi-sub">Next 2 hours</div></div>
+        <div class="kpi"><div class="kpi-label">Vitals Pending</div><div class="kpi-val red">3</div><div class="kpi-sub">Overdue check</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">⏰ Medication Schedule</div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="tbl">
+            <thead><tr><th>Time</th><th>Patient</th><th>Medication</th><th>Dose</th><th>Route</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="mono" style="color:var(--teal);">14:00</td><td class="fw6">Khalid Mansour</td><td class="mono">Metoprolol</td><td class="mono">50mg</td><td class="mono">Oral</td><td><span class="tag tag-warn">Due</span></td></tr>
+              <tr><td class="mono" style="color:var(--teal);">14:00</td><td class="fw6">Hana El-Masry</td><td class="mono">Amlodipine</td><td class="mono">5mg</td><td class="mono">Oral</td><td><span class="tag tag-warn">Due</span></td></tr>
+              <tr><td class="mono">16:00</td><td class="fw6">Ibrahim Farouk</td><td class="mono">Ceftriaxone</td><td class="mono">1g</td><td class="mono">IV</td><td><span class="tag tag-info">Upcoming</span></td></tr>
+              <tr><td class="mono">18:00</td><td class="fw6">Nadia Omar</td><td class="mono">Furosemide</td><td class="mono">40mg</td><td class="mono">IV</td><td><span class="tag tag-info">Upcoming</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: SHIFTS ══════════════════════════ -->
+    <div class="page" id="page-shifts">
+      <div class="shift-grid" style="margin-bottom:20px;">
+        <div class="shift-cell"><div class="shift-type">Morning 06–14</div><div class="shift-count teal">12</div></div>
+        <div class="shift-cell"><div class="shift-type">Afternoon 14–22</div><div class="shift-count amber">7</div></div>
+        <div class="shift-cell"><div class="shift-type">Night 22–06</div><div class="shift-count blue">3</div></div>
+        <div class="shift-cell"><div class="shift-type">On-Call</div><div class="shift-count">1</div></div>
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header"><div class="card-title">⏰ Shift Schedule — Cardiology</div></div>
+        <div class="card-body" style="padding:0;">
+          <table class="tbl">
+            <thead><tr><th>Staff</th><th>Role</th><th>Shift</th><th>Start</th><th>End</th><th>Dept</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="fw6">Dr. Yusuf Hassan</td><td class="mono">Doctor</td><td class="mono">Morning</td><td class="mono">06:00</td><td class="mono">14:00</td><td class="mono">Cardiology</td><td><span class="tag tag-ok">Active</span></td></tr>
+              <tr><td class="fw6">Nurse Mona Fawzi</td><td class="mono">Nurse</td><td class="mono">Afternoon</td><td class="mono">14:00</td><td class="mono">22:00</td><td class="mono">Cardiology</td><td><span class="tag tag-info">Starting</span></td></tr>
+              <tr><td class="fw6">Nurse Kareem Said</td><td class="mono">Nurse</td><td class="mono">Night</td><td class="mono">22:00</td><td class="mono">06:00</td><td class="mono">Cardiology</td><td><span class="tag tag-warn">Later</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════ PAGE: MEDICAL RECORDS ══════════════════════════ -->
+    <div class="page" id="page-records">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search records by patient, type, diagnosis...">
+      </div>
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-header"><div class="card-title">📁 Medical Records — My Patients</div><button class="btn-primary" style="font-size:9px;padding:6px 14px;">+ New Record</button></div>
+        <div class="card-body" style="padding:0;">
+          <table class="tbl">
+            <thead><tr><th>Patient</th><th>Type</th><th>Title</th><th>Date</th><th>Version</th><th>Hash</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="fw6">Khalid Mansour</td><td><span class="tag tag-info">Diagnosis</span></td><td>ECG — Sinus Tachycardia</td><td class="mono">2026-03-22</td><td class="mono">v2</td><td class="hash">4a1f...c82e</td><td><span class="tag tag-ok">Signed</span></td></tr>
+              <tr><td class="fw6">Khalid Mansour</td><td><span class="tag tag-teal">Prescription</span></td><td>Metoprolol 50mg</td><td class="mono">2026-03-22</td><td class="mono">v1</td><td class="hash">1c4e...8b3f</td><td><span class="tag tag-ok">Signed</span></td></tr>
+              <tr><td class="fw6">Nadia Omar</td><td><span class="tag tag-warn">Lab Result</span></td><td>Blood Panel — Complete Metabolic</td><td class="mono">2026-03-28</td><td class="mono">v1</td><td class="hash">2e7b...9d1a</td><td><span class="tag tag-warn">Pending</span></td></tr>
+              <tr><td class="fw6">Hana El-Masry</td><td><span class="tag tag-teal">Prescription</span></td><td>Amlodipine 5mg</td><td class="mono">2026-03-20</td><td class="mono">v1</td><td class="hash">8f0a...3c2e</td><td><span class="tag tag-ok">Signed</span></td></tr>
+              <tr><td class="fw6">Ibrahim Farouk</td><td><span class="tag tag-alert">Procedure</span></td><td>Post-Op Report — Appendectomy</td><td class="mono">2026-03-25</td><td class="mono">v3</td><td class="hash">6d1b...4e9c</td><td><span class="tag tag-ok">Signed</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// ── PAGE NAVIGATION ──
+const pageTitles = {
+  'dashboard':    'System Overview',
+  'patients':     'Patient Registry',
+  'staff':        'Staff Management',
+  'audit':        'Audit Chain',
+  'nda':          'NDA Queue',
+  'deposits':     'Deposit Ledger',
+  'doctor-dash':  'My Dashboard',
+  'my-patients':  'My Patients',
+  'appointments': 'Appointments',
+  'records':      'Medical Records',
+  'access-log':   'My Access Log',
+  'nurse-dash':   'Ward Overview',
+  'shifts':       'Shift Schedule',
+};
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('active');
+  document.getElementById('pageTitle').textContent = pageTitles[name] || name;
+  // Highlight nav item
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(name)) {
+      n.classList.add('active');
+    }
+  });
+}
+
+// ── ROLE SWITCHER ──
+const roles = {
+  admin: {
+    name: 'Fatima Al-Rashid',
+    role: 'Administrator',
+    initials: 'FA',
+    nav: 'nav-admin',
+    defaultPage: 'dashboard',
+    alert: '⚠ 2 Critical Alerts',
+  },
+  doctor: {
+    name: 'Dr. Yusuf Hassan',
+    role: 'Attending Physician · Cardiology',
+    initials: 'YH',
+    nav: 'nav-doctor',
+    defaultPage: 'doctor-dash',
+    alert: '⚠ 1 Lab Alert',
+  },
+  nurse: {
+    name: 'Nurse Mona Fawzi',
+    role: 'Charge Nurse · Cardiology',
+    initials: 'MF',
+    nav: 'nav-nurse',
+    defaultPage: 'nurse-dash',
+    alert: '⚠ 3 Vitals Pending',
+  },
+};
+
+function switchRole(role) {
+  const r = roles[role];
+  // Update sidebar user
+  document.getElementById('sidebarAvatar').textContent = r.initials;
+  document.getElementById('sidebarName').textContent = r.name;
+  document.getElementById('sidebarRole').textContent = r.role;
+  // Update alert
+  document.querySelector('.topbar-alert').textContent = r.alert;
+  // Toggle nav
+  ['admin','doctor','nurse'].forEach(k => {
+    const el = document.getElementById('nav-' + k);
+    if (el) el.style.display = k === role ? 'block' : 'none';
+    document.getElementById('rb-' + k).classList.toggle('active', k === role);
+  });
+  showPage(r.defaultPage);
+}
+
+// Patient selection
+function selectPt(el) {
+  document.querySelectorAll('.pt-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+</script>
+</body>
+</html>
