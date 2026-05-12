@@ -74,7 +74,7 @@ To maintain consistency in the codebase, please follow these guidelines:
 
 ## License
 
-This project is part of Elmahrosa International. All code, assets, and documentation are governed by the proprietary license of the organization. No per-contributor licensing applies.
+This project is part of Elmahrosa International and governed by **TESL v2.0 (Teos Sovereign License)**. All code, assets, and documentation are covered under the organization-wide TESL framework. No per-contributor licensing applies.
 
 ---
 

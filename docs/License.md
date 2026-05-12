@@ -2,13 +2,9 @@
 
 ## License Status & Governance
 Copyright © 2025 Elmahrosa International  
-**Status:** Proprietary / Source‑Available (Founder‑Only Usage)  
-**Jurisdiction:** Cairo, Egypt  
+**Status:** TESL v2.0 — Teos Sovereign License  
 
----
-
-## License
-This repository and all associated code, smart contracts, AI systems, documentation, and infrastructure are **proprietary**.  
+This repository and all associated code, smart contracts, AI systems, documentation, and infrastructure are governed by **TESL v2.0 (Teos Sovereign License)**.
 
 - Usage requires **written approval** from TEOS Egypt / Elmahrosa International.  
 - Unauthorized use, reproduction, modification, distribution, or sublicensing is strictly prohibited.  

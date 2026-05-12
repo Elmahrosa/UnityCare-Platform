@@ -4,7 +4,7 @@
 [![Security](https://img.shields.io/badge/Security-Hardened-blue)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Sovereign--First-purple)]()
 [![Stack](https://img.shields.io/badge/Stack-Node.js%20%7C%20MongoDB%20%7C%20Docker-black)]()
-[![License](https://img.shields.io/badge/License-Commercial%20%2F%20Private-red)]()
+[![License](https://img.shields.io/badge/license-TESL%20v2.0-blue)]()
 
 ---
 

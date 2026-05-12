@@ -11,7 +11,7 @@ telemedicine consultations, hospital bed allocation, and compliance logging.
 The platform enables healthcare providers to deploy a full digital hospital
 infrastructure in **less than 30 days**.
 
-[![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)](./LICENSE)
+[![License](https://img.shields.io/badge/license-TESL%20v2.0-blue?style=flat-square)](./LICENSE)
 [![Status](https://img.shields.io/badge/status-Active%20Sale-brightgreen?style=flat-square)]()
 [![Response](https://img.shields.io/badge/response-48h-blue?style=flat-square)](mailto:info@uch.teosegypt.com)
 

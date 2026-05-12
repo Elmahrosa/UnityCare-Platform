@@ -2,7 +2,7 @@
 
 ## Purpose
 This CLA ensures all contributions to TEOS Egypt / Elmahrosa International repositories are legally governed under TESL v2.0.  
-By signing, you acknowledge contributions are proprietary and cannot be used outside TEOS Egypt without written approval.
+By signing, you acknowledge contributions are governed by TESL v2.0 (Teos Sovereign License) and cannot be used outside Elmahrosa International without written approval.
 
 ---
 

@@ -5,7 +5,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build">
-  <img src="https://img.shields.io/badge/license-proprietary-red" alt="License">
+  <img src="https://img.shields.io/badge/license-TESL%20v2.0-blue" alt="License">
   <img src="https://img.shields.io/github/issues/Elmahrosa/UnityCare-Platform" alt="Issues">
   <img src="https://img.shields.io/github/stars/Elmahrosa/UnityCare-Platform" alt="Stars">
   <img src="https://img.shields.io/badge/HIPAA-ready-blue" alt="HIPAA">
@@ -122,7 +122,7 @@ docker-compose up --build
 
 <p align="center">
   <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build">
-  <img src="https://img.shields.io/badge/license-proprietary-red" alt="License">
+  <img src="https://img.shields.io/badge/license-TESL%20v2.0-blue" alt="License">
   <img src="https://img.shields.io/github/issues/Elmahrosa/UnityCare-Platform" alt="Issues">
   <img src="https://img.shields.io/badge/HIPAA-ready-blue" alt="HIPAA">
   <img src="https://img.shields.io/badge/GDPR-compliant-blue" alt="GDPR">

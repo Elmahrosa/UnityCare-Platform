@@ -2,7 +2,7 @@
 
 ![Node](https://img.shields.io/badge/node-20.x-green)
 ![Express](https://img.shields.io/badge/framework-express-black)
-![License](https://img.shields.io/badge/license-proprietary-red)
+![License](https://img.shields.io/badge/license-TESL%20v2.0-blue)
 
 Backend API for the Unity Care Hospital digital healthcare platform.
 
