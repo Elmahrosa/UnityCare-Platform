@@ -1,0 +1,9 @@
+{
+  "outputDirectory": "website",
+  "redirects": [
+    { "source": "/", "destination": "/demo.html", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}

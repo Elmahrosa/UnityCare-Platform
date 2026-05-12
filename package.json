@@ -1,0 +1,43 @@
+{
+  "name": "unity-care-hospital",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Unity Care Hospital (UCH) — Institutional Digital Health Infrastructure",
+  "scripts": {
+    "api:install": "npm --prefix backend install",
+    "api:dev": "npm --prefix backend run dev",
+    "api:start": "npm --prefix backend run start",
+    "api:test": "npm --prefix backend run test",
+    "start": "node backend/src/server.js",
+    "test": "dotenv -e .env.test -- jest --runInBand tests/backend"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.27",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "next": "^16.2.1",
+    "octokit": "^5.0.5",
+    "postcss": "^8.5.8",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "dotenv-cli": "^11.0.0",
+    "jest": "^30.3.0",
+    "mongoose": "^9.3.3",
+    "supertest": "^7.2.2"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/labs/"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.js"
+    ]
+  }
+}
