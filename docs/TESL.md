@@ -1,4 +1,4 @@
-﻿# ⚖️ TEOS Egypt Sovereign License (TESL) v2.0 — UnityCare Platform
+﻿# ⚖️ TEOS Egypt Sovereign License (TESL) v2.0 — Elmahrosa International
 
 ![License](https://img.shields.io/badge/license-TESL%20v2.0-blue)
 ![Status](https://img.shields.io/badge/status-Active-brightgreen)
@@ -10,7 +10,7 @@
 ---
 
 ## 1. Purpose
-TESL governs all software, smart contracts, AI systems, documentation, and infrastructure published under **Elmahrosa International / TEOS Egypt** repositories, including UnityCare Platform.
+TESL governs all software, smart contracts, AI systems, documentation, and infrastructure published under **Elmahrosa International / TEOS Egypt** repositories, including UnityCare Platform, Teos-AI-Engine, and all associated projects.
 
 This software exists to support **sovereign healthcare IT infrastructure**, not unrestricted commercial exploitation.
 
@@ -48,7 +48,7 @@ Without prior written permission, others may **NOT**:
 ---
 
 ## 6. AI & Governance Disclaimer
-AI systems within UnityCare Platform:
+AI systems within Elmahrosa International repositories:
 - Operate as decision-support tools only
 - Do not replace human medical authority
 - May produce incomplete or incorrect outputs
