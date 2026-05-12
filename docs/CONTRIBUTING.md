@@ -74,7 +74,7 @@ To maintain consistency in the codebase, please follow these guidelines:
 
 ## License
 
-By contributing to this project, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+This project is part of Elmahrosa International. All code, assets, and documentation are governed by the proprietary license of the organization. No per-contributor licensing applies.
 
 ---
 
