@@ -7,10 +7,7 @@ const connectDB = async () => {
 
         // ✅ FIX: removed deprecated options: useCreateIndex, useFindAndModify
         // These were removed in Mongoose 6+ and throw errors if passed
-        await mongoose.connect(dbURI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(dbURI);
 
         // ✅ ADDED: connection event listeners for runtime monitoring
         mongoose.connection.on('disconnected', () => {

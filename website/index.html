@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Unity Care Hospital Sovereign | Sovereign Healthcare Infrastructure</title>
+  <meta
+    name="description"
+    content="Unity Care Hospital Sovereign is deployable healthcare infrastructure for hospitals, private networks, and sovereign health systems. No SaaS lock-in. Full ownership."
+  />
+
+  <meta property="og:title" content="Unity Care Hospital Sovereign" />
+  <meta
+    property="og:description"
+    content="Healthcare is sovereign. Your infrastructure should be too."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://YOUR-GITHUB-USERNAME.github.io/YOUR-REPO/" />
+
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0d1b2e;
+      --card: rgba(255,255,255,0.06);
+      --line: rgba(255,255,255,0.12);
+      --text: #eef4ff;
+      --muted: #b9c5d8;
+      --accent: #4cc9f0;
+      --accent-2: #2dd4bf;
+      --gold: #d7b56d;
+      --danger: #ef4444;
+      --shadow: 0 20px 50px rgba(0,0,0,0.35);
+      --radius: 20px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(76,201,240,0.16), transparent 28%),
+        radial-gradient(circle at top left, rgba(45,212,191,0.12), transparent 22%),
+        linear-gradient(180deg, #06101c 0%, #0a1628 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(7, 17, 31, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 16px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #021018;
+      font-weight: 800;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 13px 18px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+      transition: 0.2s ease;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,0.22);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #03131a;
+      border: none;
+    }
+
+    .hero {
+      padding: 72px 0 48px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03);
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 66px);
+      line-height: 1.05;
+      margin: 0 0 18px;
+      letter-spacing: -1.5px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 760px;
+      margin: 0 0 26px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .mini-points {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .mini-points span {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .hero-card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .stat:first-of-type { border-top: none; }
+
+    .stat strong {
+      font-size: 24px;
+      color: white;
+    }
+
+    .section {
+      padding: 42px 0;
+    }
+
+    .section h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      margin: 0 0 12px;
+      letter-spacing: -0.8px;
+    }
+
+    .section-lead {
+      color: var(--muted);
+      max-width: 780px;
+      margin: 0 0 28px;
+      font-size: 17px;
+    }
+
+    .grid-3,
+    .grid-4,
+    .pricing-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .pricing-grid { grid-template-columns: repeat(4, 1fr); }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3, .card h4 {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .pillars .card {
+      min-height: 220px;
+    }
+
+    .number {
+      display: inline-grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #03131a;
+    }
+
+    .feature-list,
+    .price-list,
+    .simple-list {
+      padding-left: 18px;
+      margin: 14px 0 0;
+      color: var(--muted);
+    }
+
+    .feature-list li,
+    .price-list li,
+    .simple-list li {
+      margin: 8px 0;
+    }
+
+    .pricing .card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .price {
+      font-size: 34px;
+      font-weight: 800;
+      margin: 0 0 8px;
+      color: white;
+    }
+
+    .price small {
+      font-size: 15px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .highlight {
+      border: 1px solid rgba(76,201,240,0.42);
+      box-shadow: 0 0 0 1px rgba(76,201,240,0.1), var(--shadow);
+    }
+
+    .cta {
+      text-align: center;
+      padding: 56px 0 74px;
+    }
+
+    .cta-box {
+      padding: 30px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(76,201,240,0.14), rgba(45,212,191,0.08));
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: var(--shadow);
+    }
+
+    .notice {
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      padding: 22px 0 34px;
+      font-size: 14px;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .mono {
+      font-family: Consolas, Monaco, monospace;
+      font-size: 13px;
+      color: #d7e7ff;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid-3,
+      .grid-4,
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 42px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-badge">UCH</div>
+        <div>Unity Care Hospital Sovereign</div>
+      </div>
+      <div class="nav-links">
+        <a href="#pillars">Pillars</a>
+        <a href="#platform">Platform</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <a class="btn" href="mailto:info@uch.teosegypt.com?subject=UCH%20Institutional%20Inquiry">Request Access</a>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Institutional Pilot • Sovereign Deployment • No SaaS Lock-In</div>
+          <h1>Healthcare is sovereign. Your infrastructure should be too.</h1>
+          <p>
+            Unity Care Hospital Sovereign is a deployable healthcare infrastructure platform
+            for private hospital groups, public institutions, and sovereign health programs.
+            Own the system. Control the data. Deploy on your terms.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="mailto:info@uch.teosegypt.com?subject=UCH%20Pilot%20Request">Request Institutional Briefing</a>
+            <a class="btn" href="https://github.com/Elmahrosa/Unity-Care-Hospital-Sovereign" target="_blank" rel="noopener">View Technical Repository</a>
+          </div>
+
+          <div class="mini-points">
+            <span>Docker Deployment</span>
+            <span>JWT + RBAC</span>
+            <span>Mongo Auth</span>
+            <span>Private Cloud / On-Prem</span>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Institutional Procurement Model</h3>
+          <p>Built for pilot engagements, perpetual licensing, enterprise deployment, and full ownership transfer.</p>
+
+          <div class="stat">
+            <div>
+              <div style="color: var(--muted); font-size: 13px;">Pilot Range</div>
+              <strong>$25K–$50K</strong>
+            </div>
+            <div style="color: var(--muted); text-align: right;">Single-site validation<br />30–90 days</div>
+          </div>
+
+          <div class="stat">
+            <div>
+              <div style="color: var(--muted); font-size: 13px;">Enterprise Range</div>
+              <strong>$120K–$250K</strong>
+            </div>
+            <div style="color: var(--muted); text-align: right;">Multi-site deployment<br />Customization included</div>
+          </div>
+
+          <div class="stat">
+            <div>
+              <div style="color: var(--muted); font-size: 13px;">Ownership Transfer</div>
+              <strong>$250K+</strong>
+            </div>
+            <div style="color: var(--muted); text-align: right;">Full source + rights<br />Sovereign control</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pillars" class="section pillars">
+      <div class="container">
+        <h2>The three pillars of UCH</h2>
+        <p class="section-lead">
+          This is not positioned as a telemedicine app or SaaS dashboard. It is healthcare infrastructure
+          designed for ownership, control, and deployment flexibility.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="number">1</div>
+            <h3>Data autonomy</h3>
+            <p>
+              Your patients. Your data. Your servers. Deploy in private cloud, on-prem,
+              or sovereign environments without recurring SaaS lock-in.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="number">2</div>
+            <h3>Clinical velocity</h3>
+            <p>
+              Move from fragmented workflows to a structured digital infrastructure model
+              with rapid pilot deployment and modular expansion.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="number">3</div>
+            <h3>Audit-grade integrity</h3>
+            <p>
+              Role-based access, token lifecycle management, health checks, and infrastructure
+              controls designed for institutional trust.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="platform" class="section">
+      <div class="container">
+        <h2>What buyers actually get</h2>
+        <p class="section-lead">
+          A deployable infrastructure foundation with authenticated backend services, reverse proxy,
+          database layer, and extensible healthcare modules.
+        </p>
+
+        <div class="grid-4">
+          <div class="card">
+            <h3>Backend Core</h3>
+            <p>Node.js / Express API with JWT auth, refresh tokens, role-based access, and password hashing.</p>
+          </div>
+          <div class="card">
+            <h3>Deployment Stack</h3>
+            <p>Dockerized API, MongoDB with authentication, Nginx reverse proxy, health checks, and service networking.</p>
+          </div>
+          <div class="card">
+            <h3>Institutional Positioning</h3>
+            <p>Pilot-first commercial structure built for hospital groups, procurement pathways, and ownership conversations.</p>
+          </div>
+          <div class="card">
+            <h3>Roadmap Expansion</h3>
+            <p>Patient registry, appointments, records, audit logging, integrations, and sovereign identity extensions.</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 22px;" class="mono">
+Client → Nginx → Node API → MongoDB
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>Market need</h2>
+        <p class="section-lead">
+          The market does not need another generic health app. It needs deployable, owner-operated infrastructure
+          that reduces SaaS dependency and strengthens institutional control.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>What buyers care about</h3>
+            <ul class="simple-list">
+              <li>Ownership of patient data</li>
+              <li>Deployment certainty</li>
+              <li>Security posture</li>
+              <li>Ability to customize</li>
+              <li>Reduced recurring vendor dependence</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>What hospitals are tired of</h3>
+            <ul class="simple-list">
+              <li>Locked SaaS subscriptions</li>
+              <li>Expensive custom rebuilds</li>
+              <li>Weak integration flexibility</li>
+              <li>Low ownership of infrastructure decisions</li>
+              <li>Vendor-controlled roadmaps</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Why UCH fits</h3>
+            <ul class="simple-list">
+              <li>Deployable instead of rented</li>
+              <li>Pilot-friendly pricing</li>
+              <li>Institutional narrative</li>
+              <li>Clear path to ownership transfer</li>
+              <li>Sovereign deployment story</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section pricing">
+      <div class="container">
+        <h2>Institutional tiers</h2>
+        <p class="section-lead">
+          These tiers are structured for fast sales conversations while keeping room for larger ownership and national-stack deals.
+        </p>
+
+        <div class="pricing-grid">
+          <div class="card">
+            <div class="tag">Fast-close tier</div>
+            <div class="price">$25K–$50K <small>/ pilot</small></div>
+            <h3>Pilot Deployment</h3>
+            <ul class="price-list">
+              <li>Single-site institutional validation</li>
+              <li>30–90 day engagement</li>
+              <li>Technical onboarding</li>
+              <li>Decision-maker demo path</li>
+            </ul>
+          </div>
+
+          <div class="card highlight">
+            <div class="tag">Best core offer</div>
+            <div class="price">$60K–$120K <small>/ license</small></div>
+            <h3>Institutional License</h3>
+            <ul class="price-list">
+              <li>Full deployable platform</li>
+              <li>White-label deployment path</li>
+              <li>Private cloud or on-prem model</li>
+              <li>Most realistic first major deal</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="tag">Expansion tier</div>
+            <div class="price">$120K–$250K <small>/ enterprise</small></div>
+            <h3>Enterprise Deployment</h3>
+            <ul class="price-list">
+              <li>Multi-site rollout</li>
+              <li>Customization scope</li>
+              <li>Integration support</li>
+              <li>Network-level deployment</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="tag">Asset sale</div>
+            <div class="price">$250K+ <small>/ transfer</small></div>
+            <h3>Ownership Transfer</h3>
+            <ul class="price-list">
+              <li>Full source access and rights</li>
+              <li>Strategic acquisition pathway</li>
+              <li>Sovereign ownership narrative</li>
+              <li>Government / major group target</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2>What to say to the market</h2>
+        <p class="section-lead">
+          To sell fast, you should not lead with technical jargon. Lead with ownership, speed, and control.
+        </p>
+
+        <div class="grid-3">
+          <div class="card">
+            <h3>For hospital groups</h3>
+            <p>Replace recurring SaaS dependence with a deployable infrastructure stack you can control and extend internally.</p>
+          </div>
+          <div class="card">
+            <h3>For ministries</h3>
+            <p>Position UCH as a sovereign digital health backbone that supports national control, local deployment, and long-term ownership.</p>
+          </div>
+          <div class="card">
+            <h3>For investors / acquirers</h3>
+            <p>Frame UCH as infrastructure-as-an-asset with pilot revenue, license upside, and acquisition-level ownership transfer potential.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="cta">
+      <div class="container">
+        <div class="cta-box">
+          <h2 style="margin-top: 0;">Request institutional access</h2>
+          <p class="section-lead" style="margin-left:auto;margin-right:auto;">
+            Full technical review, pricing discussion, and institutional briefing available by direct request.
+          </p>
+          <div class="hero-actions" style="justify-content:center;">
+            <a class="btn btn-primary" href="mailto:info@uch.teosegypt.com?subject=UCH%20Institutional%20Access%20Request">Email Institutional Inquiry</a>
+            <a class="btn" href="https://github.com/Elmahrosa/Unity-Care-Hospital-Sovereign" target="_blank" rel="noopener">Open GitHub Repository</a>
+          </div>
+          <div class="notice">
+            Suggested next step: offer a pilot first, then upsell to institutional license or ownership transfer.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <div><strong>Unity Care Hospital Sovereign</strong> • Elmahrosa International</div>
+      <div>Healthcare is sovereign. Infrastructure must be owned.</div>
+    </div>
+  </footer>
+</body>
+</html>

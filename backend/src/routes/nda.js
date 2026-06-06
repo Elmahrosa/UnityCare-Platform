@@ -2,6 +2,16 @@ const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 
+function escapeHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 router.post('/request', async (req, res) => {
   try {
     const { fullName, organization, role, email, country, intendedUse } = req.body;
@@ -22,16 +32,16 @@ router.post('/request', async (req, res) => {
 
     await transporter.sendMail({
       from: `"UCH NDA Request" <${process.env.SMTP_USER}>`,
-      to: "ayman@teosegypt.com",
+      to: process.env.NDA_NOTIFY_EMAIL || "ayman@teosegypt.com",
       subject: "New NDA Request — Unity Care Hospital",
       html: `
         <h2>New NDA Request</h2>
-        <p><strong>Name:</strong> ${fullName}</p>
-        <p><strong>Organization:</strong> ${organization}</p>
-        <p><strong>Role:</strong> ${role}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Country:</strong> ${country}</p>
-        <p><strong>Intended Use:</strong> ${intendedUse}</p>
+        <p><strong>Name:</strong> ${escapeHtml(fullName)}</p>
+        <p><strong>Organization:</strong> ${escapeHtml(organization)}</p>
+        <p><strong>Role:</strong> ${escapeHtml(role)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+        <p><strong>Country:</strong> ${escapeHtml(country)}</p>
+        <p><strong>Intended Use:</strong> ${escapeHtml(intendedUse)}</p>
       `
     });
 

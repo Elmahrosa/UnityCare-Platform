@@ -54,6 +54,19 @@ services:
     networks:
       - uch-network
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: uch-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - uch-network
+
 networks:
   uch-network:
     driver: bridge
