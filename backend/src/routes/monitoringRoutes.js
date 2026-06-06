@@ -1,10 +1,10 @@
 const express = require('express');
 const authMiddleware = require('../middlewares/authMiddleware');
-
+const ctrl = require('../controllers/monitoringController');
 const router = express.Router();
 
-router.get('/status', authMiddleware, (req, res) => {
-  res.json({ ok: true, message: 'Monitoring placeholder.' });
-});
+router.get('/health', ctrl.getSystemHealth);
+
+router.get('/metrics', authMiddleware, authMiddleware.requireRole('admin'), ctrl.getMetrics);
 
 module.exports = router;

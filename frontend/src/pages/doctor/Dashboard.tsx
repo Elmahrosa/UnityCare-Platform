@@ -2,22 +2,45 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { trpc } from "@/lib/trpc";
+import { useState, useEffect } from "react";
 import { Users, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { authApi, appointmentApi } from "@/services/apiService";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const { data: profile } = trpc.doctor.getProfile.useQuery();
-  const { data: queue } = trpc.doctor.getPatientQueue.useQuery();
+  const [profile, setProfile] = useState<any>(null);
+  const [queue, setQueue] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const todayAppointments = queue?.filter(
+  useEffect(() => {
+    async function load() {
+      try {
+        const [meRes, queueRes] = await Promise.allSettled([
+          authApi.me(),
+          user?.id ? appointmentApi.getByDoctor(user.id) : Promise.resolve({ data: [] }),
+        ]);
+
+        if (meRes.status === "fulfilled") setProfile(meRes.value.data.user || meRes.value.data);
+        if (queueRes.status === "fulfilled") setQueue(queueRes.value.data.appointments || queueRes.value.data || []);
+      } catch (err) {
+        console.error("Failed to load dashboard data", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [user?.id]);
+
+  const todayAppointments = queue.filter(
     (apt) =>
-      new Date(apt.scheduledAt).toDateString() === new Date().toDateString()
+      new Date(apt.date || apt.scheduledAt).toDateString() === new Date().toDateString()
   ) || [];
 
   const completedToday = todayAppointments.filter(
     (apt) => apt.status === "completed"
   ).length;
+
+  if (loading) return <div className="p-8 text-center text-gray-600">Loading dashboard...</div>;
 
   return (
     <div className="space-y-6">
@@ -71,11 +94,7 @@ export default function Dashboard() {
               <div>
                 <p className="text-sm text-gray-600">In Progress</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {
-                    todayAppointments.filter(
-                      (apt) => apt.status === "in_progress"
-                    ).length
-                  }
+                  {todayAppointments.filter((apt) => apt.status === "in_progress").length}
                 </p>
               </div>
               <Clock className="w-8 h-8 text-orange-500" />
@@ -110,16 +129,16 @@ export default function Dashboard() {
                 <div className="space-y-3">
                   {todayAppointments.map((apt) => (
                     <div
-                      key={apt.id}
+                      key={apt.id || apt._id}
                       className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
                     >
                       <div className="flex-1">
-                        <p className="font-medium text-gray-900">Patient ID: {apt.patientId}</p>
+                        <p className="font-medium text-gray-900">Patient ID: {apt.patientId || apt.patient}</p>
                         <p className="text-sm text-gray-600">
-                          {new Date(apt.scheduledAt).toLocaleTimeString()}
+                          {new Date(apt.date || apt.scheduledAt).toLocaleTimeString()}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
-                          {apt.reason || "General consultation"}
+                          {apt.reason || apt.notes || "General consultation"}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">

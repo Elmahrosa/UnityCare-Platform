@@ -1,53 +1,79 @@
-// Import necessary modules
-const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const helmet = require('helmet');
-const morgan = require('morgan');
-const connectDB = require('./config/dbConfig');
-const { loadEnvVariables, validateEnvVariables } = require('./config/envConfig');
-const { requestLogger, errorLogger } = require('./utils/logger');
-const appointmentRoutes = require('./routes/appointmentRoutes'); // Import appointment routes
-const userRoutes = require('./routes/userRoutes'); // Import user routes
+const bcrypt = require('bcrypt');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../backend/.env') });
 
-// Initialize the Express application
-const app = express();
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/salma_unity_care_hospital';
 
-// Load and validate environment variables
-loadEnvVariables();
-validateEnvVariables();
+const users = [
+  {
+    name: 'Admin User',
+    email: 'admin@unitycare.health',
+    password: 'Admin@123456',
+    role: 'admin',
+  },
+  {
+    name: 'Dr. Sarah Johnson',
+    email: 'sarah.johnson@unitycare.health',
+    password: 'Doctor@123456',
+    role: 'doctor',
+  },
+  {
+    name: 'Dr. Michael Chen',
+    email: 'michael.chen@unitycare.health',
+    password: 'Doctor@123456',
+    role: 'doctor',
+  },
+  {
+    name: 'John Patient',
+    email: 'john.patient@example.com',
+    password: 'Patient@123456',
+    role: 'patient',
+  },
+  {
+    name: 'Jane Patient',
+    email: 'jane.patient@example.com',
+    password: 'Patient@123456',
+    role: 'patient',
+  },
+  {
+    name: 'Nurse Alice',
+    email: 'alice.nurse@unitycare.health',
+    password: 'Nurse@123456',
+    role: 'nurse',
+  },
+];
 
-// Connect to the database
-connectDB();
+async function seed() {
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log('Connected to MongoDB');
 
-// Middleware setup
-app.use(cors()); // Enable CORS
-app.use(helmet()); // Set security headers
-app.use(bodyParser.json()); // Parse JSON request bodies
-app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded request bodies
-app.use(morgan('combined')); // Log HTTP requests
+    const User = mongoose.model('User', new mongoose.Schema({
+      name: String,
+      email: String,
+      password: String,
+      role: String,
+      createdAt: { type: Date, default: Date.now },
+    }));
 
-// Use request logger middleware
-app.use(requestLogger);
+    await User.deleteMany({});
+    console.log('Cleared existing users');
 
-// Define routes
-app.use('/api/appointments', appointmentRoutes); // Appointment routes
-app.use('/api/users', userRoutes); // User routes
+    for (const u of users) {
+      u.password = await bcrypt.hash(u.password, 12);
+      await User.create(u);
+      console.log(`Created user: ${u.email} (${u.role})`);
+    }
 
-// Error handling middleware
-app.use(errorLogger);
+    console.log('\nSeed complete!');
+    console.log('Login credentials:');
+    users.forEach(u => console.log(`  ${u.role}: ${u.email} / ${u.password}`));
+  } catch (err) {
+    console.error('Seed failed:', err);
+  } finally {
+    await mongoose.disconnect();
+  }
+}
 
-// Global error handler
-app.use((err, req, res) => {
-    res.status(err.statusCode || 500).json({
-        success: false,
-        message: err.message || 'Internal Server Error',
-    });
-});
-
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+seed();

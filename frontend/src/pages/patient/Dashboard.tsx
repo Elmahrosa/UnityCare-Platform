@@ -2,24 +2,49 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { trpc } from "@/lib/trpc";
+import { useState, useEffect } from "react";
 import { Calendar, Heart, Pill, Activity, AlertCircle } from "lucide-react";
-import { useState } from "react";
+import { authApi, appointmentApi } from "@/services/apiService";
+import api from "@/services/apiService";
 
 export default function Dashboard() {
   const { user } = useAuth();
   const [selectedTab, setSelectedTab] = useState("overview");
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [vitalSigns, setVitalSigns] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const { data: profile } = trpc.patient.getProfile.useQuery();
-  const { data: appointments } = trpc.patient.getAppointments.useQuery();
-  const { data: prescriptions } = trpc.patient.getPrescriptions.useQuery();
-  const { data: vitalSigns } = trpc.iot.getVitalSigns.useQuery({ patientId: user?.id });
+  useEffect(() => {
+    async function load() {
+      if (!user?.id) return;
+      try {
+        const [aptRes, vitalsRes] = await Promise.allSettled([
+          appointmentApi.getByPatient(user.id),
+          api.get(`/iot/${user.id}/vitals`),
+        ]);
 
-  const upcomingAppointments = appointments?.filter(
-    (apt) => new Date(apt.scheduledAt) > new Date()
+        if (aptRes.status === "fulfilled") {
+          setAppointments(aptRes.value.data.appointments || aptRes.value.data || []);
+        }
+        if (vitalsRes.status === "fulfilled") {
+          setVitalSigns(vitalsRes.value.data.vitals || vitalsRes.value.data);
+        }
+      } catch (err) {
+        console.error("Failed to load dashboard data", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [user?.id]);
+
+  const upcomingAppointments = appointments.filter(
+    (apt) => new Date(apt.date || apt.scheduledAt) > new Date()
   ) || [];
 
-  const activePrescriptions = prescriptions?.filter((p) => p.status === "active") || [];
+  const activePrescriptions: any[] = [];
+
+  if (loading) return <div className="p-8 text-center text-gray-600">Loading dashboard...</div>;
 
   return (
     <div className="space-y-6">
@@ -62,7 +87,7 @@ export default function Dashboard() {
               <div>
                 <p className="text-sm text-gray-600">Heart Rate</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {vitalSigns?.[0]?.heartRate || "--"} bpm
+                  {vitalSigns?.heart_rate?.value || "--"} {vitalSigns?.heart_rate?.unit || "bpm"}
                 </p>
               </div>
               <Heart className="w-8 h-8 text-red-500" />
@@ -76,7 +101,7 @@ export default function Dashboard() {
               <div>
                 <p className="text-sm text-gray-600">O₂ Level</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {vitalSigns?.[0]?.oxygenLevel || "--"}%
+                  {vitalSigns?.oxygen_saturation?.value || "--"}%
                 </p>
               </div>
               <Activity className="w-8 h-8 text-purple-500" />
@@ -97,30 +122,20 @@ export default function Dashboard() {
                 <div className="space-y-4">
                   {upcomingAppointments.slice(0, 5).map((apt) => (
                     <div
-                      key={apt.id}
+                      key={apt.id || apt._id}
                       className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
                     >
                       <div className="flex-1">
                         <p className="font-medium text-gray-900">Consultation</p>
                         <p className="text-sm text-gray-600">
-                          {new Date(apt.scheduledAt).toLocaleDateString()} at{" "}
-                          {new Date(apt.scheduledAt).toLocaleTimeString()}
+                          {new Date(apt.date || apt.scheduledAt).toLocaleDateString()} at{" "}
+                          {new Date(apt.time || apt.scheduledAt).toLocaleTimeString()}
                         </p>
                         <div className="mt-2 flex gap-2">
-                          <Badge
-                            variant={
-                              apt.appointmentType === "telemedicine"
-                                ? "default"
-                                : "secondary"
-                            }
-                          >
-                            {apt.appointmentType}
+                          <Badge variant={apt.type === "telemedicine" ? "default" : "secondary"}>
+                            {apt.type || "in-person"}
                           </Badge>
-                          <Badge
-                            variant={
-                              apt.status === "confirmed" ? "default" : "outline"
-                            }
-                          >
+                          <Badge variant={apt.status === "confirmed" ? "default" : "outline"}>
                             {apt.status}
                           </Badge>
                         </div>
@@ -131,9 +146,7 @@ export default function Dashboard() {
                         className="ml-4"
                         disabled={apt.status !== "confirmed"}
                       >
-                        {apt.appointmentType === "telemedicine"
-                          ? "Join Call"
-                          : "View Details"}
+                        {apt.type === "telemedicine" ? "Join Call" : "View Details"}
                       </Button>
                     </div>
                   ))}
@@ -181,7 +194,9 @@ export default function Dashboard() {
               <CardTitle className="text-lg">Health Alerts</CardTitle>
             </CardHeader>
             <CardContent>
-              {vitalSigns?.[0]?.isAbnormal ? (
+              {vitalSigns && Object.values(vitalSigns).some((v: any) => v?.value && (
+                v.metric === "heart_rate" && (v.value < 50 || v.value > 120)
+              )) ? (
                 <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
                   <p className="text-sm font-medium text-red-900">Abnormal Readings Detected</p>
                   <p className="text-xs text-red-700 mt-1">
@@ -223,8 +238,7 @@ export default function Dashboard() {
                     <Badge variant="outline">Active</Badge>
                     {prescription.expiresAt && (
                       <Badge variant="secondary">
-                        Expires:{" "}
-                        {new Date(prescription.expiresAt).toLocaleDateString()}
+                        Expires: {new Date(prescription.expiresAt).toLocaleDateString()}
                       </Badge>
                     )}
                   </div>

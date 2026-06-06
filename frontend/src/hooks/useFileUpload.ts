@@ -1,23 +1,11 @@
-/**
- * useFileUpload - Hook for managing file upload state
- *
- * Handles:
- * - File state tracking (uploading, success, error)
- * - Immediate upload on add
- * - Retry failed uploads
- * - Preview URLs (auto-cleaned)
- *
- * Does NOT handle:
- * - Drag & drop UI (implement in component)
- * - File input rendering (implement in component)
- */
-
 import { useState, useCallback, useRef } from "react";
-import type { FileUIPart } from "ai";
 
-// ============================================================================
-// TYPES
-// ============================================================================
+type FileUIPart = {
+  type: "file";
+  url: string;
+  mediaType: string;
+  filename: string;
+};
 
 export interface PendingFile {
   id: string;
@@ -29,65 +17,28 @@ export interface PendingFile {
 }
 
 export interface UseFileUploadOptions {
-  /**
-   * Function to upload a file. Receives File, returns uploaded URL.
-   * Use fileToBase64() helper if your API needs base64.
-   */
   uploadFn: (file: File) => Promise<string>;
-
-  /**
-   * Accepted MIME types (default: images and PDFs)
-   */
   accept?: string[];
-
-  /**
-   * Maximum file size in bytes (default: 10MB)
-   */
   maxSize?: number;
 }
 
 export interface UseFileUploadReturn {
-  /** Files with their upload status */
   files: PendingFile[];
-
-  /** Add files and start uploading immediately */
   addFiles: (files: FileList | File[]) => void;
-
-  /** Remove a file by ID */
   removeFile: (id: string) => void;
-
-  /** Retry a failed upload */
   retryUpload: (id: string) => void;
-
-  /** Clear all files */
   clearFiles: () => void;
-
-  /** Get successfully uploaded files as FileUIPart[] for sendMessage */
   getUploadedFiles: () => FileUIPart[];
-
-  // Boolean states
-  /** Any file currently uploading */
   isUploading: boolean;
-  /** Any file failed to upload */
   hasErrors: boolean;
-  /** All files uploaded successfully (and has files) */
   isComplete: boolean;
-  /** No files */
   isEmpty: boolean;
 }
-
-// ============================================================================
-// HELPERS
-// ============================================================================
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 15);
 }
 
-/**
- * Convert File to base64 string (without data URL prefix)
- * Export this for use in uploadFn if your API needs base64
- */
 export function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -110,11 +61,7 @@ const DEFAULT_ACCEPT = [
   "application/pdf",
 ];
 
-const DEFAULT_MAX_SIZE = 10 * 1024 * 1024; // 10MB
-
-// ============================================================================
-// HOOK
-// ============================================================================
+const DEFAULT_MAX_SIZE = 10 * 1024 * 1024;
 
 export function useFileUpload({
   uploadFn,
@@ -124,7 +71,6 @@ export function useFileUpload({
   const [files, setFiles] = useState<PendingFile[]>([]);
   const uploadingRef = useRef<Set<string>>(new Set());
 
-  // Upload a single file
   const uploadFile = useCallback(
     async (pendingFile: PendingFile) => {
       if (uploadingRef.current.has(pendingFile.id)) return;
@@ -158,13 +104,11 @@ export function useFileUpload({
     [uploadFn]
   );
 
-  // Add files and start uploading
   const addFiles = useCallback(
     (input: FileList | File[]) => {
       const newFiles: PendingFile[] = [];
 
       for (const file of Array.from(input)) {
-        // Check file type
         const isAccepted =
           accept.includes(file.type) ||
           accept.some((a) => a.endsWith("/*") && file.type.startsWith(a.replace("/*", "/")));
@@ -174,7 +118,6 @@ export function useFileUpload({
           continue;
         }
 
-        // Check file size
         if (file.size > maxSize) {
           console.warn(`File ${file.name} exceeds max size`);
           continue;
@@ -196,7 +139,6 @@ export function useFileUpload({
     [accept, maxSize, uploadFile]
   );
 
-  // Remove a file
   const removeFile = useCallback((id: string) => {
     setFiles((prev) => {
       const file = prev.find((f) => f.id === id);
@@ -205,7 +147,6 @@ export function useFileUpload({
     });
   }, []);
 
-  // Retry a failed upload
   const retryUpload = useCallback(
     (id: string) => {
       const file = files.find((f) => f.id === id);
@@ -221,13 +162,11 @@ export function useFileUpload({
     [files, uploadFile]
   );
 
-  // Clear all files
   const clearFiles = useCallback(() => {
     files.forEach((f) => URL.revokeObjectURL(f.previewUrl));
     setFiles([]);
   }, [files]);
 
-  // Get uploaded files as FileUIPart[]
   const getUploadedFiles = useCallback((): FileUIPart[] => {
     return files
       .filter((f) => f.status === "success" && f.uploadedUrl)
@@ -239,7 +178,6 @@ export function useFileUpload({
       }));
   }, [files]);
 
-  // Computed boolean states
   const isUploading = files.some((f) => f.status === "uploading");
   const hasErrors = files.some((f) => f.status === "error");
   const isComplete = files.length > 0 && files.every((f) => f.status === "success");
