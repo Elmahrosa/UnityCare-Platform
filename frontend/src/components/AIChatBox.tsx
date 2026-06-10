@@ -14,8 +14,8 @@ function isToolLoading(state: ToolInvocationState): boolean {
   return state === "partial-call" || state === "call";
 }
 
-function isToolError(state: ToolInvocationState): boolean {
-  return state === "result" && !!(arguments[0] as any)?.error;
+function isToolError(state: ToolInvocationState, errorText?: string): boolean {
+  return state === "result" && !!errorText;
 }
 
 function isToolComplete(state: ToolInvocationState): boolean {
@@ -37,8 +37,8 @@ export interface AIChatBoxProps {
   chatId: string;
   userId?: number;
   initialMessages: UIMessage[];
-  onFinish?: (messages: UIMessage[]) => void;
-  renderToolPart?: ToolPartRenderer;
+    onFinish?: (messages: UIMessage[]) => void;
+    renderToolPart?: ToolPartRenderer;
   placeholder?: string;
   className?: string;
   emptyStateMessage?: string;
@@ -55,7 +55,7 @@ function DefaultToolPartRenderer({ toolName, state, output, errorText }: ToolPar
     );
   }
 
-  if (isToolError(state)) {
+  if (isToolError(state, errorText)) {
     return (
       <div className="p-3 bg-destructive/10 rounded-lg my-2 text-sm text-destructive">
         Error: {errorText || "Tool execution failed"}

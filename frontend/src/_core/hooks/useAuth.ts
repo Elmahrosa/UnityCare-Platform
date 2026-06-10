@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-// @ts-ignore
 import { authApi } from "../../services/apiService";
 
 type User = {
