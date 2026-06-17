@@ -1,12 +1,19 @@
 const DeviceReading = require('../models/DeviceReading');
 
+const { validationResult } = require('express-validator');
+
 exports.getReadings = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+
   try {
     const { patientId } = req.params;
     const { metric, limit: queryLimit = 50 } = req.query;
 
     const filter = { patient: patientId };
-    if (metric) filter.metric = metric;
+    if (metric && typeof metric === 'string') filter.metric = metric;
 
     const readings = await DeviceReading.find(filter)
       .sort({ recordedAt: -1 })
@@ -14,7 +21,7 @@ exports.getReadings = async (req, res) => {
 
     res.json({ ok: true, readings });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -41,7 +48,7 @@ exports.recordReading = async (req, res) => {
 
     res.status(201).json({ ok: true, reading });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
@@ -70,6 +77,6 @@ exports.getLatestVitals = async (req, res) => {
 
     res.json({ ok: true, vitals: latest });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };

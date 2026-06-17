@@ -53,6 +53,6 @@ exports.verifyRecord = async (req, res) => {
       createdAt: record.createdAt,
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };

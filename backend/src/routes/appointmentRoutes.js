@@ -9,7 +9,7 @@ router.post(
   '/',
   authMiddleware,
   [
-    body('date').notEmpty().withMessage('date is required'),
+    body('date').isISO8601().withMessage('Valid date is required'),
     body('time').notEmpty().withMessage('time is required'),
     body('patientId').notEmpty().withMessage('patientId is required'),
     body('doctorId').notEmpty().withMessage('doctorId is required')

@@ -13,16 +13,15 @@ const loadEnvVariables = () => {
 const validateEnvVariables = () => {
     const required = [
         'PORT',
-        'MONGODB_URI',
+        'MONGO_URI',
         'JWT_SECRET',
+        'JWT_REFRESH_SECRET',
         'NODE_ENV',
+        'CORS_ORIGIN',
     ];
 
-    // ✅ ADDED: warn about recommended vars rather than crashing on them
     const recommended = [
-        'JWT_REFRESH_SECRET',
         'JWT_EXPIRES_IN',
-        'CORS_ORIGIN',
         'ML_API_URL',
     ];
 

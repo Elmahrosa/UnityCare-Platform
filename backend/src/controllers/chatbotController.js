@@ -1,7 +1,13 @@
+const { validationResult } = require('express-validator');
 const Appointment = require('../models/Appointment');
 const User = require('../models/User');
 
 exports.triage = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+
   try {
     const { symptom, urgency } = req.body;
 
@@ -30,11 +36,16 @@ exports.triage = async (req, res) => {
       })),
     });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
 
 exports.suggestAppointment = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ success: false, errors: errors.array() });
+  }
+
   try {
     const { doctorId } = req.params;
 
@@ -52,6 +63,6 @@ exports.suggestAppointment = async (req, res) => {
 
     res.json({ ok: true, existingAppointments: slots });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };

@@ -47,12 +47,12 @@ app.use(helmet({
     contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
 }));
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || '*',
+    origin: process.env.CORS_ORIGIN,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 app.use(globalLimiter);
 app.use(requestLogger);
@@ -70,7 +70,7 @@ app.get('/health', (_req, res) => {
 
 // ── API routes ────────────────────────────────────────────────────────────────
 app.use('/api/auth',          authLimiter, authRoutes);
-app.use('/api/users',         userRoutes);
+app.use('/api/users',         authLimiter, userRoutes);
 app.use('/api/appointments',  appointmentRoutes);
 app.use('/api/records',       medicalRecordRoutes);   // ← NEW
 app.use('/api/analytics',     analyticsRoutes);

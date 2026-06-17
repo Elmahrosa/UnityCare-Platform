@@ -12,7 +12,7 @@ const generateTokens = (userId) => {
     );
     const refreshToken = jwt.sign(
         { id: userId },
-        process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET + '_refresh',
+        process.env.JWT_REFRESH_SECRET,
         { expiresIn: '7d' }
     );
     return { accessToken, refreshToken };
@@ -61,7 +61,7 @@ exports.refreshToken = async (req, res) => {
     }
 
     try {
-        const refreshSecret = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET + '_refresh';
+        const refreshSecret = process.env.JWT_REFRESH_SECRET;
         const decoded = jwt.verify(token, refreshSecret);
         const user = await User.findById(decoded.id).select('-password');
 

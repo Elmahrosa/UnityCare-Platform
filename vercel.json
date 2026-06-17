@@ -1,10 +1,9 @@
 {
-  "outputDirectory": "website",
+  "outputDirectory": "dist",
   "redirects": [
     { "source": "/", "destination": "/index.html", "permanent": false }
   ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

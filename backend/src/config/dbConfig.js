@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // Database configuration function
 const connectDB = async () => {
     try {
-        const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/salma_unity_care_hospital';
+        const dbURI = process.env.MONGO_URI;
 
         // ✅ FIX: removed deprecated options: useCreateIndex, useFindAndModify
         // These were removed in Mongoose 6+ and throw errors if passed

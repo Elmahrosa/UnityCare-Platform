@@ -18,18 +18,6 @@ router.post(
     userController.registerUser
 );
 
-// @route   POST api/users/login
-// @desc    Login a user
-// @access  Public
-router.post(
-    '/login',
-    [
-        check('email', 'Please include a valid email').isEmail(),
-        check('password', 'Password is required').exists(),
-    ],
-    userController.loginUser
-);
-
 // @route   GET api/users/me
 // @desc    Get current user details
 // @access  Private

@@ -10,7 +10,7 @@ exports.registerUser = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     try {
         let user = await User.findOne({ email });
@@ -18,13 +18,11 @@ exports.registerUser = async (req, res) => {
             return res.status(400).json({ msg: 'User already exists' });
         }
 
-        // ✅ FIX: do NOT hash password here — the User model pre-save hook handles it.
-        // Original code hashed in controller AND in the pre-save hook = double-hashing = broken auth.
         user = new User({
             name,
             email,
-            password, // Plain text — pre-save hook hashes it
-            role: role || 'patient',
+            password,
+            role: 'patient',
         });
 
         await user.save();
