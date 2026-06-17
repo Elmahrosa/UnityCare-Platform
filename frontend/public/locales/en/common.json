@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "compliance": "Compliance",
+    "contact": "Contact",
+    "login": "Sign In",
+    "dashboard": "Dashboard"
+  },
+  "hero": {
+    "title": "Healthcare Trust Infrastructure for the Connected World",
+    "subtitle": "Identity, consent, and interoperability platform powering secure healthcare data exchange across Egypt, GCC, EU, and US markets.",
+    "cta": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "features": {
+    "title": "Enterprise Healthcare Platform",
+    "subtitle": "Built for regulated healthcare markets from day one",
+    "identity": { "title": "Identity & Access", "desc": "Patient and provider identity with MFA, SSO, and role-based access control. FHIR-compliant from day one." },
+    "fhir": { "title": "FHIR R4 Gateway", "desc": "Full FHIR R4 API for Patient, Practitioner, Organization, and clinical resources. Certified interoperability backbone." },
+    "consent": { "title": "Consent Engine", "desc": "Granular consent management for treatment, research, AI processing, data sharing, and cross-border transfer." },
+    "audit": { "title": "Immutable Audit", "desc": "Hash-chained audit ledger tracking every healthcare action. Tamper-evident, SIEM-ready, regulation-proof." },
+    "security": { "title": "Zero Trust Security", "desc": "OAuth2, OIDC, MFA, encryption at rest and in transit. SOC 2 and HIPAA aligned architecture." },
+    "arabic": { "title": "Arabic-First UX", "desc": "Full RTL support with Arabic-language clinical terminology, Hijri calendar, and localized regulatory compliance." }
+  },
+  "compliance": {
+    "title": "Regulatory Compliance",
+    "subtitle": "Certification-ready architecture for every market we serve",
+    "hipaa": "HIPAA (US)",
+    "gdpr": "GDPR (EU)",
+    "ehhds": "EHDS / MyHealth@EU",
+    "nphies": "NPHIES (KSA)",
+    "soc2": "SOC 2 Type II",
+    "iso": "ISO 27001"
+  },
+  "patient": {
+    "profile": "Profile",
+    "consents": "My Consents",
+    "activity": "Activity Log",
+    "noConsents": "No consents found"
+  },
+  "admin": {
+    "users": "Users",
+    "patients": "Patients",
+    "consents": "Consents",
+    "auditLogs": "Audit Logs"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "search": "Search",
+    "email": "Email",
+    "password": "Password",
+    "login": "Sign In",
+    "register": "Register",
+    "logout": "Sign Out",
+    "english": "English",
+    "arabic": "العربية"
+  }
+}
