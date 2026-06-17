@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "UnityCare — Healthcare Trust Infrastructure",
-  description: "Identity, consent, and interoperability platform for regulated healthcare markets.",
+  description: "Healthcare Trust Infrastructure — Identity, consent, and interoperability platform by Elmahrosa International.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

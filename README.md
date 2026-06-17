@@ -1,181 +1,94 @@
-<p align="center">
-  <h1 align="center">UnityCare Platform</h1>
-  <p align="center"><strong>Sovereign Hospital Management & Telemedicine Monorepo</strong></p>
-</p>
+# UnityCare Sovereign Healthcare Infrastructure
 
-<p align="center">
-  <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build">
-  <img src="https://img.shields.io/badge/license-TESL%20v2.0-blue" alt="License">
-  <img src="https://img.shields.io/github/issues/Elmahrosa/UnityCare-Platform" alt="Issues">
-  <img src="https://img.shields.io/github/stars/Elmahrosa/UnityCare-Platform" alt="Stars">
-  <img src="https://img.shields.io/badge/HIPAA-ready-blue" alt="HIPAA">
-  <img src="https://img.shields.io/badge/GDPR-compliant-blue" alt="GDPR">
-  <img src="https://img.shields.io/badge/Docker-ready-2496ED?logo=docker" alt="Docker">
-  <img src="https://img.shields.io/badge/Vercel-deploy-black?logo=vercel" alt="Vercel">
-</p>
+## By Elmahrosa International
 
----
+UnityCare is a sovereign healthcare infrastructure platform developed by Elmahrosa International to support secure, compliant, and AI-ready healthcare operations across hospitals, healthcare networks, research institutions, and national health systems.
 
-**Elmahrosa International delivers sovereign healthcare IT operations with HIPAA/GDPR compliance, blockchain-backed audit trails, and deterministic AI safety. UnityCare provides end-to-end hospital management, telemedicine, pharmacy integration, emergency dispatch, and institutional deployment support — positioned as the compliance infrastructure layer for next-generation biomedical AI pipelines.**
+The platform combines hospital operations, telemedicine, pharmacy management, emergency coordination, compliance automation, and healthcare interoperability into a unified deployment architecture designed for institutional ownership and long-term sovereignty.
 
-Designed to integrate with AI drug discovery ecosystems, UnityCare enables de-identified patient data pipelines and clinical trial management support, ensuring biomedical breakthroughs are delivered safely, reproducibly, and with sovereign trust.
+Unlike traditional SaaS healthcare platforms, UnityCare is built for private cloud, on-premise, and sovereign deployments, enabling organizations to retain full control over data governance, regulatory compliance, and operational workflows.
 
-Consolidated from 5 repositories: Unity-Care-Hospital-Sovereign, UCH-Backend, UCH-Buyer-Kit, salma-unity-care-hospital, U_C_H2.
+### Core Capabilities
 
----
+- Hospital Information Management
+- Electronic Health Records (EHR)
+- Telemedicine Services
+- Pharmacy Operations
+- Emergency Dispatch Coordination
+- Clinical Workflow Management
+- Multi-Tenant Healthcare Operations
+- Healthcare Identity and Access Management
+- FHIR R4 Interoperability
+- Consent Management
+- Immutable Audit Logging
+- White-Label Institutional Deployments
 
-## 📦 Monorepo Structure
+### Compliance Infrastructure
 
-```
-UnityCare-Platform/
-├── frontend/          # React SPA (JavaScript + TypeScript)
-│   ├── src/
-│   │   ├── components/   # UI components (base + shadcn/ui from U_C_H2)
-│   │   ├── pages/        # Role-based pages (admin, doctor, patient, pharmacy, emergency)
-│   │   ├── hooks/        # Custom React hooks
-│   │   ├── services/     # API client services
-│   │   ├── context/      # Auth & theme context
-│   │   ├── lib/          # Utilities (tRPC, helpers)
-│   │   ├── styles/       # Global CSS, theme
-│   │   └── _core/        # U_C_H2 core framework
-│   ├── public/
-│   ├── package.json
-│   ├── tsconfig.json
-│   ├── tailwind.config.js
-│   └── Dockerfile
-├── backend/           # Express API (Node.js)
-│   ├── src/
-│   │   ├── controllers/  # Request handlers
-│   │   ├── routes/       # API endpoints
-│   │   ├── services/     # Business logic
-│   │   ├── models/       # Database schemas
-│   │   ├── middleware/   # Auth, validation, audit
-│   │   ├── config/       # DB, env configuration
-│   │   └── utils/        # Logger, helpers
-│   ├── pi/               # Pi Network integration (from U_C_H2)
-│   ├── tests/
-│   ├── package.json
-│   └── Dockerfile
-├── infra/             # Deployment & institutional kit
-│   ├── docs/             # Buyer kit, proposals, NDA templates
-│   ├── assets/           # Screenshots, architecture PDFs
-│   └── LICENSE
-├── docs/              # Consolidated documentation
-│   ├── api/              # API specs (OpenAPI, Swagger)
-│   ├── technical/        # Architecture, backend system
-│   ├── commercial/       # Licensing, acquisition
-│   ├── compliance/       # HIPAA, GDPR, audit
-│   ├── design/           # Wireframes, UI specs
-│   ├── governance/       # Contributing, PR templates
-│   └── user/             # User guides
-├── database/          # Migrations, seeds, schema
-│   ├── migrations/
-│   └── seeds/
-├── archive/           # Legacy assets from archived repos
-│   ├── salma-legacy/     # From salma-unity-care-hospital
-│   └── uch2-legacy/      # From U_C_H2
-├── docker-compose.yml
-├── Dockerfile
-├── nginx.conf
-├── vercel.json
-├── .env.example
-└── .github/workflows/ci.yml
-```
+UnityCare is designed to support healthcare compliance requirements including:
 
----
+- HIPAA
+- GDPR
+- EHDS
+- SMART-on-FHIR
+- Healthcare Audit Requirements
+- Sovereign Data Residency Policies
 
-## 🏗️ Architecture
+The platform incorporates blockchain-backed audit trails, cryptographic integrity verification, and policy-driven consent management to establish verifiable trust across healthcare workflows.
 
-| Layer | Source Repo | Technology |
-|-------|------------|------------|
-| Frontend | Unity-Care-Hospital-Sovereign + U_C_H2 | React, TypeScript, shadcn/ui, Tailwind |
-| Backend API | UCH-Backend + U_C_H2 | Node.js, Express, JWT |
-| Database | Unity-Care-Hospital-Sovereign | MongoDB / PostgreSQL |
-| Auth | Unity-Care-Hospital-Sovereign | JWT (access + refresh tokens) |
-| Blockchain | U_C_H2 / salma | Web3, Pi Network |
-| Infra | UCH-Buyer-Kit | Docker, Vercel |
-| CI/CD | Unity-Care-Hospital-Sovereign | GitHub Actions, Jenkins |
+### AI Governance and Biomedical Infrastructure
+
+UnityCare serves as the compliance and operational infrastructure layer for next-generation biomedical AI ecosystems.
+
+The platform enables:
+- De-identified patient data pipelines
+- Clinical trial workflow support
+- AI consent enforcement
+- Model auditability
+- Human oversight workflows
+- Data provenance tracking
+- Reproducible healthcare AI operations
+
+This architecture allows healthcare organizations to safely participate in AI-assisted diagnostics, biomedical research, and drug discovery initiatives while maintaining regulatory compliance and institutional control.
+
+### Sovereign Healthcare Vision
+
+Healthcare data is a strategic national asset.
+
+UnityCare is designed to help healthcare providers, ministries of health, insurers, and biomedical research organizations maintain sovereignty over healthcare infrastructure while enabling secure participation in global healthcare innovation networks.
+
+### Market Position
+
+UnityCare is positioned as: **"The Compliance Infrastructure Layer for Biomedical AI."**
+
+Rather than competing with individual healthcare applications, UnityCare provides the trusted operational foundation required to safely deploy, govern, and scale healthcare AI systems across institutional and sovereign environments.
+
+### Project Origin
+
+UnityCare has been consolidated into a unified platform architecture from the following development repositories:
+
+- Unity-Care-Hospital-Sovereign
+- UCH-Backend
+- UCH-Buyer-Kit
+- salma-unity-care-hospital
+- U_C_H2
+
+These repositories now contribute to a single strategic roadmap focused on sovereign healthcare infrastructure, AI governance, interoperability, and institutional deployment.
+
+### Ownership
+
+UnityCare is owned and developed by Elmahrosa International.
+
+The platform is offered through:
+- Pilot Engagements
+- Institutional Licensing
+- Enterprise Deployments
+- Sovereign National Licensing
+
+Elmahrosa International retains ownership of the core intellectual property while supporting white-label and sovereign deployment models for healthcare organizations worldwide.
 
 ---
 
-## 🚀 Quick Start
+**Deployment:** [health.elmahrosa.org](https://health.elmahrosa.org)
 
-```bash
-# Clone
-git clone https://github.com/Elmahrosa/UnityCare-Platform.git
-cd UnityCare-Platform
-
-# Backend
-cd backend && npm install && npm run dev
-
-# Frontend (new terminal)
-cd frontend && npm install && npm run dev
-```
-
-### Docker
-
-```bash
-docker-compose up --build
-```
-
----
-
-<p align="center">
-  <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build">
-  <img src="https://img.shields.io/badge/license-TESL%20v2.0-blue" alt="License">
-  <img src="https://img.shields.io/github/issues/Elmahrosa/UnityCare-Platform" alt="Issues">
-  <img src="https://img.shields.io/badge/HIPAA-ready-blue" alt="HIPAA">
-  <img src="https://img.shields.io/badge/GDPR-compliant-blue" alt="GDPR">
-</p>
-
----
-
-## 📡 API Modules
-
-| Module | Endpoints | Source |
-|--------|-----------|--------|
-| Auth | login, register, refresh, logout | UCH-Backend |
-| Patients | CRUD, search, records | UCH-Backend |
-| Appointments | create, list, update, cancel | UCH-Backend |
-| Telemedicine | sessions, video, chat | UCH-Backend + U_C_H2 |
-| Pharmacy | inventory, prescriptions | UCH-Backend + U_C_H2 |
-| Emergency | dispatch, triage, alerts | U_C_H2 |
-| Blockchain | records, verification | U_C_H2 / salma |
-| Analytics | reporting, dashboards | UCH-Backend |
-| IoT | monitoring, devices | UCH-Backend |
-| Chatbot | AI-assisted queries | salma |
-
----
-
-## 🔐 Security
-
-- JWT authentication (access + refresh tokens)
-- Role-based access control (RBAC)
-- Audit logging for HIPAA compliance
-- Environment variable protection
-- CORS configuration
-
----
-
-## 📜 Merge History
-
-| Source Repo | Status | Role |
-|------------|--------|------|
-| Unity-Care-Hospital-Sovereign | Merged | Base frontend + backend + database |
-| UCH-Backend | Merged | Primary backend API |
-| UCH-Buyer-Kit | Merged | → `/infra` |
-| salma-unity-care-hospital | Archived | Extracted → `/archive/salma-legacy` |
-| U_C_H2 | Archived | Extracted → frontend TS components + `/archive/uch2-legacy` |
-
----
-
-<p align="center">
-  <img src="https://img.shields.io/badge/build-passing-brightgreen" alt="Build">
-  <img src="https://img.shields.io/github/stars/Elmahrosa/UnityCare-Platform" alt="Stars">
-  <img src="https://img.shields.io/badge/Docker-ready-2496ED?logo=docker" alt="Docker">
-  <img src="https://img.shields.io/badge/Vercel-deploy-black?logo=vercel" alt="Vercel">
-  <br>
-  <strong>Elmahrosa International</strong> — Founder: Ayman Seif
-  <br>
-  <a href="https://uch.teosegypt.com">uch.teosegypt.com</a>
-</p>
+**Contact:** [contact@elmahrosa.org](mailto:contact@elmahrosa.org)

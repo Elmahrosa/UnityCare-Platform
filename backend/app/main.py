@@ -33,8 +33,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="UnityCare Healthcare Platform",
-    description="Healthcare Identity, Consent, and Interoperability Platform",
+    title="UnityCare — Healthcare Trust Infrastructure",
+    description="Healthcare Identity, Consent, and Interoperability Platform — by Elmahrosa International",
     version="1.0.0",
     lifespan=lifespan,
 )
