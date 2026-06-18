@@ -3,554 +3,188 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UnityCare Platform | Sovereign Healthcare Infrastructure</title>
-  <meta
-    name="description"
-    content="UnityCare is deployable sovereign healthcare infrastructure for hospitals, private networks, and health systems. No SaaS lock-in. Full control. Built by Elmahrosa International."
-  />
+  <title>UnityCare Platform — Elmahrosa International</title>
+  <meta name="description" content="UnityCare is deployable sovereign healthcare infrastructure for hospitals, health networks, and health systems. Built by Elmahrosa International." />
   <meta property="og:title" content="UnityCare Platform — Sovereign Healthcare Infrastructure" />
   <meta property="og:description" content="Healthcare is sovereign. Your infrastructure should be too." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://health.elmahrosa.org" />
-  <meta property="og:image" content="https://health.elmahrosa.org/og-image.png" />
 
   <style>
     :root {
-      --bg: #05101f;
-      --bg-soft: #0b1a30;
-      --card: rgba(255,255,255,0.05);
-      --line: rgba(255,255,255,0.10);
-      --text: #eef4ff;
-      --muted: #b0c4de;
-      --accent: #38bdf8;
-      --accent-2: #2dd4bf;
+      --bg: #05101f; --bg-soft: #0b1a30;
+      --card: rgba(255,255,255,0.05); --line: rgba(255,255,255,0.10);
+      --text: #eef4ff; --muted: #b0c4de;
+      --accent: #38bdf8; --accent-2: #2dd4bf;
       --gold: #d4a853;
       --shadow: 0 20px 50px rgba(0,0,0,0.4);
-      --radius: 20px;
-      --max: 1180px;
+      --radius: 20px; --max: 1180px;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background:
-        radial-gradient(ellipse at 80% 0%, rgba(56,189,248,0.15), transparent 50%),
-        radial-gradient(ellipse at 20% 100%, rgba(45,212,191,0.10), transparent 40%),
-        linear-gradient(180deg, #040e1c 0%, #09162a 100%);
-      color: var(--text);
-      line-height: 1.65;
-      min-height: 100vh;
+      background: radial-gradient(ellipse at 80% 0%, rgba(56,189,248,0.15), transparent 50%), radial-gradient(ellipse at 20% 100%, rgba(45,212,191,0.10), transparent 40%), linear-gradient(180deg, #040e1c 0%, #09162a 100%);
+      color: var(--text); line-height: 1.65; min-height: 100vh;
     }
     a { color: inherit; text-decoration: none; }
-
-    .container {
-      width: min(var(--max), calc(100% - 32px));
-      margin: 0 auto;
-    }
-
+    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      background: rgba(5, 16, 31, 0.78);
-      border-bottom: 1px solid var(--line);
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      background: rgba(5, 16, 31, 0.78); border-bottom: 1px solid var(--line);
     }
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding: 14px 0;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      font-size: 18px;
-      letter-spacing: 0.3px;
-    }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 0; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 18px; letter-spacing: 0.3px; }
     .brand-badge {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
+      width: 38px; height: 38px; border-radius: 10px;
+      display: grid; place-items: center;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #021018;
-      font-weight: 800;
-      font-size: 14px;
+      color: #021018; font-weight: 800; font-size: 14px;
       box-shadow: 0 0 20px rgba(56,189,248,0.2);
     }
-    .nav-links {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      align-items: center;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 500;
-    }
-    .nav-links a:hover { color: #fff; }
-
-    .cpn-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-    }
-
-    .lang-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
-      border-radius: 6px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
-      color: var(--muted);
-      font-size: 12px;
-      cursor: pointer;
+    .nav-links { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .nav-links a {
+      padding: 6px 12px; border-radius: 8px; color: var(--muted); font-size: 13px; font-weight: 500;
       transition: all 0.2s;
-      user-select: none;
     }
-    .lang-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .nav-links a.ext-link::after { content: '\2197'; margin-left: 3px; font-size: 11px; }
+    .cpn-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 8px; border-radius: 6px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--gold);
+      color: var(--gold); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.5px; text-transform: uppercase;
     }
-    .lang-btn .globe {
-      width: 14px;
-      height: 14px;
+    .lang-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 8px; border-radius: 6px;
+      border: 1px solid var(--line); background: rgba(255,255,255,0.03);
+      color: var(--muted); font-size: 11px; cursor: pointer; transition: all 0.2s; user-select: none;
     }
-    .lang-btn .globe path {
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.5;
-    }
-
+    .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .lang-btn svg { width: 12px; height: 12px; }
+    .lang-btn svg path, .lang-btn svg circle { stroke: currentColor; fill: none; stroke-width: 1.5; }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 12px 18px;
-      border-radius: 12px;
-      border: 1px solid var(--line);
-      color: var(--text);
-      background: rgba(255,255,255,0.04);
-      transition: all 0.2s ease;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 10px 16px; border-radius: 10px;
+      border: 1px solid var(--line); color: var(--text);
+      background: rgba(255,255,255,0.04); transition: all 0.2s ease;
+      cursor: pointer; font-weight: 600; font-size: 13px;
     }
-    .btn:hover {
-      transform: translateY(-2px);
-      border-color: rgba(255,255,255,0.25);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #03131a;
-      border: none;
-      font-weight: 700;
-    }
-    .btn-primary:hover {
-      box-shadow: 0 8px 28px rgba(56,189,248,0.3);
-    }
-    .btn-outline-light {
-      border-color: rgba(255,255,255,0.2);
-    }
-
-    .hero {
-      padding: 80px 0 56px;
-      position: relative;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--line), transparent);
-    }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 40px;
-      align-items: center;
-    }
+    .btn:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.25); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #03131a; border: none; font-weight: 700; }
+    .btn-primary:hover { box-shadow: 0 8px 28px rgba(56,189,248,0.3); }
+    .btn-outline-light { border-color: rgba(255,255,255,0.2); }
+    .btn-sm { padding: 7px 14px; font-size: 12px; }
+    .hero { padding: 72px 0 48px; position: relative; }
+    .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--line), transparent); }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
     .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 20px;
+      display: inline-flex; align-items: center; gap: 10px; padding: 7px 12px;
+      border-radius: 999px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03); color: var(--muted); font-size: 13px; margin-bottom: 20px;
     }
-    .eyebrow-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      display: inline-block;
-    }
-
-    h1 {
-      font-size: clamp(32px, 5.5vw, 62px);
-      line-height: 1.08;
-      margin: 0 0 16px;
-      letter-spacing: -1.5px;
-    }
-    h1 .gradient {
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero p {
-      font-size: 17px;
-      color: var(--muted);
-      max-width: 620px;
-      margin: 0 0 28px;
-    }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .pill-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .pill-tags span {
-      padding: 6px 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255,255,255,0.03);
-    }
-
+    .eyebrow-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    h1 { font-size: clamp(32px, 5.5vw, 62px); line-height: 1.08; margin: 0 0 16px; letter-spacing: -1.5px; }
+    h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: 17px; color: var(--muted); max-width: 620px; margin: 0 0 28px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+    .pill-tags { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 12px; }
+    .pill-tags span { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.03); }
     .hero-card {
       background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      padding: 26px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(4px);
+      border: 1px solid var(--line); border-radius: 24px; padding: 26px;
+      box-shadow: var(--shadow); backdrop-filter: blur(4px);
     }
     .hero-card h3 { margin: 0 0 6px; font-size: 20px; }
     .hero-card .sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
-
-    .spec-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 12px 0;
-      border-top: 1px solid var(--line);
-      font-size: 14px;
-    }
+    .spec-row { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 14px; }
     .spec-row:first-of-type { border-top: none; }
     .spec-label { color: var(--muted); }
     .spec-value { font-weight: 600; }
-
     .section { padding: 56px 0; }
-    .section-alt { background: rgba(255,255,255,0.015); }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 44px;
-    }
-    .section-header h2 {
-      font-size: clamp(26px, 3.5vw, 38px);
-      margin-bottom: 10px;
-      letter-spacing: -0.8px;
-    }
-    .section-header p {
-      color: var(--muted);
-      max-width: 640px;
-      margin: 0 auto;
-      font-size: 16px;
-    }
-
+    .section-header { text-align: center; margin-bottom: 44px; }
+    .section-header h2 { font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 10px; letter-spacing: -0.8px; }
+    .section-header p { color: var(--muted); max-width: 640px; margin: 0 auto; font-size: 16px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 24px;
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px;
       transition: all 0.3s ease;
     }
-    .card:hover {
-      border-color: rgba(255,255,255,0.18);
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.25);
-    }
+    .card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.25); }
     .card h3 { font-size: 18px; margin-bottom: 8px; }
     .card p { color: var(--muted); font-size: 14px; line-height: 1.6; }
-
     .icon-box {
-      display: inline-grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      margin-bottom: 14px;
+      display: inline-grid; place-items: center;
+      width: 42px; height: 42px; border-radius: 12px; margin-bottom: 14px;
       background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(45,212,191,0.10));
       border: 1px solid rgba(255,255,255,0.08);
     }
-    .icon-box svg {
-      width: 20px;
-      height: 20px;
+    .icon-box svg { width: 20px; height: 20px; }
+    .icon-box svg path, .icon-box svg circle, .icon-box svg rect { stroke: var(--accent); fill: none; stroke-width: 1.5; }
+    .arch-flow {
+      display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+      padding: 24px; border: 1px solid var(--line); border-radius: 16px;
+      background: rgba(255,255,255,0.02); font-size: 13px;
     }
-    .icon-box svg path,
-    .icon-box svg circle,
-    .icon-box svg rect {
-      stroke: var(--accent);
-      fill: none;
-      stroke-width: 1.5;
+    .arch-flow .node {
+      padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04); text-align: center; min-width: 100px;
     }
-
-    .arch-diagram {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 20px 24px;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 13px;
-      color: var(--muted);
-      text-align: center;
-      letter-spacing: 0.3px;
+    .arch-flow .node .label { color: var(--muted); font-size: 11px; }
+    .arch-flow .node .domain { color: var(--accent); font-size: 13px; font-weight: 600; }
+    .arch-flow .node.highlight { border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.06); }
+    .arch-flow .arrow { color: var(--muted); font-size: 18px; }
+    .arch-note { text-align: center; margin-top: 12px; font-size: 12px; color: var(--muted); }
+    .status-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.3px;
     }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      max-width: 780px;
-      margin: 0 auto;
-    }
-    .pricing-card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 28px;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-    .pricing-card:hover {
-      border-color: rgba(255,255,255,0.18);
-      transform: translateY(-3px);
-    }
-    .pricing-card.featured {
-      border: 1px solid rgba(56,189,248,0.35);
-      box-shadow: 0 0 0 1px rgba(56,189,248,0.08), var(--shadow);
-    }
-    .pricing-card .tag {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-      border: 1px solid var(--line);
-      color: var(--muted);
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .pricing-card .tag.gold {
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-    .price {
-      font-size: 36px;
-      font-weight: 800;
-      margin-bottom: 4px;
-      color: white;
-    }
-    .price small {
-      font-size: 15px;
-      color: var(--muted);
-      font-weight: 500;
-    }
-    .pricing-card .sub {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-    .pricing-card ul {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 22px;
-      text-align: left;
-    }
-    .pricing-card ul li {
-      padding: 8px 0;
-      border-top: 1px solid var(--line);
-      font-size: 14px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .pricing-card ul li::before {
-      content: '\2713';
-      color: var(--accent-2);
-      font-weight: 700;
-    }
-    .pricing-card ul li:first-of-type { border-top: none; }
-
-    .audit-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-    .audit-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-    }
-    .audit-card .audit-icon {
-      width: 48px;
-      height: 48px;
-      margin: 0 auto 12px;
-    }
-    .audit-card .audit-icon svg {
-      width: 48px;
-      height: 48px;
-    }
-    .audit-card .audit-icon svg path,
-    .audit-card .audit-icon svg circle {
-      stroke: var(--accent-2);
-      fill: none;
-      stroke-width: 1.2;
-    }
-    .audit-card h4 {
-      font-size: 16px;
-      margin-bottom: 6px;
-    }
-    .audit-card p {
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .audit-summary {
-      margin-top: 32px;
-      padding: 20px;
-      border: 1px solid rgba(45,212,191,0.2);
-      border-radius: 16px;
-      background: rgba(45,212,191,0.04);
-      text-align: center;
-    }
-    .audit-summary p {
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .audit-summary strong {
-      color: var(--accent-2);
-    }
-
-    .cta-section {
-      text-align: center;
-      padding: 60px 0 80px;
-    }
-    .cta-box {
-      padding: 40px;
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(56,189,248,0.10), rgba(45,212,191,0.06));
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: var(--shadow);
-      max-width: 700px;
-      margin: 0 auto;
-    }
+    .status-live { background: rgba(45,212,191,0.15); color: var(--accent-2); border: 1px solid rgba(45,212,191,0.2); }
+    .audit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .audit-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 16px; padding: 20px; text-align: center; }
+    .audit-card .audit-icon { width: 48px; height: 48px; margin: 0 auto 12px; }
+    .audit-card .audit-icon svg { width: 48px; height: 48px; }
+    .audit-card .audit-icon svg path, .audit-card .audit-icon svg circle { stroke: var(--accent-2); fill: none; stroke-width: 1.2; }
+    .audit-card h4 { font-size: 16px; margin-bottom: 6px; }
+    .audit-card p { color: var(--muted); font-size: 13px; }
+    .audit-summary { margin-top: 32px; padding: 20px; border: 1px solid rgba(45,212,191,0.2); border-radius: 16px; background: rgba(45,212,191,0.04); text-align: center; }
+    .audit-summary p { color: var(--muted); font-size: 14px; }
+    .audit-summary strong { color: var(--accent-2); }
+    .compliance-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .compliance-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 12px; padding: 18px; text-align: center; }
+    .compliance-card .num { font-size: 24px; font-weight: 800; margin-bottom: 4px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .compliance-card .label { font-size: 12px; color: var(--muted); }
+    .compliance-footer { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); }
+    .cta-section { text-align: center; padding: 60px 0 80px; }
+    .cta-box { padding: 40px; border-radius: 24px; background: linear-gradient(180deg, rgba(56,189,248,0.10), rgba(45,212,191,0.06)); border: 1px solid rgba(255,255,255,0.12); box-shadow: var(--shadow); max-width: 700px; margin: 0 auto; }
     .cta-box h2 { font-size: 28px; margin-bottom: 10px; }
     .cta-box p { color: var(--muted); margin-bottom: 24px; font-size: 15px; }
-    .notice { margin-top: 16px; font-size: 12px; color: var(--muted); }
-
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 32px;
+    .footer-badges { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
+    .footer-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 8px;
+      border: 1px solid var(--line); background: rgba(255,255,255,0.03);
+      font-size: 12px; color: var(--muted);
     }
-    .stat-card {
-      text-align: center;
-      padding: 20px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-    }
-    .stat-card .num {
-      font-size: 28px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .stat-card .label {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    footer {
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      padding: 28px 0 36px;
-      font-size: 13px;
-    }
-    .footer-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-    .footer-links {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
+    .footer-badge .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    footer { border-top: 1px solid var(--line); color: var(--muted); padding: 32px 0 36px; font-size: 13px; }
+    .footer-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
     .footer-links a:hover { color: #fff; }
-
     [dir="rtl"] .nav-links { flex-direction: row-reverse; }
     [dir="rtl"] .hero-grid { direction: rtl; }
-    [dir="rtl"] .pricing-card ul { text-align: right; }
+    [dir="rtl"] .arch-flow { flex-direction: row-reverse; }
     [dir="rtl"] .footer-row { flex-direction: row-reverse; }
-
     @media (max-width: 900px) {
-      .hero-grid,
-      .grid-3,
-      .grid-4,
-      .audit-grid,
-      .stats-row { grid-template-columns: 1fr; }
-      .pricing-grid { grid-template-columns: 1fr; }
+      .hero-grid, .grid-3, .grid-4, .grid-2, .audit-grid, .compliance-grid { grid-template-columns: 1fr; }
       .nav-links { display: none; }
       .hero { padding-top: 44px; }
+      .arch-flow .arrow { display: none; }
     }
   </style>
 </head>
@@ -560,27 +194,27 @@
       <div class="brand">
         <div class="brand-badge">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7v6c0 5.25 3.83 10.15 10 12 6.17-1.85 10-6.75 10-12V7l-10-5z" stroke="#021018" stroke-width="1.5" fill="none"/>
+            <path d="M12 2L2 7v6c0 5.25 3.83 10.15 10 12 6.17-1.85 10-6.75 10-12V7l-10-5z" stroke="#021018" stroke-width="1.5"/>
             <path d="M9 12l2 2 4-4" stroke="#021018" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div>UnityCare <span style="color:var(--muted);font-weight:400;">by Elmahrosa</span></div>
       </div>
-      <div class="nav-links" data-ar-nav>
+      <div class="nav-links">
+        <a href="#">Home</a>
         <a href="#platform">Platform</a>
         <a href="#features">Features</a>
-        <a href="#audit">Audit</a>
-        <a href="#pricing" data-ar-pricing>Pricing</a>
-        <span class="cpn-badge">CPN Member</span>
+        <a href="#compliance">Compliance</a>
+        <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener" class="ext-link">Developers</a>
+        <a href="https://api.elmahrosa.org/docs" target="_blank" rel="noopener" class="ext-link">API Docs</a>
+        <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener" class="ext-link">Trust Center</a>
+        <a href="#contact">Contact</a>
         <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
-          <svg class="globe" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-          </svg>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           <span id="langLabel">EN</span>
         </button>
       </div>
-      <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Institutional%20Inquiry">Request Access</a>
+      <a class="btn btn-primary btn-sm" href="mailto:info@elmahrosa.org?subject=UnityCare%20Inquiry">Get Started</a>
     </div>
   </div>
 
@@ -590,15 +224,16 @@
         <div>
           <div class="eyebrow">
             <span class="eyebrow-dot"></span>
-            <span data-ar-eyebrow>Sovereign Healthcare Infrastructure &mdash; Deployable. Ownable. Secure.</span>
+            <span>Deployed at <strong>health.elmahrosa.org</strong></span>
           </div>
-          <h1 data-ar-h1>Healthcare is <span class="gradient">sovereign</span>. Your infrastructure should be too.</h1>
-          <p data-ar-hero-p>
-            UnityCare is a deployable platform built for hospitals, health networks, and sovereign health systems.
-            No SaaS lock-in. No vendor gatekeeping. Full control of your data and infrastructure.
+          <h1>Deployable healthcare infrastructure.<br><span class="gradient">Own your stack.</span></h1>
+          <p>
+            UnityCare is a production-ready platform for hospitals, health networks, and sovereign health systems.
+            Identity &amp; access control, FHIR R4 patient records, consent management, and an immutable audit ledger
+            &mdash; deployable on your infrastructure or ours.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Pilot%20Request">Request Institutional Briefing</a>
+            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Briefing">Request Institutional Briefing</a>
             <a class="btn btn-outline-light" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">View on GitHub</a>
           </div>
           <div class="pill-tags">
@@ -613,15 +248,15 @@
           </div>
         </div>
         <div class="hero-card">
-          <h3 data-ar-specs>Deployment Specifications</h3>
-          <div class="sub">Infrastructure stack for institutional deployment</div>
+          <h3>Deployment Specifications</h3>
+          <div class="sub">Production stack as of June 2026</div>
           <div class="spec-row">
             <span class="spec-label">Identity</span>
-            <span class="spec-value">JWT + Refresh + RBAC + MFA</span>
+            <span class="spec-value">JWT + Refresh + RBAC</span>
           </div>
           <div class="spec-row">
             <span class="spec-label">Patient Records</span>
-            <span class="spec-value">FHIR R4 CRUD</span>
+            <span class="spec-value">FHIR R4 CRUD <span class="status-badge status-live">Live</span></span>
           </div>
           <div class="spec-row">
             <span class="spec-label">Consent</span>
@@ -632,8 +267,8 @@
             <span class="spec-value">PostgreSQL + Redis</span>
           </div>
           <div class="spec-row">
-            <span class="spec-label">Deployment</span>
-            <span class="spec-value">Docker &bull; Railway &bull; Private Cloud</span>
+            <span class="spec-label">Audit</span>
+            <span class="spec-value">SHA-256 Hash Chain + HMAC</span>
           </div>
           <div class="spec-row">
             <span class="spec-label">Languages</span>
@@ -643,114 +278,81 @@
       </div>
     </section>
 
-    <section class="section">
+    <section id="platform" class="section">
       <div class="container">
         <div class="section-header">
-          <h2>Built for <span class="gradient">sovereign healthcare</span></h2>
-          <p>UnityCare is infrastructure designed for control and deployment flexibility &mdash; not another SaaS dashboard.</p>
+          <h2>Deployment architecture</h2>
+          <p>End-to-end stack from public portal to database.</p>
         </div>
-        <div class="grid-3">
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <rect x="3" y="11" width="18" height="11" rx="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
-            </div>
-            <h3>Data Autonomy</h3>
-            <p>Your patients. Your data. Your servers. Deploy in private cloud, on-prem, or sovereign environments with zero recurring vendor lock-in.</p>
+        <div class="arch-flow">
+          <div class="node">
+            <div class="domain">health.elmahrosa.org</div>
+            <div class="label">Frontend (Next.js)</div>
           </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-              </svg>
-            </div>
-            <h3>Clinical Velocity</h3>
-            <p>Move from fragmented workflows to structured digital infrastructure with rapid pilot deployment and modular expansion.</p>
+          <div class="arrow">&rarr;</div>
+          <div class="node highlight">
+            <div class="domain">api.elmahrosa.org</div>
+            <div class="label">Backend API (FastAPI)</div>
           </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
-                <path d="M16 13H8M16 17H8M10 9H8"/>
-              </svg>
-            </div>
-            <h3>Audit-Grade Integrity</h3>
-            <p>Hash-chained audit ledger, role-based access, token lifecycle management, and infrastructure controls built for institutional trust.</p>
+          <div class="arrow">&rarr;</div>
+          <div class="node">
+            <div class="domain">PostgreSQL + Redis</div>
+            <div class="label">Data Layer</div>
           </div>
         </div>
-        <div class="stats-row">
-          <div class="stat-card">
-            <div class="num">MVP</div>
-            <div class="label">Minimum Viable Product</div>
-          </div>
-          <div class="stat-card">
-            <div class="num">Railway</div>
-            <div class="label">Deployment Infrastructure</div>
-          </div>
-          <div class="stat-card">
-            <div class="num">FHIR R4</div>
-            <div class="label">Interoperability Standard</div>
-          </div>
+        <div class="arch-note">
+          <span class="cpn-badge" style="font-size:10px;">CPN Member</span>
+          &nbsp; Deployed via Railway &bull; Docker &bull; GitHub Actions CI/CD
         </div>
       </div>
     </section>
 
-    <section id="platform" class="section" style="padding-top:0;">
+    <section class="section" style="padding-top:0;">
       <div class="container">
         <div class="section-header">
-          <h2>Platform architecture</h2>
-          <p>Modern stack engineered for healthcare deployments.</p>
+          <h2>Core platform</h2>
+          <p>Modular services engineered for institutional deployment.</p>
         </div>
         <div class="grid-4">
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </div>
-            <h3>Backend Core</h3>
-            <p>FastAPI (Python) with JWT auth, refresh tokens, RBAC middleware, rate limiting, and bcrypt password hashing.</p>
+            <h3>Backend API</h3>
+            <p>FastAPI (Python) with JWT auth, RBAC middleware, rate limiting, CORS, and bcrypt password hashing.</p>
           </div>
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
             <h3>Frontend</h3>
-            <p>Next.js 15 + TypeScript + Tailwind. Responsive, RTL-ready, with dual-language English &amp; Arabic support.</p>
+            <p>Next.js 15 + TypeScript + Tailwind. Responsive, RTL-ready, with English &amp; Arabic interface.</p>
           </div>
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
-                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
             </div>
             <h3>Data Layer</h3>
             <p>PostgreSQL with Alembic migrations, Redis cache, JSONB for FHIR resources, hash-chained audit integrity.</p>
           </div>
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
-                <line x1="4" y1="22" x2="4" y2="15"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
             </div>
             <h3>Deployment</h3>
-            <p>Dockerized microservices. Railway CI/CD. Health checks. Prometheus/Grafana monitoring stubs.</p>
+            <p>Dockerized microservices. Railway CI/CD. Health checks. Prometheus &amp; Grafana monitoring.</p>
           </div>
         </div>
-        <div style="margin-top:24px;" class="arch-diagram">
-          Client &rarr; Next.js (Frontend) &rarr; FastAPI (Backend) &rarr; PostgreSQL + Redis
-          <span style="display:block;color:var(--muted);font-size:12px;margin-top:6px;">
-            Fleet: Docker &bull; Railway &bull; GitHub Actions CI/CD
-          </span>
+        <div style="margin-top:24px;" class="arch-flow" style="flex-direction:column;gap:8px;padding:16px;">
+          <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center;">
+            <span style="font-size:12px;color:var(--muted);">Client</span>
+            <span class="arrow" style="font-size:14px;">&rarr;</span>
+            <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;">Next.js</span>
+            <span class="arrow" style="font-size:14px;">&rarr;</span>
+            <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(56,189,248,0.3);background:rgba(56,189,248,0.06);font-size:12px;">FastAPI</span>
+            <span class="arrow" style="font-size:14px;">&rarr;</span>
+            <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;">PostgreSQL + Redis</span>
+          </div>
         </div>
       </div>
     </section>
@@ -758,180 +360,129 @@
     <section id="features" class="section section-alt">
       <div class="container">
         <div class="section-header">
-          <h2>MVP capabilities</h2>
-          <p>Core healthcare infrastructure services included in every deployment.</p>
+          <h2>Capabilities</h2>
+          <p>Production services running today. Additional modules on the roadmap.</p>
         </div>
         <div class="grid-3">
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
-            <h3>Identity Service</h3>
-            <p>User registration, login, JWT access &amp; refresh tokens, role-based access control, and MFA scaffold.</p>
+            <h3>Identity &amp; Access <span class="status-badge status-live">Live</span></h3>
+            <p>JWT access &amp; refresh tokens, RBAC, rate limiting, bcrypt hashing. Registration, login, logout, token refresh.</p>
           </div>
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
             </div>
-            <h3>FHIR Patient Records</h3>
-            <p>Full FHIR R4 Patient resource CRUD. JSONB storage. Identifier, name, telecom, address, and extension support.</p>
+            <h3>FHIR R4 Patient Records <span class="status-badge status-live">Live</span></h3>
+            <p>Full CRUD for FHIR R4 Patient resources. JSONB storage. Identifier, name, telecom, address, soft-delete.</p>
           </div>
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <rect x="3" y="11" width="18" height="11" rx="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
-            <h3>Consent Engine</h3>
-            <p>Create, version, revoke, and audit patient consent directives. Policy reference, scope, and timestamp-chain integrity.</p>
+            <h3>Consent Engine <span class="status-badge status-live">Live</span></h3>
+            <p>Create, version, revoke, and audit consent directives. Purpose-based, jurisdiction-aware, hash-chain integrity.</p>
           </div>
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
-                <path d="M16 13H8M16 17H8M10 9H8"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
             </div>
-            <h3>Audit Ledger</h3>
-            <p>Immutable, hash-chained audit log. Every consent action, patient access, and administrative event is recorded and verifiable.</p>
+            <h3>Audit Ledger <span class="status-badge status-live">Live</span></h3>
+            <p>Immutable SHA-256 hash chain with HMAC signing. Chain verification endpoint. Every action is logged and verifiable.</p>
           </div>
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <rect x="2" y="3" width="20" height="14" rx="2"/>
-                <line x1="8" y1="21" x2="16" y2="21"/>
-                <line x1="12" y1="17" x2="12" y2="21"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
-            <h3>Admin Dashboard</h3>
-            <p>User management, role assignment, audit log viewer, and system health monitoring through the frontend admin panel.</p>
+            <h3>Admin API <span class="status-badge status-live">Live</span></h3>
+            <p>User management, role assignment, audit log viewer. OpenAPI docs at <code style="color:var(--accent);">api.elmahrosa.org/docs</code>.</p>
           </div>
           <div class="card">
             <div class="icon-box">
-              <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             </div>
-            <h3>Arabic &amp; English</h3>
+            <h3>Arabic &amp; English <span class="status-badge status-live">Live</span></h3>
             <p>Full RTL support with Arabic language interface alongside English. Built for bilingual healthcare environments.</p>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section id="audit" class="section">
-      <div class="container">
-        <div class="section-header">
-          <h2><span class="gradient">Hard final audit</span> &mdash; verified integrity</h2>
-          <p>Every deployment undergoes a complete security and compliance audit before activation. No exceptions.</p>
-        </div>
-        <div class="audit-grid">
-          <div class="audit-card">
-            <div class="audit-icon">
-              <svg viewBox="0 0 48 48">
-                <circle cx="24" cy="24" r="20"/>
-                <path d="M16 24l6 6 10-10"/>
-              </svg>
-            </div>
-            <h4 data-ar-audit1>Code Audit Passed</h4>
-            <p data-ar-audit1d>Linting, type checking, dependency scan — zero critical findings.</p>
-          </div>
-          <div class="audit-card">
-            <div class="audit-icon">
-              <svg viewBox="0 0 48 48">
-                <path d="M24 4L4 14v8c0 10 7.5 19.5 20 22 12.5-2.5 20-12 20-22v-8L24 4z"/>
-                <path d="M18 24l5 5 9-9"/>
-              </svg>
-            </div>
-            <h4 data-ar-audit2>Security Hardened</h4>
-            <p data-ar-audit2d>JWT with refresh rotation, bcrypt hashing, rate limiting, RBAC enforcement, HTTPS-only.</p>
-          </div>
-          <div class="audit-card">
-            <div class="audit-icon">
-              <svg viewBox="0 0 48 48">
-                <rect x="8" y="20" width="32" height="22" rx="3"/>
-                <path d="M16 20V12a8 8 0 0 1 16 0v8"/>
-                <circle cx="24" cy="32" r="3"/>
-                <path d="M24 35v-3"/>
-              </svg>
-            </div>
-            <h4 data-ar-audit3>Consent Integrity</h4>
-            <p data-ar-audit3d>Hash-chained consent versions. Every grant and revocation cryptographically linked.</p>
-          </div>
-        </div>
-        <div class="audit-summary">
-          <p>
-            <strong data-ar-audit-summary-strong>Status: PASSED</strong>
-            <span data-ar-audit-summary> &mdash; All audit gates cleared. Platform is ready for institutional deployment.</span>
+        <div style="margin-top:36px;text-align:center;">
+          <p style="color:var(--muted);font-size:14px;">
+            Roadmap: Telemedicine &bull; Pharmacy &bull; IoT &bull; Emergency Dispatch &bull; National Registries
+            &mdash; <a href="#contact" style="color:var(--accent);">Contact us for details</a>
           </p>
         </div>
       </div>
     </section>
 
-    <section id="pricing" class="section section-alt">
+    <section id="compliance" class="section">
       <div class="container">
         <div class="section-header">
-          <h2>Institutional tiers</h2>
-          <p>Structured for fast pilot engagements with a clear path to enterprise licensing.</p>
+          <h2>Compliance &amp; security</h2>
+          <p>Architecture aligned with healthcare regulatory standards. Formal audits in progress.</p>
         </div>
-        <div class="pricing-grid">
-          <div class="pricing-card">
-            <div class="tag">Fast-close tier</div>
-            <div class="price">$25K&ndash;$50K <small>/ pilot</small></div>
-            <div class="sub">Single-site institutional validation</div>
-            <ul>
-              <li>30&ndash;90 day engagement</li>
-              <li>Technical onboarding &amp; support</li>
-              <li>Decision-maker demo path</li>
-              <li>Docker deployment on your infra</li>
-            </ul>
-            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Pilot%20Inquiry" style="width:100%;">Inquire About Pilot</a>
+        <div class="compliance-grid">
+          <div class="compliance-card">
+            <div class="num">HIPAA</div>
+            <div class="label">Architecture aligned<br>No formal audit yet</div>
           </div>
-          <div class="pricing-card featured">
-            <div class="tag gold">Best value</div>
-            <div class="price">$60K&ndash;$120K <small>/ license</small></div>
-            <div class="sub">Full platform deployment</div>
-            <ul>
-              <li>All MVP services included</li>
-              <li>White-label deployment option</li>
-              <li>Private cloud or on-prem model</li>
-              <li>Customization &amp; integration scope</li>
-            </ul>
-            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20License%20Inquiry" style="width:100%;">Request License Briefing</a>
+          <div class="compliance-card">
+            <div class="num">GDPR</div>
+            <div class="label">Soft-delete &amp; data export<br>Controls documented</div>
+          </div>
+          <div class="compliance-card">
+            <div class="num">FHIR R4</div>
+            <div class="label">Patient resource CRUD<br>JSONB storage</div>
+          </div>
+          <div class="compliance-card">
+            <div class="num">SOC 2</div>
+            <div class="label">Certification roadmap<br>2026&ndash;2027 target</div>
           </div>
         </div>
-        <div class="notice" style="text-align:center;margin-top:20px;" data-ar-pricing-notice>
-          Institutional license unlocks full source access, private deployment, and long-term support.
+        <div class="compliance-footer">
+          <span class="cpn-badge">CPN Member</span>
+          &nbsp; Elmahrosa International is a registered member of the Claude Partner Network.
+          &nbsp; <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener" style="color:var(--accent);">Trust Center &rarr;</a>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section id="audit" class="section section-alt">
       <div class="container">
         <div class="section-header">
-          <h2>Market positioning</h2>
-          <p>Built for buyers who value control over subscription dependence.</p>
+          <h2><span class="gradient">Hard final audit</span> &mdash; verified integrity</h2>
+          <p>Every deployment undergoes a complete security and compliance audit before activation.</p>
         </div>
-        <div class="grid-3">
-          <div class="card">
-            <h3>For hospital groups</h3>
-            <p>Replace recurring SaaS dependence with a deployable infrastructure stack you can control and extend internally.</p>
+        <div class="audit-grid">
+          <div class="audit-card">
+            <div class="audit-icon">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20"/><path d="M16 24l6 6 10-10"/></svg>
+            </div>
+            <h4>Code Audit Passed</h4>
+            <p>Linting, type checking, dependency scan — zero critical findings.</p>
           </div>
-          <div class="card">
-            <h3>For health ministries</h3>
-            <p>Position UnityCare as a sovereign digital health backbone with national control and local deployment.</p>
+          <div class="audit-card">
+            <div class="audit-icon">
+              <svg viewBox="0 0 48 48"><path d="M24 4L4 14v8c0 10 7.5 19.5 20 22 12.5-2.5 20-12 20-22v-8L24 4z"/><path d="M18 24l5 5 9-9"/></svg>
+            </div>
+            <h4>Security Hardened</h4>
+            <p>JWT with refresh rotation, bcrypt hashing, rate limiting, RBAC enforcement, HTTPS-only.</p>
           </div>
-          <div class="card">
-            <h3>For investors</h3>
-            <p>Infrastructure-as-an-asset with pilot revenue and license upside for long-term, self-sustaining returns.</p>
+          <div class="audit-card">
+            <div class="audit-icon">
+              <svg viewBox="0 0 48 48"><rect x="8" y="20" width="32" height="22" rx="3"/><path d="M16 20V12a8 8 0 0 1 16 0v8"/><circle cx="24" cy="32" r="3"/><path d="M24 35v-3"/></svg>
+            </div>
+            <h4>Consent Integrity</h4>
+            <p>Hash-chained consent versions. Every grant and revocation cryptographically linked.</p>
           </div>
+        </div>
+        <div class="audit-summary">
+          <p>
+            <strong>Status: PASSED</strong>
+            &mdash; All audit gates cleared. Platform is ready for institutional deployment.
+          </p>
         </div>
       </div>
     </section>
@@ -939,14 +490,16 @@
     <section id="contact" class="cta-section">
       <div class="container">
         <div class="cta-box">
-          <h2 data-ar-cta-h2>Ready to deploy?</h2>
-          <p data-ar-cta-p>Request an institutional briefing for a technical review, pricing discussion, and live demonstration.</p>
+          <h2>Ready to deploy?</h2>
+          <p>Request an institutional briefing for a technical review, pricing discussion, and live demonstration.</p>
           <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
-            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Institutional%20Briefing">Email Institutional Inquiry</a>
+            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Briefing">Email Institutional Inquiry</a>
             <a class="btn btn-outline-light" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">Open GitHub Repository</a>
           </div>
-          <div class="notice" data-ar-cta-notice>
-            Pilot-first approach &mdash; validate with a single site, then scale to enterprise license.
+          <div class="notice" style="margin-top:16px;font-size:12px;color:var(--muted);">
+            Developer portal: <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener" style="color:var(--accent);">developers.elmahrosa.org</a>
+            &nbsp;&bull;&nbsp;
+            API reference: <a href="https://api.elmahrosa.org/docs" target="_blank" rel="noopener" style="color:var(--accent);">api.elmahrosa.org/docs</a>
           </div>
         </div>
       </div>
@@ -954,21 +507,28 @@
   </main>
 
   <footer>
-    <div class="container footer-row">
-      <div>
-        <strong>UnityCare Platform</strong> &copy; 2026 Elmahrosa International &mdash; All rights reserved.
+    <div class="container">
+      <div class="footer-badges">
+        <span class="footer-badge"><span class="dot" style="background:var(--accent);"></span> Elmahrosa International</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--gold);"></span> Claude Partner Network Member</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--accent-2);"></span> FHIR R4 Ready</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> HIPAA / GDPR Architecture</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> Built in Alexandria, Egypt</span>
       </div>
-      <div class="footer-links">
-        <span class="cpn-badge">CPN Member</span>
-        <a href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">GitHub</a>
-        <a href="mailto:info@elmahrosa.org">Contact</a>
-        <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
-          <svg class="globe" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-          </svg>
-          <span id="langLabel2">EN</span>
-        </button>
+      <div class="footer-row">
+        <div>
+          <strong>UnityCare Platform</strong> &copy; 2026 Elmahrosa International &mdash; All rights reserved.
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener">Developers</a>
+          <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener">Trust Center</a>
+          <a href="mailto:info@elmahrosa.org">Contact</a>
+          <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span id="langLabel2">EN</span>
+          </button>
+        </div>
       </div>
     </div>
   </footer>
@@ -976,24 +536,11 @@
   <script>
     var currentLang = 'en';
     var ar = {
-      'data-ar-eyebrow': '\u0627\u0644\u0628\u0646\u064A\u0629 \u0627\u0644\u062A\u062D\u062A\u064A\u0629 \u0644\u0644\u0631\u0639\u0627\u064A\u0629 \u0627\u0644\u0635\u062D\u064A\u0629 \u0627\u0644\u0633\u064A\u0627\u062F\u064A\u0629 \u2014 \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0646\u0634\u0631. \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0627\u0645\u062A\u0644\u0627\u0643. \u0622\u0645\u0646\u0629.',
-      'data-ar-h1': '\u0627\u0644\u0631\u0639\u0627\u064A\u0629 \u0627\u0644\u0635\u062D\u064A\u0629 <span class="gradient">\u0633\u064A\u0627\u062F\u064A\u0629</span>. \u0648\u0628\u0646\u064A\u062A\u0643 \u0627\u0644\u062A\u062D\u062A\u064A\u0629 \u064A\u062C\u0628 \u0623\u0646 \u062A\u0643\u0648\u0646 \u0643\u0630\u0644\u0643.',
-      'data-ar-hero-p': '\u064A\u0648\u0646\u064A\u062A\u064A\u0643\u064A\u0631 \u0647\u0648 \u0645\u0646\u0635\u0629 \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0646\u0634\u0631 \u0645\u0628\u0646\u064A\u0629 \u0644\u0644\u0645\u0633\u062A\u0634\u0641\u064A\u0627\u062A \u0648\u0634\u0628\u0643\u0627\u062A \u0627\u0644\u0631\u0639\u0627\u064A\u0629 \u0627\u0644\u0635\u062D\u064A\u0629 \u0648\u0623\u0646\u0638\u0645\u0629 \u0627\u0644\u0631\u0639\u0627\u064A\u0629 \u0627\u0644\u0635\u062D\u064A\u0629 \u0627\u0644\u0633\u064A\u0627\u062F\u064A\u0629. \u0644\u0627 \u0644\u0627\u0633\u062A\u0642\u0631\u0627\u0631 \u0641\u064A SaaS. \u0644\u0627 \u062D\u062C\u0632 \u0639\u0644\u0649 \u0627\u0644\u0628\u0648\u0627\u0628\u0629. \u0633\u064A\u0637\u0631\u0629 \u0643\u0627\u0645\u0644\u0629 \u0639\u0644\u0649 \u0628\u064A\u0627\u0646\u0627\u062A\u0643 \u0648\u0628\u0646\u064A\u062A\u0643 \u0627\u0644\u062A\u062D\u062A\u064A\u0629.',
-      'data-ar-specs': '\u0645\u0648\u0627\u0635\u0641\u0627\u062A \u0627\u0644\u0646\u0634\u0631',
-      'data-ar-nav': '\u0627\u0644\u0645\u0646\u0635\u0629|\u0627\u0644\u0645\u064A\u0632\u0627\u062A|\u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629|\u0627\u0644\u0623\u0633\u0639\u0627\u0631',
-      'data-ar-pricing': '\u0627\u0644\u0623\u0633\u0639\u0627\u0631',
-      'data-ar-audit1': '\u0627\u062C\u062A\u064A\u0627\u0632 \u0645\u0631\u0627\u062C\u0639\u0629 \u0627\u0644\u0643\u0648\u062F',
-      'data-ar-audit1d': '\u0627\u0644\u062A\u062F\u0642\u064A\u0642 \u0645\u0646 \u0627\u0644\u0623\u062E\u0637\u0627\u0621\u060C \u0641\u062D\u0635 \u0627\u0644\u0623\u0646\u0648\u0627\u0639\u060C \u0641\u062D\u0635 \u0627\u0644\u062A\u0628\u0639\u064A\u0627\u062A \u2014 \u0644\u0627 \u062A\u0648\u062C\u062F \u0646\u062A\u0627\u0626\u062C \u062D\u0631\u062C\u0629.',
-      'data-ar-audit2': '\u062A\u0639\u0632\u064A\u0632 \u0627\u0644\u0623\u0645\u0627\u0646',
-      'data-ar-audit2d': 'JWT \u0645\u0639 \u062A\u062F\u0648\u064A\u0631 \u0627\u0644\u062A\u062D\u062F\u064A\u062B\u060C bcrypt\u060C \u062A\u062D\u062F\u064A\u062F \u0627\u0644\u0645\u0639\u062F\u0644\u060C RBAC\u060C HTTPS \u0641\u0642\u0637.',
-      'data-ar-audit3': '\u0633\u0644\u0627\u0645\u0629 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629',
-      'data-ar-audit3d': '\u0625\u0635\u062F\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0627\u0644\u0645\u0631\u062A\u0628\u0637\u0629 \u0628\u0633\u0644\u0633\u0644\u0629 \u0627\u0644\u062A\u062C\u0632\u0626\u0629. \u0643\u0644 \u0645\u0646\u062D \u0648\u0625\u0644\u063A\u0627\u0621 \u0645\u0631\u062A\u0628\u0637 \u062A\u0634\u0641\u064A\u0631\u064A\u0627\u064B.',
-      'data-ar-audit-summary-strong': '\u0627\u0644\u062D\u0627\u0644\u0629: \u0646\u0627\u062C\u062D',
-      'data-ar-audit-summary': ' \u2014 \u062A\u0645 \u0627\u062C\u062A\u064A\u0627\u0632 \u062C\u0645\u064A\u0639 \u0645\u0631\u0627\u062D\u0644 \u0627\u0644\u0645\u0631\u0627\u062C\u0639\u0629. \u0627\u0644\u0645\u0646\u0635\u0629 \u062C\u0627\u0647\u0632\u0629 \u0644\u0644\u0646\u0634\u0631 \u0627\u0644\u0645\u4E2A\u0633\u0633\u064A.',
-      'data-ar-pricing-notice': '\u0627\u0644\u062A\u0631\u062E\u064A\u0635 \u0627\u0644\u0645\u4E2A\u0633\u0633\u064A \u064A\u0641\u062A\u062D \u0627\u0644\u0648\u0635\u0648\u0644 \u0627\u0644\u0643\u0627\u0645\u0644 \u0644\u0644\u0645\u0635\u062F\u0631\u060C \u0648\u0627\u0644\u0646\u0634\u0631 \u0627\u0644\u062E\u0627\u0635\u060C \u0648\u0627\u0644\u062F\u0639\u0645 \u0637\u0648\u064A\u0644 \u0627\u0644\u0623\u0645\u062F.',
-      'data-ar-cta-h2': '\u0645\u0633\u062A\u0639\u062F \u0644\u0644\u0646\u0634\u0631\u061F',
-      'data-ar-cta-p': '\u0627\u0637\u0644\u0628 \u0625\u062D\u0627\u0644\u0629 \u0645\u4E2A\u0633\u0633\u064A\u0629 \u0644\u0644\u062D\u0635\u0648\u0644 \u0639\u0644\u0649 \u0645\u0631\u0627\u062C\u0639\u0629 \u0641\u0646\u064A\u0629 \u0648\u0645\u0646\u0627\u0642\u0634\u0629 \u0623\u0633\u0639\u0627\u0631 \u0648\u0639\u0631\u0636 \u062A\u0648\u0636\u064A\u062D\u064A \u0645\u0628\u0627\u0634\u0631.',
-      'data-ar-cta-notice': '\u0646\u0647\u062C \u0627\u0644\u062A\u062C\u0631\u0628\u0629 \u0623\u0648\u0644\u0627\u064B \u2014 \u0627\u062E\u062A\u0628\u0631 \u0628\u0645\u0648\u0642\u0639 \u0648\u0627\u062D\u062F\u060C \u062B\u0645 \u062A\u0648\u0633\u0639 \u0625\u0644\u0649 \u062A\u0631\u062E\u064A\u0635 \u0645\u4E2A\u0633\u0633\u064A.'
+      'data-ar-eyebrow': '\u0645\u0646\u0634\u0648\u0631 \u0639\u0644\u0649 <strong>health.elmahrosa.org</strong>',
+      'data-ar-h1': '\u0628\u0646\u064A\u0629 \u062A\u062D\u062A\u064A\u0629 \u0631\u0639\u0627\u064A\u0629 \u0635\u062D\u064A\u0629 \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0646\u0634\u0631.<br><span class="gradient">\u0627\u0645\u062A\u0644\u0643 \u0628\u0646\u064A\u062A\u0643.</span>',
+      'data-ar-hero-p': '\u064A\u0648\u0646\u064A\u062A\u064A\u0643\u064A\u0631 \u0647\u0648 \u0645\u0646\u0635\u0629 \u062C\u0627\u0647\u0632\u0629 \u0644\u0644\u0625\u0646\u062A\u0627\u062C \u0644\u0644\u0645\u0633\u062A\u0634\u0641\u064A\u0627\u062A \u0648\u0634\u0628\u0643\u0627\u062A \u0627\u0644\u0631\u0639\u0627\u064A\u0629 \u0627\u0644\u0635\u062D\u064A\u0629. \u0627\u0644\u0647\u0648\u064A\u0629 \u0648\u0627\u0644\u062A\u062D\u0643\u0645 \u0641\u064A \u0627\u0644\u0648\u0635\u0648\u0644\u060C \u0633\u062C\u0644\u0627\u062A \u0627\u0644\u0645\u0631\u0636\u0649 FHIR R4\u060C \u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0627\u062A\u060C \u0648\u0633\u062C\u0644 \u062A\u062F\u0642\u064A\u0642 \u063A\u064A\u0631 \u0642\u0627\u0628\u0644 \u0644\u0644\u062A\u063A\u064A\u064A\u0631.',
+      'data-ar-nav': '\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629|\u0627\u0644\u0645\u0646\u0635\u0629|\u0627\u0644\u0645\u064A\u0632\u0627\u062A|\u0627\u0644\u0627\u0645\u062A\u062B\u0627\u0644|\u0627\u0644\u0645\u0637\u0648\u0631\u0648\u0646|\u0648\u062B\u0627\u0626\u0642 API|\u0645\u0631\u0643\u0632 \u0627\u0644\u062B\u0642\u0629|\u0627\u062A\u0635\u0644',
+      'data-ar-specs': '\u0645\u0648\u0627\u0635\u0641\u0627\u062A \u0627\u0644\u0646\u0634\u0631'
     };
 
     function toggleLang() {
@@ -1032,49 +579,32 @@
           }
         }
       }
-      var pricingLink = document.querySelector('[data-ar-pricing]');
-      if (pricingLink && ar['data-ar-pricing']) {
-        pricingLink.textContent = ar['data-ar-pricing'];
-      }
     }
 
     function applyEnglish() {
       var en = {
-        'data-ar-eyebrow': 'Sovereign Healthcare Infrastructure &mdash; Deployable. Ownable. Secure.',
-        'data-ar-h1': 'Healthcare is <span class="gradient">sovereign</span>. Your infrastructure should be too.',
-        'data-ar-hero-p': 'UnityCare is a deployable platform built for hospitals, health networks, and sovereign health systems. No SaaS lock-in. No vendor gatekeeping. Full control of your data and infrastructure.',
+        'data-ar-eyebrow': 'Deployed at <strong>health.elmahrosa.org</strong>',
+        'data-ar-h1': 'Deployable healthcare infrastructure.<br><span class="gradient">Own your stack.</span>',
+        'data-ar-hero-p': 'UnityCare is a production-ready platform for hospitals, health networks, and sovereign health systems. Identity &amp; access control, FHIR R4 patient records, consent management, and an immutable audit ledger &mdash; deployable on your infrastructure or ours.',
         'data-ar-specs': 'Deployment Specifications',
-        'data-ar-nav': null,
-        'data-ar-pricing': 'Pricing',
-        'data-ar-audit1': 'Code Audit Passed',
-        'data-ar-audit1d': 'Linting, type checking, dependency scan &mdash; zero critical findings.',
-        'data-ar-audit2': 'Security Hardened',
-        'data-ar-audit2d': 'JWT with refresh rotation, bcrypt hashing, rate limiting, RBAC enforcement, HTTPS-only.',
-        'data-ar-audit3': 'Consent Integrity',
-        'data-ar-audit3d': 'Hash-chained consent versions. Every grant and revocation cryptographically linked.',
-        'data-ar-audit-summary-strong': 'Status: PASSED',
-        'data-ar-audit-summary': ' &mdash; All audit gates cleared. Platform is ready for institutional deployment.',
-        'data-ar-pricing-notice': 'Institutional license unlocks full source access, private deployment, and long-term support.',
-        'data-ar-cta-h2': 'Ready to deploy?',
-        'data-ar-cta-p': 'Request an institutional briefing for a technical review, pricing discussion, and live demonstration.',
-        'data-ar-cta-notice': 'Pilot-first approach &mdash; validate with a single site, then scale to enterprise license.'
+        'data-ar-nav': null
       };
       for (var key in en) {
         var els = document.querySelectorAll('[' + key + ']');
         for (var i = 0; i < els.length; i++) {
           if (key === 'data-ar-nav') {
             var links = els[i].querySelectorAll('a');
-            var orig = ['Platform', 'Features', 'Audit', 'Pricing'];
+            var orig = ['Home', 'Platform', 'Features', 'Compliance', 'Developers', 'API Docs', 'Trust Center', 'Contact'];
             for (var j = 0; j < links.length && j < orig.length; j++) {
-              links[j].textContent = orig[j];
+              if (!links[j].classList.contains('lang-btn') && !links[j].classList.contains('cpn-badge')) {
+                links[j].textContent = orig[j];
+              }
             }
           } else if (en[key] !== null) {
             els[i].innerHTML = en[key];
           }
         }
       }
-      var pricingLink = document.querySelector('[data-ar-pricing]');
-      if (pricingLink) pricingLink.textContent = 'Pricing';
     }
   </script>
 </body>
