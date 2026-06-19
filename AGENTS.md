@@ -1,57 +1,54 @@
 # UnityCare Platform — Session Context
 
-## Current Session (Jun 18, 2026)
+## Current Session (Jun 19, 2026)
 
-### Completed — Frontend Migration & Audit Fixes
+### Completed — Railway Separation & Repo Cleanup
 
-#### Architecture
-- Audited dual architecture (Next.js `app/` + SPA `src/`)
-- Chose **Next.js App Router** as canonical frontend
-- Migrated business-critical SPA logic to Next.js structure
-- Archived `src/` → `legacy-src-backup/`
+#### Infrastructure
+- Separated UnityCare from TEOS/Sentinel into own Railway project **"UnityCare Production"**
+- Deployed backend (FastAPI/Python 3.12, Dockerfile, 1 replica)
+- Deployed frontend (Next.js 15, Dockerfile, 1 replica)
+- Provisioned dedicated PostgreSQL 16 with daily auto-backups
+- All 7 DB tables created and verified via `/health`
+- Backend domain: `https://backend-production-9705.up.railway.app`
+- Frontend domain: `https://frontend-production-c053.up.railway.app`
+- Health/status/version endpoints all returning 200
+- Railway healthchecks: backend 30s timeout, frontend 10s timeout
+- Railway CLI v5.15.0 installed (npm global)
 
-#### Migrated Files (SPA → Next.js)
-| From | To | Notes |
-|------|----|-------|
-| `src/services/apiService.js` | `lib/api.js` | Rewrote with `fetch()` instead of Axios |
-| `src/_core/hooks/useAuth.ts` | `hooks/useAuth.ts` | Rewrote to use `lib/api.js` |
-| `src/components/ErrorBoundary.tsx` | `components/ErrorBoundary.tsx` | Simplified, removed lucide-react dep |
-| `src/pages/doctor/Dashboard.tsx` | `app/[locale]/doctor/page.tsx` | Rewritten with plain Tailwind HTML |
-| `src/pages/patient/Dashboard.tsx` | Enhanced `app/[locale]/patient/page.tsx` | Added IoT vitals section |
+#### Landing Page (`website/index.html`)
+- Added `data-ar-eyebrow`, `data-ar-h1`, `data-ar-hero-p`, `data-ar-specs`, `data-ar-nav` attributes
+- Added `#audit` link to navbar
+- Added favicon (`<link rel="icon" href="/favicon.ico" />`)
+- Added OG image meta tag (`og:image`)
+- Updated JS arrays to 6-element nav (includes Audit)
 
-#### Removed / Cleaned
-- `webpack.config.js` (SPA build, conflicted with Next.js)
-- `public/index.html` (SPA entry point)
-- `public/locales/` (duplicate i18n JSON; `i18n/messages/` retained)
-- `i18n/routing.ts`, `i18n/request.ts` (depended on uninstalled `next-intl`)
-- `backend/node_modules/` (orphaned, no `package.json`)
-- `backend/jest.config.js`, `backend/.eslintrc.json` (vestigial Node.js configs)
-- `frontend/coverage/` (test artifact)
-- Removed `next-intl`, `lucide-react`, `clsx` from `frontend/package.json` (not used by app/)
-- Removed `psycopg2-binary` from `backend/requirements.txt` (unused sync driver)
-
-#### Backend Fixes
-- `alembic/env.py`: fixed async connection (was using sync `.connect()` on async engine)
-- `nginx.conf`: fixed proxy_pass port mismatch (5000→8000) + service name (api→backend)
-- Updated CSP `connect-src` in nginx.conf
-
-#### CI Fixes
-- Removed `|| true` suppression from `frontend-lint` (now fails on lint errors)
-- Added `frontend-type-check` job running `npm run type-check`
-- Updated deploy `needs:` to include type-check
+#### Repo Cleanup
+- Made repo **private** (settings → change visibility)
+- Purged `backend/.env.railway` and `frontend/.env.railway` from git history (filter-branch)
+- Added `*.env.railway` to `.gitignore`
+- Removed stale MongoDB database files, outdated docs, vestigial Node.js configs
+- Rewrote root `.env.example`, `backend/README.md`, updated `.gitignore`
+- Updated architecture diagrams
 
 ### Current State
-- **Frontend**: Single architecture (Next.js App Router). Pages: landing, login, register, patient dashboard, doctor dashboard, admin dashboard
-- **Frontend lint**: ✅ 0 errors, 0 warnings
-- **TypeScript**: ✅ 0 errors
+- **Frontend**: Next.js App Router (landing, login, register, patient/doctor/admin dashboards)
+- **Frontend lint**: ✅ 0 errors, 0 warnings (CI enforces)
+- **TypeScript**: ✅ 0 errors (CI enforces)
 - **Build**: ✅ Passes (Next.js 15.5.19 standalone)
 - **Frontend tests**: 0 test files
-- **Backend**: Python/FastAPI, PostgreSQL, Alembic corrected
-- **Backend lint**: Cannot verify (Python not installed on this machine)
+- **Backend**: Python/FastAPI, PostgreSQL, Alembic (auto-create via `init_db()`)
+- **Backend lint**: Cannot verify (Python not installed)
 
 ### Known Items for Next Time
-1. Write frontend tests (Jest config exists but no test files, needs `ts-jest` and `@testing-library/jest-dom` in devDeps)
+1. Write frontend tests (Jest config exists but no test files; needs `ts-jest` + `@testing-library/jest-dom` in devDeps)
 2. Backend lint: `pip install ruff && ruff check app/`
-3. Backend README still references Node.js/Express — needs rewrite for Python/FastAPI
-4. Add translation consumption from `i18n/messages/` (all text currently hardcoded English)
-5. Migrate remaining pages from `legacy-src-backup/` as needed
+3. Add translation consumption from `i18n/messages/` (all text currently hardcoded English)
+4. Migrate remaining pages from `legacy-src-backup/` as needed
+5. 3 Dependabot moderate alerts on GitHub — review
+
+## Key Decisions
+- Railway CLI must be run from service subdirectory with `--path-as-root` flag for correct `railway.toml` detection
+- Railway uses Railpack auto-detection, but Dockerfile builds with explicit `railway.toml` are more reliable
+- DB tables auto-created via `init_db()` lifespan handler; Alembic used as fallback
+- `railway.toml` files in `backend/` and `frontend/` are correct and match deployed configs

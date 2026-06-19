@@ -19,6 +19,7 @@ build/
 .env
 .env.local
 .env.*.local
+*.env.railway
 backend/.env
 frontend/.env
 
