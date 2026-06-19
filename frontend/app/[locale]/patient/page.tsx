@@ -5,23 +5,29 @@ import { useEffect, useState } from "react";
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 interface Consent { id: string; purpose: string; status: string; jurisdiction: string; created_at: string }
+interface VitalSigns { heartRate?: number; oxygenSaturation?: number; bloodPressure?: string; temperature?: number }
 
 export default function PatientDashboard() {
   const [consents, setConsents] = useState<Consent[]>([]);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [vitalSigns, setVitalSigns] = useState<VitalSigns | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("unitycare_token");
     if (!token) return;
+
     fetch(`${API}/admin/users/me`, { headers: { Authorization: `Bearer ${token}` } })
       .then((r) => r.json())
       .then((u) => {
-        setUserId(u.id);
-        return fetch(`${API}/consent/patient/${u.id}`, { headers: { Authorization: `Bearer ${token}` } });
+        return Promise.all([
+          fetch(`${API}/consent/patient/${u.id}`, { headers: { Authorization: `Bearer ${token}` } }).then((r) => r.json()),
+          fetch(`${API}/iot/${u.id}/vitals`, { headers: { Authorization: `Bearer ${token}` } }).then((r) => r.json()).catch(() => null),
+        ]);
       })
-      .then((r) => r.json())
-      .then((c) => setConsents(c))
+      .then(([consentData, vitalsData]) => {
+        setConsents(consentData);
+        setVitalSigns(vitalsData);
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -29,10 +35,40 @@ export default function PatientDashboard() {
   if (loading) return <div className="p-8 text-center text-gray-500">Loading...</div>;
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
-      <h1 className="mb-8 text-2xl font-bold text-gray-900">Patient Dashboard</h1>
-      <div className="mb-8 rounded-2xl border border-gray-200 bg-white p-6">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">My Consents</h2>
+    <div className="mx-auto max-w-5xl px-4 py-8 space-y-8">
+      <h1 className="text-2xl font-bold text-gray-900">Patient Dashboard</h1>
+
+      {vitalSigns && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {vitalSigns.heartRate !== undefined && (
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              <p className="text-sm text-gray-500">Heart Rate</p>
+              <p className="text-xl font-bold text-gray-900">{vitalSigns.heartRate} <span className="text-sm font-normal text-gray-500">bpm</span></p>
+            </div>
+          )}
+          {vitalSigns.oxygenSaturation !== undefined && (
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              <p className="text-sm text-gray-500">O2 Saturation</p>
+              <p className="text-xl font-bold text-gray-900">{vitalSigns.oxygenSaturation} <span className="text-sm font-normal text-gray-500">%</span></p>
+            </div>
+          )}
+          {vitalSigns.bloodPressure && (
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              <p className="text-sm text-gray-500">Blood Pressure</p>
+              <p className="text-xl font-bold text-gray-900">{vitalSigns.bloodPressure} <span className="text-sm font-normal text-gray-500">mmHg</span></p>
+            </div>
+          )}
+          {vitalSigns.temperature !== undefined && (
+            <div className="rounded-2xl border border-gray-200 bg-white p-4">
+              <p className="text-sm text-gray-500">Temperature</p>
+              <p className="text-xl font-bold text-gray-900">{vitalSigns.temperature} <span className="text-sm font-normal text-gray-500">°C</span></p>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="rounded-2xl border border-gray-200 bg-white p-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">My Consents</h2>
         {consents.length === 0 ? (
           <p className="text-sm text-gray-500">No consents found.</p>
         ) : (

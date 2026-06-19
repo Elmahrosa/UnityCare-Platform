@@ -1,171 +1,84 @@
-# UCH Backend
+# UnityCare Backend
 
-![Node](https://img.shields.io/badge/node-20.x-green)
-![Express](https://img.shields.io/badge/framework-express-black)
+![Python](https://img.shields.io/badge/python-3.12-blue)
+![FastAPI](https://img.shields.io/badge/framework-FastAPI-green)
 ![License](https://img.shields.io/badge/license-TESL%20v2.0-blue)
 
-Backend API for the Unity Care Hospital digital healthcare platform.
+Backend API for the UnityCare healthcare trust platform.
 
-This service powers:
-
-• Patient management  
-• Appointment scheduling  
-• Hospital bed allocation  
-• Telemedicine session orchestration  
-• Compliance audit logging  
-
-The backend is designed for secure deployment in healthcare environments including:
-
-• Cloud infrastructure  
-• Private hospital networks  
-• Air-gapped national healthcare systems
-
----
-
-## Architecture
-
-The backend follows a modular service architecture.
-
-```
-
-src/
-controllers/
-routes/
-services/
-models/
-middlewares/
-utils/
-config/
-server.js
-
-```
-
-Responsibilities:
-
-| Layer | Responsibility |
-|------|---------------|
-| Routes | API endpoints |
-| Controllers | Request handling |
-| Services | Business logic |
-| Models | Database interaction |
-| Middleware | Auth / validation |
-| Utils | Shared helpers |
+Built with Python 3.12 + FastAPI, async PostgreSQL (SQLAlchemy + asyncpg), Redis, and OpenTelemetry.
 
 ---
 
 ## Technology Stack
 
 | Component | Technology |
-|---|---|
-| Runtime | Node.js |
-| Framework | Express |
-| Database | PostgreSQL / MongoDB |
-| Auth | JWT |
-| Testing | Jest |
-| Containerization | Docker |
+|-----------|-----------|
+| Runtime | Python 3.12 |
+| Framework | FastAPI |
+| Database | PostgreSQL 16 (async via asyncpg) |
+| ORM | SQLAlchemy 2.0 (async) |
+| Migrations | Alembic |
+| Auth | JWT (python-jose) |
+| Cache | Redis |
+| Monitoring | OpenTelemetry |
 
 ---
 
 ## API Modules
 
-| Module | Description |
-|---|---|
-| Patients | Patient registry |
-| Appointments | Scheduling |
-| Beds | Bed allocation |
-| Telemedicine | Consultation sessions |
-| Audit | Compliance logs |
+| Module | Route Prefix | Description |
+|--------|-------------|-------------|
+| Auth | `/api/v1/auth` | Login, Register, Refresh |
+| Patients | `/api/v1/fhir/Patient` | FHIR R4 Patient CRUD |
+| Consents | `/api/v1/consent` | Consent lifecycle with hash chaining |
+| Audit | `/api/v1/audit` | Immutable audit log |
+| Admin | `/api/v1/admin` | User management |
 
 ---
 
 ## Local Development
 
-Clone:
+```bash
+# Start dependencies
+docker compose up -d postgres redis
 
-```
+# Install dependencies
+pip install -r requirements.txt
 
-git clone [https://github.com/Elmahrosa/UCH-Backend](https://github.com/Elmahrosa/UCH-Backend)
-
-```
-
-Install dependencies:
-
-```
-
-npm install
-
-```
-
-Run dev server:
-
-```
-
-npm run dev
-
-```
-
----
-
-## Environment Variables
-
-Create `.env`
-
-Example:
-
-```
-
-PORT=3000
-DATABASE_URL=postgres://localhost/uch
-JWT_SECRET=replace_this
-
+# Run dev server
+uvicorn app.main:app --reload --port 8000
 ```
 
 ---
 
 ## Docker Deployment
 
-Build container:
-
-```
-
-docker build -t uch-backend .
-
-```
-
-Run container:
-
-```
-
-docker run -p 3000:3000 uch-backend
-
+```bash
+docker build -t unitycare-backend .
+docker run -p 8000:8000 unitycare-backend
 ```
 
 ---
 
-## Security
+## Environment Variables
 
-Security controls include:
+See `.env.example` for all required variables.
 
-• JWT authentication  
-• Request validation  
-• Environment variable protection  
-• Audit logging  
-
-See:
-
-```
-
-docs/SECURITY.md
-
-```
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| DATABASE_URL | Yes | — | PostgreSQL connection (asyncpg) |
+| JWT_SECRET | Yes | — | 64-char hex string |
+| ENCRYPTION_KEY | Yes | — | 32-char hex string |
+| ENVIRONMENT | No | development | production/development |
+| REDIS_URL | No | redis://localhost:6379/0 | Redis connection |
 
 ---
 
-## Platform
+## Health Endpoints
 
-Unity Care Hospital is part of the Elmahrosa digital infrastructure stack.
-
-Institutional overview:
-
-https://uch.teosegypt.com
-```
+| Endpoint | Description |
+|----------|-------------|
+| `/health` | Service + database health |
+| `/status` | Detailed status |
+| `/version` | Version info |

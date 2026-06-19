@@ -1,26 +1,25 @@
-# 🏗️ System Architecture
+# System Architecture
 
 ## High-Level Flow
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   Next.js App   │◄──►│   Express API    │◄──►│   MongoDB       │
-│  (React/TS)     │    │  (Node.js/TS)    │    │                 │
+│   Next.js App   │◄──►│   FastAPI        │◄──►│   PostgreSQL    │
+│  (React/TS)     │    │  (Python 3.12)   │    │                  │
 └─────────────────┘    └──────────────────┘    └─────────────────┘
          │                       │                       │
          ▼                       ▼                       ▼
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
-│   WebRTC Video  │    │   Integrations   │    │   Migrations    │
-│   (Peer-to-Peer)│    │ • Twilio SMS     │    │   (/migrations) │
-└─────────────────┘    │ • Pi (optional)  │    └─────────────────┘
-                       │ • IoT Vitals     │
-                       └──────────────────┘
+│   Frontend      │    │   Redis Cache    │    │   Alembic       │
+│   /health       │    │   Rate Limiting  │    │   Migrations    │
+│   /status       │    │   Sessions       │    │   (7 tables)    │
+│   /version      │    └──────────────────┘    └─────────────────┘
+└─────────────────┘
 ```
 
-## Deployment Layers
+## Deployment (Railway)
 ```
-Production Stack:
-├── Docker Compose (1 command deploy)
-├── Nginx Reverse Proxy
-├── PM2 Process Manager
-└── MongoDB Replica Set (optional)
+UnityCare Production:
+├── Backend  →  FastAPI :8000  →  PostgreSQL
+├── Frontend →  Next.js :3000
+└── Monitoring → /health, /status, /version
 ```

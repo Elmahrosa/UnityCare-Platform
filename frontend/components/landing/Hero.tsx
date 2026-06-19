@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900">
@@ -11,9 +13,9 @@ export default function Hero() {
           Identity, consent, and interoperability platform powering secure healthcare data exchange across Egypt, GCC, EU, and US markets.
         </p>
         <div className="mt-10 flex items-center justify-center gap-4">
-          <a href="/register" className="rounded-xl bg-white px-8 py-3 text-sm font-semibold text-blue-700 shadow-lg hover:bg-blue-50">
+          <Link href="/register" className="rounded-xl bg-white px-8 py-3 text-sm font-semibold text-blue-700 shadow-lg hover:bg-blue-50">
             Get Started
-          </a>
+          </Link>
           <a href="#features" className="rounded-xl border border-white/30 px-8 py-3 text-sm font-semibold text-white hover:bg-white/10">
             Learn More
           </a>

@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 interface HeaderProps {
   locale: string;
   user: { id: string; full_name: string; role: string } | null;
@@ -25,8 +27,8 @@ export default function Header({ locale, user, onLogout }: HeaderProps) {
             </>
           ) : (
             <>
-              <a href="/login" className="text-sm text-gray-600 hover:text-gray-900">Sign In</a>
-              <a href="/register" className="rounded-lg bg-blue-600 px-4 py-1.5 text-sm text-white hover:bg-blue-700">Get Started</a>
+              <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900">Sign In</Link>
+              <Link href="/register" className="rounded-lg bg-blue-600 px-4 py-1.5 text-sm text-white hover:bg-blue-700">Get Started</Link>
             </>
           )}
           <a href={isAr ? "/" : "/ar"} className="text-sm text-gray-500 hover:text-gray-700">{isAr ? "English" : "العربية"}</a>

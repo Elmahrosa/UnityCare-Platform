@@ -9,6 +9,8 @@
   <meta property="og:description" content="Healthcare is sovereign. Your infrastructure should be too." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://health.elmahrosa.org" />
+  <meta property="og:image" content="https://health.elmahrosa.org/og.png" />
+  <link rel="icon" href="/favicon.ico" />
 
   <style>
     :root {
@@ -200,15 +202,13 @@
         </div>
         <div>UnityCare <span style="color:var(--muted);font-weight:400;">by Elmahrosa</span></div>
       </div>
-      <div class="nav-links">
-        <a href="#">Home</a>
-        <a href="#platform">Platform</a>
-        <a href="#features">Features</a>
-        <a href="#compliance">Compliance</a>
-        <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener" class="ext-link">Developers</a>
-        <a href="https://api.elmahrosa.org/docs" target="_blank" rel="noopener" class="ext-link">API Docs</a>
-        <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener" class="ext-link">Trust Center</a>
-        <a href="#contact">Contact</a>
+      <div class="nav-links" data-ar-nav>
+        <a href="#platform">🏥 Platform</a>
+        <a href="#audit">📋 Audit</a>
+        <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener" class="ext-link">🧑‍💻 Developers</a>
+        <a href="https://api.elmahrosa.org/docs" target="_blank" rel="noopener" class="ext-link">📚 API Reference</a>
+        <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener" class="ext-link">🛡 Trust Center</a>
+        <a href="#contact">📞 Contact</a>
         <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           <span id="langLabel">EN</span>
@@ -222,12 +222,12 @@
     <section class="hero">
       <div class="container hero-grid">
         <div>
-          <div class="eyebrow">
+          <div class="eyebrow" data-ar-eyebrow>
             <span class="eyebrow-dot"></span>
             <span>Deployed at <strong>health.elmahrosa.org</strong></span>
           </div>
-          <h1>Deployable healthcare infrastructure.<br><span class="gradient">Own your stack.</span></h1>
-          <p>
+          <h1 data-ar-h1>Deployable healthcare infrastructure.<br><span class="gradient">Own your stack.</span></h1>
+          <p data-ar-hero-p>
             UnityCare is a production-ready platform for hospitals, health networks, and sovereign health systems.
             Identity &amp; access control, FHIR R4 patient records, consent management, and an immutable audit ledger
             &mdash; deployable on your infrastructure or ours.
@@ -248,7 +248,7 @@
           </div>
         </div>
         <div class="hero-card">
-          <h3>Deployment Specifications</h3>
+          <h3 data-ar-specs>Deployment Specifications</h3>
           <div class="sub">Production stack as of June 2026</div>
           <div class="spec-row">
             <span class="spec-label">Identity</span>
@@ -300,9 +300,15 @@
             <div class="label">Data Layer</div>
           </div>
         </div>
+        <div class="arch-flow" style="margin-top:12px;padding:16px;">
+          <div class="node">
+            <div class="domain">developers.elmahrosa.org</div>
+            <div class="label">Developer Portal</div>
+          </div>
+        </div>
         <div class="arch-note">
           <span class="cpn-badge" style="font-size:10px;">CPN Member</span>
-          &nbsp; Deployed via Railway &bull; Docker &bull; GitHub Actions CI/CD
+          &nbsp; All services deployed via Railway &bull; Docker &bull; GitHub Actions CI/CD
         </div>
       </div>
     </section>
@@ -487,6 +493,42 @@
       </div>
     </section>
 
+    <section id="status" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Product status</h2>
+          <p>Current deployment status across all capabilities.</p>
+        </div>
+        <div style="max-width:600px;margin:0 auto;border:1px solid var(--line);border-radius:16px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+            <div style="padding:12px 18px;background:rgba(255,255,255,0.06);font-weight:700;font-size:13px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Capability</div>
+            <div style="padding:12px 18px;background:rgba(255,255,255,0.06);font-weight:700;font-size:13px;border-bottom:1px solid var(--line);">Status</div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Authentication</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">RBAC</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Admin Portal</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Audit Logging</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">FHIR R4</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(212,168,83,0.15);color:var(--gold);border:1px solid rgba(212,168,83,0.2);">In Development</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">NPHIES</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">EHDS</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Malaafi</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-right:1px solid var(--line);">NABIDH</div>
+            <div style="padding:10px 18px;font-size:13px;"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:16px;">
+          <a href="https://health.elmahrosa.org/status" target="_blank" rel="noopener" style="color:var(--accent);font-size:13px;">Full status page &rarr;</a>
+        </div>
+      </div>
+    </section>
+
     <section id="contact" class="cta-section">
       <div class="container">
         <div class="cta-box">
@@ -504,6 +546,37 @@
         </div>
       </div>
     </section>
+    <section class="section" style="padding:32px 0 48px;border-top:1px solid var(--line);">
+      <div class="container">
+        <div class="arch-flow" style="flex-direction:column;gap:6px;padding:20px;font-size:13px;max-width:520px;margin:0 auto;">
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Frontend</span>
+            <span>health.elmahrosa.org</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Developer Portal</span>
+            <span>developers.elmahrosa.org</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">API Layer</span>
+            <span>api.elmahrosa.org</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Infrastructure</span>
+            <span>Railway + PostgreSQL + Redis</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Organization</span>
+            <span>Elmahrosa International</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Membership</span>
+            <span><span class="cpn-badge" style="font-size:10px;">CPN</span> Claude Partner Network</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
@@ -511,9 +584,10 @@
       <div class="footer-badges">
         <span class="footer-badge"><span class="dot" style="background:var(--accent);"></span> Elmahrosa International</span>
         <span class="footer-badge"><span class="dot" style="background:var(--gold);"></span> Claude Partner Network Member</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--accent-2);"></span> FHIR R4 Ready</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> HIPAA / GDPR Architecture</span>
         <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> Built in Alexandria, Egypt</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--accent-2);"></span> FHIR R4 Architecture</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> HIPAA/GDPR Aligned</span>
+        <a href="https://health.elmahrosa.org/status" target="_blank" rel="noopener" class="footer-badge" style="text-decoration:none;"><span class="dot" style="background:var(--accent-2);"></span> Product Status</a>
       </div>
       <div class="footer-row">
         <div>
@@ -539,7 +613,7 @@
       'data-ar-eyebrow': '\u0645\u0646\u0634\u0648\u0631 \u0639\u0644\u0649 <strong>health.elmahrosa.org</strong>',
       'data-ar-h1': '\u0628\u0646\u064A\u0629 \u062A\u062D\u062A\u064A\u0629 \u0631\u0639\u0627\u064A\u0629 \u0635\u062D\u064A\u0629 \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0646\u0634\u0631.<br><span class="gradient">\u0627\u0645\u062A\u0644\u0643 \u0628\u0646\u064A\u062A\u0643.</span>',
       'data-ar-hero-p': '\u064A\u0648\u0646\u064A\u062A\u064A\u0643\u064A\u0631 \u0647\u0648 \u0645\u0646\u0635\u0629 \u062C\u0627\u0647\u0632\u0629 \u0644\u0644\u0625\u0646\u062A\u0627\u062C \u0644\u0644\u0645\u0633\u062A\u0634\u0641\u064A\u0627\u062A \u0648\u0634\u0628\u0643\u0627\u062A \u0627\u0644\u0631\u0639\u0627\u064A\u0629 \u0627\u0644\u0635\u062D\u064A\u0629. \u0627\u0644\u0647\u0648\u064A\u0629 \u0648\u0627\u0644\u062A\u062D\u0643\u0645 \u0641\u064A \u0627\u0644\u0648\u0635\u0648\u0644\u060C \u0633\u062C\u0644\u0627\u062A \u0627\u0644\u0645\u0631\u0636\u0649 FHIR R4\u060C \u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0627\u062A\u060C \u0648\u0633\u062C\u0644 \u062A\u062F\u0642\u064A\u0642 \u063A\u064A\u0631 \u0642\u0627\u0628\u0644 \u0644\u0644\u062A\u063A\u064A\u064A\u0631.',
-      'data-ar-nav': '\u0627\u0644\u0631\u0626\u064A\u0633\u064A\u0629|\u0627\u0644\u0645\u0646\u0635\u0629|\u0627\u0644\u0645\u064A\u0632\u0627\u062A|\u0627\u0644\u0627\u0645\u062A\u062B\u0627\u0644|\u0627\u0644\u0645\u0637\u0648\u0631\u0648\u0646|\u0648\u062B\u0627\u0626\u0642 API|\u0645\u0631\u0643\u0632 \u0627\u0644\u062B\u0642\u0629|\u0627\u062A\u0635\u0644',
+      'data-ar-nav': '\u0627\u0644\u0645\u0646\u0635\u0629|\u0627\u0644\u062A\u062F\u0642\u064A\u0642|\u0627\u0644\u0645\u0637\u0648\u0631\u0648\u0646|\u0645\u0631\u062C\u0639 API|\u0645\u0631\u0643\u0632 \u0627\u0644\u062B\u0642\u0629|\u0627\u062A\u0635\u0644',
       'data-ar-specs': '\u0645\u0648\u0627\u0635\u0641\u0627\u062A \u0627\u0644\u0646\u0634\u0631'
     };
 
@@ -594,7 +668,7 @@
         for (var i = 0; i < els.length; i++) {
           if (key === 'data-ar-nav') {
             var links = els[i].querySelectorAll('a');
-            var orig = ['Home', 'Platform', 'Features', 'Compliance', 'Developers', 'API Docs', 'Trust Center', 'Contact'];
+            var orig = ['🏥 Platform', '📋 Audit', '🧑‍💻 Developers', '📚 API Reference', '🛡 Trust Center', '📞 Contact'];
             for (var j = 0; j < links.length && j < orig.length; j++) {
               if (!links[j].classList.contains('lang-btn') && !links[j].classList.contains('cpn-badge')) {
                 links[j].textContent = orig[j];

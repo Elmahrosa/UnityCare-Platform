@@ -1,10 +1,11 @@
 import logging
 from contextlib import asynccontextmanager
+import sqlalchemy
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.config import settings
-from app.database import init_db
+from app.database import init_db, engine
 from app.api.v1 import auth_router, patients_router, consents_router, audit_router, admin_router
 from app.middleware.rate_limit import RateLimitMiddleware
 
@@ -57,7 +58,45 @@ app.include_router(admin_router, prefix="/api/v1")
 
 @app.get("/health")
 async def health():
-    return {"status": "healthy", "version": "1.0.0", "app": "UnityCare MVP"}
+    db_ok = False
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(sqlalchemy.text("SELECT 1"))
+            db_ok = True
+    except Exception:
+        db_ok = False
+    return {
+        "status": "healthy" if db_ok else "degraded",
+        "database": "connected" if db_ok else "disconnected",
+        "app": "UnityCare MVP",
+    }
+
+
+@app.get("/status")
+async def status():
+    db_ok = False
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(sqlalchemy.text("SELECT 1"))
+            db_ok = True
+    except Exception:
+        db_ok = False
+    return {
+        "app": settings.app_name,
+        "version": "1.0.0",
+        "environment": settings.environment,
+        "database": "connected" if db_ok else "disconnected",
+    }
+
+
+@app.get("/version")
+async def version():
+    return {
+        "app": settings.app_name,
+        "version": "1.0.0",
+        "framework": "FastAPI",
+        "python": "3.12",
+    }
 
 
 @app.exception_handler(Exception)

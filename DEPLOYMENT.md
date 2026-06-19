@@ -1,115 +1,116 @@
-# UnityCare Platform — Production Deployment Guide
+# UnityCare Platform — Deployment Guide
 
-## Architecture (Docker Compose)
+## Architecture
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌───────────┐
-│  nginx:80   │────▶│  api:5000    │────▶│ mongo:27017│
-│  (landing)  │     │  (Express)   │     │  (MongoDB) │
-└─────────────┘     └──────────────┘     └───────────┘
-┌─────────────┐
-│ frontend:80 │
-│  (React SPA)│
-└─────────────┘
+┌─────────────────────┐       ┌──────────────────────┐
+│  frontend (Next.js) │──────▶│  backend (FastAPI)   │
+│  :3000              │       │  :8000               │
+└─────────────────────┘       └──────┬───────────────┘
+                                     │
+                            ┌────────▼────────┐
+                            │  PostgreSQL 16   │
+                            │  :5432           │
+                            └─────────────────┘
 ```
 
-## Prerequisites
-
-- Docker & Docker Compose v2+
-- Node.js 20+ (for local dev only)
-- Git
-
-## Quick Start
+## Local Development
 
 ```bash
-# Clone
-git clone https://github.com/Elmahrosa/UnityCare-Platform.git
-cd UnityCare-Platform
-
-# 1. Configure environment
-cp .env.example backend/.env
-# Edit backend/.env with real secrets
-
-# 2. Start all services
+# Start all services
 docker-compose up --build -d
 
-# 3. Verify
-curl http://localhost/health
+# Verify
+curl http://localhost:8000/health
+curl http://localhost:3000/health
 ```
 
-## Service URLs
+## Railway Deployment (Production)
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| Landing Page | http://localhost/ | Marketing site |
-| Frontend SPA | http://localhost:3000/ | React dashboard |
-| API | http://localhost:5000/ | Backend API |
-| MongoDB | localhost:27017 | Database (127.0.0.1 only) |
-
-## API Endpoints
-
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| GET | /health | No | Health check |
-| POST | /api/auth/login | No | Login |
-| POST | /api/auth/refresh | No | Refresh token |
-| POST | /api/auth/logout | JWT | Logout (invalidates token) |
-| POST | /api/users/register | No | Register |
-| GET | /api/users/me | JWT | Current user |
-| PUT | /api/users/update | JWT | Update profile |
-| GET | /api/users | JWT+Admin | List users |
-| POST | /api/appointments | JWT | Create appointment |
-| GET | /api/appointments/patient/:id | JWT | Patient's appointments |
-| GET | /api/appointments/doctor/:id | JWT | Doctor's appointments |
-| PATCH | /api/appointments/:id | JWT | Update appointment |
-| DELETE | /api/appointments/:id | JWT | Delete appointment |
-| POST | /api/records | JWT+Doctor | Create medical record |
-| GET | /api/records/patient/:id | JWT | Patient's records |
-| GET | /api/records/:id | JWT | Single record |
-| PATCH | /api/records/:id | JWT+Doctor | Update record |
-| DELETE | /api/records/:id | JWT+Admin | Soft-delete record |
-| GET | /api/records/patient/:id/export | JWT | GDPR export |
-| GET | /api/analytics/trends | JWT+Admin | Health trends |
-| GET | /api/analytics/stats | JWT+Admin | Appointment stats |
-
-## Environment Variables (backend/.env)
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| PORT | Yes | 5000 | API port |
-| NODE_ENV | Yes | development | Environment |
-| MONGODB_URI | Yes | mongodb://mongo:27017/unity_care_hospital | MongoDB connection |
-| JWT_SECRET | Yes | — | 32+ char random string |
-| JWT_REFRESH_SECRET | Recommended | JWT_SECRET + _refresh | Separate refresh secret |
-| JWT_EXPIRES_IN | No | 1h | Access token expiry |
-| CORS_ORIGIN | No | * | Allowed CORS origin |
-| MONGO_USER | Yes | uch_admin | MongoDB user |
-| MONGO_PASS | Yes | — | MongoDB password |
-
-## Production Hardening Checklist
-
-- [ ] Generate 48+ char JWT_SECRET and JWT_REFRESH_SECRET
-- [ ] Set NODE_ENV=production
-- [ ] Set CORS_ORIGIN to specific domain
-- [ ] Change MONGO_PASS from default
-- [ ] Enable HTTPS via reverse proxy
-- [ ] Uncomment HSTS header in nginx.conf
-- [ ] Run `docker-compose up --build -d`
-- [ ] Health check: `curl http://localhost/health`
-- [ ] Enable monitoring (see MONITORING.md)
-
-## Docker Compose Commands
-
+### 1. Create Project
 ```bash
-# Build and start
-docker-compose up --build -d
-
-# View logs
-docker-compose logs -f api
-
-# Stop
-docker-compose down
-
-# Stop and remove volumes
-docker-compose down -v
+railway login
+railway init --name "UnityCare Platform"
 ```
+
+### 2. Add Services
+
+**Backend:**
+```bash
+railway add --service backend
+# Set root directory: ./backend
+# Build: Dockerfile
+# Start: ./start.sh
+```
+
+**Frontend:**
+```bash
+railway add --service frontend
+# Set root directory: ./frontend
+# Build: Dockerfile
+# Start: node server.js
+```
+
+### 3. Add PostgreSQL
+```bash
+railway add --plugin postgresql
+# Railway provides DATABASE_URL automatically
+```
+
+### 4. Configure Environment Variables
+
+**Backend Service:**
+| Variable | Value |
+|----------|-------|
+| `DATABASE_URL` | `postgresql+asyncpg://` (Railway auto-provided) |
+| `JWT_SECRET` | Generate via: `openssl rand -hex 32` |
+| `ENCRYPTION_KEY` | Generate via: `openssl rand -hex 16` |
+| `ENVIRONMENT` | `production` |
+| `DEBUG` | `false` |
+| `CORS_ORIGINS` | `["https://<frontend>.railway.app"]` |
+
+**Frontend Service:**
+| Variable | Value |
+|----------|-------|
+| `NEXT_PUBLIC_API_URL` | `https://<backend>.railway.app/api/v1` |
+| `NEXT_PUBLIC_SITE_URL` | `https://<frontend>.railway.app` |
+
+### 5. Deploy
+```bash
+railway up --service backend
+railway up --service frontend
+```
+
+### 6. Verify Health
+```bash
+curl https://<backend>.railway.app/health
+curl https://<frontend>.railway.app/health
+```
+
+### 7. Run Migrations (if needed)
+```bash
+railway run --service backend alembic upgrade head
+```
+
+## Health Endpoints
+
+| Service | Endpoint | Purpose |
+|---------|----------|---------|
+| Backend | `/health` | Primary + DB connectivity |
+| Backend | `/status` | Detailed service status |
+| Backend | `/version` | Version info |
+| Frontend | `/health` | Frontend health |
+| Frontend | `/status` | Frontend status |
+| Frontend | `/version` | Frontend version |
+
+## Production Checklist
+
+- [ ] JWT_SECRET generated (48+ chars)
+- [ ] ENCRYPTION_KEY generated (32 bytes)
+- [ ] CORS_ORIGINS set to production domain
+- [ ] ENVIRONMENT=production
+- [ ] DEBUG=false
+- [ ] Railway PostgreSQL plugin added
+- [ ] Health checks return healthy
+- [ ] Backups configured (Railway auto-backups enabled)
+- [ ] Monitoring set up (see MONITORING.md)

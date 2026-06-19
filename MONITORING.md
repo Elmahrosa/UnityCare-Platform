@@ -1,86 +1,81 @@
-# UnityCare Platform — Post-Launch Monitoring Plan
+# UnityCare Platform — Monitoring Plan (Railway)
 
 ## Health Check Endpoints
 
-| Endpoint | Frequency | Expected | Action on Failure |
-|----------|-----------|----------|-------------------|
-| GET /health | 30s | `{"status":"ok"}` | Restart container |
-| GET /ready | 30s | 200 OK | Check MongoDB connection |
+| Service | Endpoint | Expected | Purpose |
+|---------|----------|----------|---------|
+| Backend | `/health` | `{"status":"healthy","database":"connected"}` | Primary health + DB check |
+| Backend | `/status` | `{"app","version","environment","database"}` | Detailed status |
+| Backend | `/version` | `{"app","version","framework","python"}` | Version info |
+| Frontend | `/health` | `{"status":"healthy","app":"UnityCare MVP Frontend"}` | Frontend health |
+| Frontend | `/status` | `{"app","version","framework","node"}` | Frontend status |
+| Frontend | `/version` | `{"app","version","framework","node"}` | Frontend version |
 
-## Metrics to Monitor
+## Railway Health Checks (Configured in railway.toml)
 
-### API Server
-| Metric | Threshold | Alert |
-|--------|-----------|-------|
-| Response time p95 | < 500ms | > 1s → warn, > 3s → critical |
-| Request rate | < 1000 req/min | > 1000 → scale investigation |
-| Error rate (5xx) | < 1% | > 5% → page |
-| 401/403 rate | < 50/min | > 100/min → possible brute force |
+- **Backend**: `/health` every 30s, 30s timeout, restart on failure
+- **Frontend**: `/health` every 30s, 10s timeout, restart on failure
 
-### MongoDB
-| Metric | Threshold | Alert |
-|--------|-----------|-------|
-| Connection count | < 100 | > 100 → connection pool warn |
-| Disk usage | < 80% | > 80% → add storage |
-| Replication lag | < 10s | > 30s → investigate |
+## Monitoring Services
 
-### Docker
-| Metric | Threshold | Alert |
-|--------|-----------|-------|
-| Container restarts | 0 | Any restart → investigate |
-| CPU usage | < 80% | > 80% → scale |
-| Memory usage | < 85% | > 85% → OOM risk |
+### Uptime Monitoring (Recommended)
+- [UptimeRobot](https://uptimerobot.com) or [Better Stack](https://betterstack.com)
+- Check `/health` on both services every 5 minutes
+- Alert on 3 consecutive failures
 
-## Logging
+### Railway Built-in Metrics
+- CPU, Memory, Network — available in Railway Dashboard per service
+- Alert thresholds: CPU > 80%, Memory > 85%
 
-All services log to stdout (Docker). Key log patterns:
+### Error Tracking (Recommended)
+- Integrate Sentry or similar for backend error tracking
 
+## Backups
+
+### PostgreSQL (Railway Plugin)
+- Railway provides automated daily backups
+- Retention: 7 daily backups provided by default
+- Download critical backups manually before schema changes
+
+### Manual Backup Procedure
 ```bash
-# Watch API logs
-docker-compose logs -f --tail=100 api
-
-# Filter errors
-docker-compose logs api | grep "error" -i
-
-# Rate limit hits
-docker-compose logs api | grep "Too many requests"
+# Via Railway CLI
+railway connect
+pg_dump --no-owner -d "$DATABASE_URL" > unitycare-backup-$(date +%Y%m%d).sql
 ```
 
-## Automated Alerts (Recommended Setup)
+## Alert Thresholds
 
-1. **Docker healthchecks** — built-in (30s interval)
-2. **Uptime monitoring** — Use uptimerobot.com or similar for /health
-3. **Log aggregation** — Deploy Grafana Loki or similar for log search
-4. **Metrics** — Prometheus + Grafana dashboard
-5. **Downtime alert** — Email/PagerDuty on 3 consecutive failed healthchecks
+| Metric | Threshold | Action |
+|--------|-----------|--------|
+| Health check failure | 3 consecutive | Restart service (auto via Railway) |
+| Response time > 1s | Any | Investigate query performance |
+| Error rate > 1% | Any | Check logs, rollback if needed |
+| Disk usage > 80% | Any | Scale PostgreSQL storage |
 
 ## Runbook
 
-### API Not Responding
+### Service Down
 ```bash
-# Check container status
-docker-compose ps
+# Check Railway Dashboard
+# -> Service logs
+# -> Restart service
 
-# View recent logs
-docker-compose logs --tail=50 api
-
-# Restart
-docker-compose restart api
-
-# Full rebuild if needed
-docker-compose up --build -d
+# If persists:
+# 1. Check DATABASE_URL connectivity
+# 2. Verify env vars are set
+# 3. Rollback to last working deploy
 ```
 
-### MongoDB Connection Issues
+### Database Issues
 ```bash
-# Check MongoDB
-docker-compose logs --tail=20 mongo
-
-# Verify connectivity from API container
-docker-compose exec api node -e "require('mongoose').connect('mongodb://mongo:27017/unity_care_hospital').then(()=>console.log('OK')).catch(e=>console.log(e.message))"
+# 1. Check Railway PostgreSQL dashboard
+# 2. Verify connection string
+# 3. Run alembic migrations if schema is stale:
+#    alembic upgrade head
 ```
 
-### Rate Limiting Issues
-- Check if legitimate users are hitting limits
-- Adjust `max` in `server.js` rate limiter config
-- Whitelist trusted IPs if behind corporate proxy
+### Deployment Rollback
+```bash
+# Railway Dashboard -> Deployments -> Select previous -> Rollback
+```

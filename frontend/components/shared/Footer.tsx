@@ -1,8 +1,4 @@
-"use client";
-
-interface FooterProps { locale: string }
-
-export default function Footer({ locale }: FooterProps) {
+export default function Footer() {
   return (
     <footer className="border-t border-gray-200 bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6">

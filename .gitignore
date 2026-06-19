@@ -1,18 +1,24 @@
-# Dependencies
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Node / Next.js
 node_modules/
-.pnp
-.pnp.js
+.next/
+*.tsbuildinfo
 
 # Build output
 dist/
 build/
-*.tsbuildinfo
 
 # Environment files
 .env
 .env.local
 .env.*.local
-.env.production
 backend/.env
 frontend/.env
 
