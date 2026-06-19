@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -8,6 +9,7 @@ interface Consent { id: string; purpose: string; status: string; jurisdiction: s
 interface VitalSigns { heartRate?: number; oxygenSaturation?: number; bloodPressure?: string; temperature?: number }
 
 export default function PatientDashboard() {
+  const { t } = useTranslation();
   const [consents, setConsents] = useState<Consent[]>([]);
   const [vitalSigns, setVitalSigns] = useState<VitalSigns | null>(null);
   const [loading, setLoading] = useState(true);
@@ -32,11 +34,11 @@ export default function PatientDashboard() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading...</div>;
+  if (loading) return <div className="p-8 text-center text-gray-500">{t.common.loading}</div>;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Patient Dashboard</h1>
+      <h1 className="text-2xl font-bold text-gray-900">{t.patient.profile}</h1>
 
       {vitalSigns && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -68,9 +70,9 @@ export default function PatientDashboard() {
       )}
 
       <div className="rounded-2xl border border-gray-200 bg-white p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">My Consents</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t.patient.consents}</h2>
         {consents.length === 0 ? (
-          <p className="text-sm text-gray-500">No consents found.</p>
+          <p className="text-sm text-gray-500">{t.patient.noConsents}</p>
         ) : (
           <div className="space-y-3">
             {consents.map((c) => (

@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "@/hooks/useTranslation";
 import { appointmentApi, authApi } from "@/lib/api";
 
 export default function DoctorDashboard() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [profile, setProfile] = useState<any>(null);
   const [queue, setQueue] = useState<any[]>([]);
@@ -35,17 +37,17 @@ export default function DoctorDashboard() {
 
   const completedToday = todayAppointments.filter((apt) => apt.status === "completed").length;
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading dashboard...</div>;
+  if (loading) return <div className="p-8 text-center text-gray-500">{t.common.loading}</div>;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dr. {user?.name}</h1>
-          <p className="text-gray-500 mt-1">{profile?.specialization || "Specialist"}</p>
+          <p className="text-gray-500 mt-1">{profile?.specialization || t.doctor.specialization}</p>
         </div>
         <div className="text-right">
-          <p className="text-sm text-gray-500">Rating</p>
+          <p className="text-sm text-gray-500">{t.doctor.rating}</p>
           <p className="text-2xl font-bold text-yellow-500">★ {profile?.rating || "N/A"}</p>
         </div>
       </div>
@@ -54,7 +56,7 @@ export default function DoctorDashboard() {
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Today&apos;s Patients</p>
+              <p className="text-sm text-gray-500">{t.doctor.todayPatients}</p>
               <p className="text-2xl font-bold text-gray-900">{todayAppointments.length}</p>
             </div>
             <svg className="w-8 h-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -66,7 +68,7 @@ export default function DoctorDashboard() {
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Completed</p>
+              <p className="text-sm text-gray-500">{t.doctor.completed}</p>
               <p className="text-2xl font-bold text-gray-900">{completedToday}</p>
             </div>
             <svg className="w-8 h-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -78,7 +80,7 @@ export default function DoctorDashboard() {
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">In Progress</p>
+              <p className="text-sm text-gray-500">{t.doctor.inProgress}</p>
               <p className="text-2xl font-bold text-gray-900">
                 {todayAppointments.filter((apt) => apt.status === "in_progress").length}
               </p>
@@ -92,7 +94,7 @@ export default function DoctorDashboard() {
         <div className="rounded-2xl border border-gray-200 bg-white p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-500">Total Consultations</p>
+              <p className="text-sm text-gray-500">{t.doctor.totalConsultations}</p>
               <p className="text-2xl font-bold text-gray-900">{profile?.totalConsultations || 0}</p>
             </div>
             <svg className="w-8 h-8 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -105,16 +107,16 @@ export default function DoctorDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <div className="rounded-2xl border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">Patient Queue</h2>
-            <p className="text-sm text-gray-500 mb-4">Today&apos;s appointments</p>
+            <h2 className="text-lg font-semibold text-gray-900 mb-1">{t.doctor.patientQueue}</h2>
+            <p className="text-sm text-gray-500 mb-4">{t.doctor.todayAppointments}</p>
             {todayAppointments.length > 0 ? (
               <div className="space-y-3">
                 {todayAppointments.map((apt) => (
                   <div key={apt.id || apt._id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
                     <div className="flex-1">
-                      <p className="font-medium text-gray-900">Patient ID: {apt.patientId || apt.patient}</p>
+                      <p className="font-medium text-gray-900">{t.doctor.patientId}: {apt.patientId || apt.patient}</p>
                       <p className="text-sm text-gray-500">{new Date(apt.date || apt.scheduledAt).toLocaleTimeString()}</p>
-                      <p className="text-xs text-gray-400 mt-1">{apt.reason || apt.notes || "General consultation"}</p>
+                      <p className="text-xs text-gray-400 mt-1">{apt.reason || apt.notes || t.doctor.generalConsultation}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
@@ -123,41 +125,41 @@ export default function DoctorDashboard() {
                         "bg-gray-100 text-gray-600"
                       }`}>{apt.status}</span>
                       <button disabled={apt.status === "completed"} className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs text-white hover:bg-blue-700 disabled:opacity-50">
-                        {apt.status === "in_progress" ? "Continue" : "Start"}
+                        {apt.status === "in_progress" ? t.doctor.continue : t.doctor.start}
                       </button>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-center py-8">No appointments today</p>
+              <p className="text-gray-500 text-center py-8">{t.doctor.noAppointments}</p>
             )}
           </div>
         </div>
 
         <div className="space-y-4">
           <div className="rounded-2xl border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t.doctor.quickActions}</h2>
             <div className="space-y-3">
-              <button className="w-full text-left rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-100">View Schedule</button>
-              <button className="w-full text-left rounded-lg bg-green-50 px-4 py-2 text-sm font-medium text-green-600 hover:bg-green-100">Create Prescription</button>
-              <button className="w-full text-left rounded-lg bg-purple-50 px-4 py-2 text-sm font-medium text-purple-600 hover:bg-purple-100">Medical Records</button>
+              <button className="w-full text-left rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-100">{t.doctor.viewSchedule}</button>
+              <button className="w-full text-left rounded-lg bg-green-50 px-4 py-2 text-sm font-medium text-green-600 hover:bg-green-100">{t.doctor.createPrescription}</button>
+              <button className="w-full text-left rounded-lg bg-purple-50 px-4 py-2 text-sm font-medium text-purple-600 hover:bg-purple-100">{t.doctor.medicalRecords}</button>
             </div>
           </div>
 
           <div className="rounded-2xl border border-gray-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Profile Info</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t.doctor.profileInfo}</h2>
             <div className="space-y-3 text-sm">
               <div>
-                <p className="text-gray-500">License</p>
+                <p className="text-gray-500">{t.doctor.license}</p>
                 <p className="font-medium text-gray-900">{profile?.licenseNumber || "N/A"}</p>
               </div>
               <div>
-                <p className="text-gray-500">Experience</p>
-                <p className="font-medium text-gray-900">{profile?.yearsOfExperience || 0} years</p>
+                <p className="text-gray-500">{t.doctor.experience}</p>
+                <p className="font-medium text-gray-900">{profile?.yearsOfExperience || 0} {t.doctor.years}</p>
               </div>
               <div>
-                <p className="text-gray-500">Consultation Fee</p>
+                <p className="text-gray-500">{t.doctor.consultationFee}</p>
                 <p className="font-medium text-gray-900">${profile?.consultationFee || 0}</p>
               </div>
             </div>
