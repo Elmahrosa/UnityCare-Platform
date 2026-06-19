@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -39,7 +40,7 @@ export default function LocaleLayout({ children }: { children: React.ReactNode }
   return (
     <>
       <Header locale={locale} user={user} onLogout={() => { localStorage.removeItem("unitycare_token"); setUser(null); }} />
-      <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+      <main className="min-h-[calc(100vh-4rem)]"><ErrorBoundary>{children}</ErrorBoundary></main>
       <Footer />
     </>
   );

@@ -33,7 +33,7 @@ export default function Header({ locale, user, onLogout }: HeaderProps) {
               <Link href="/register" className="rounded-lg bg-blue-600 px-4 py-1.5 text-sm text-white hover:bg-blue-700">{t.common.register}</Link>
             </>
           )}
-          <a href={isAr ? "/" : "/ar"} className="text-sm text-gray-500 hover:text-gray-700">{t.common.english}</a>
+          <a href={isAr ? "/" : "/ar"} className="text-sm text-gray-500 hover:text-gray-700">{isAr ? t.common.english : t.common.arabic}</a>
         </nav>
       </div>
     </header>

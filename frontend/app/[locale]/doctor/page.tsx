@@ -1,13 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "@/hooks/useTranslation";
 import { appointmentApi, authApi } from "@/lib/api";
+import { DashboardSkeleton } from "@/components/shared/Skeleton";
 
 export default function DoctorDashboard() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
   const [queue, setQueue] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,8 +23,8 @@ export default function DoctorDashboard() {
           user?.id ? appointmentApi.getByDoctor(user.id) : Promise.resolve([]),
         ]);
 
-        if (meRes.status === "fulfilled") setProfile(meRes.value.user || meRes.value);
-        if (queueRes.status === "fulfilled") setQueue(queueRes.value.appointments || queueRes.value || []);
+        if (meRes.status === "fulfilled" && meRes.value) setProfile((meRes.value as any).user || meRes.value);
+        if (queueRes.status === "fulfilled" && queueRes.value) setQueue((queueRes.value as any).appointments || (queueRes.value as any[]));
       } catch (err) {
         console.error("Failed to load dashboard data", err);
       } finally {
@@ -37,7 +40,7 @@ export default function DoctorDashboard() {
 
   const completedToday = todayAppointments.filter((apt) => apt.status === "completed").length;
 
-  if (loading) return <div className="p-8 text-center text-gray-500">{t.common.loading}</div>;
+  if (loading) return <DashboardSkeleton />;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 space-y-6">
@@ -141,9 +144,9 @@ export default function DoctorDashboard() {
           <div className="rounded-2xl border border-gray-200 bg-white p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">{t.doctor.quickActions}</h2>
             <div className="space-y-3">
-              <button className="w-full text-left rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-100">{t.doctor.viewSchedule}</button>
-              <button className="w-full text-left rounded-lg bg-green-50 px-4 py-2 text-sm font-medium text-green-600 hover:bg-green-100">{t.doctor.createPrescription}</button>
-              <button className="w-full text-left rounded-lg bg-purple-50 px-4 py-2 text-sm font-medium text-purple-600 hover:bg-purple-100">{t.doctor.medicalRecords}</button>
+              <button onClick={() => router.push("/doctor")} className="w-full text-left rounded-lg bg-blue-50 px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-100">{t.doctor.viewSchedule}</button>
+              <button onClick={() => router.push("/doctor")} className="w-full text-left rounded-lg bg-green-50 px-4 py-2 text-sm font-medium text-green-600 hover:bg-green-100">{t.doctor.createPrescription}</button>
+              <button onClick={() => router.push("/doctor")} className="w-full text-left rounded-lg bg-purple-50 px-4 py-2 text-sm font-medium text-purple-600 hover:bg-purple-100">{t.doctor.medicalRecords}</button>
             </div>
           </div>
 

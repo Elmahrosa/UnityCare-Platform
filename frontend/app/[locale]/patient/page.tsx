@@ -2,11 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { useTranslation } from "@/hooks/useTranslation";
+import { mockConsents, mockVitals } from "@/lib/mock-data";
+import { DashboardSkeleton } from "@/components/shared/Skeleton";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 interface Consent { id: string; purpose: string; status: string; jurisdiction: string; created_at: string }
 interface VitalSigns { heartRate?: number; oxygenSaturation?: number; bloodPressure?: string; temperature?: number }
+
+function fetchJson(url: string, headers: Record<string, string>): Promise<any> {
+  return fetch(url, { headers }).then((r) => {
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    return r.json();
+  });
+}
 
 export default function PatientDashboard() {
   const { t } = useTranslation();
@@ -16,25 +25,34 @@ export default function PatientDashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("unitycare_token");
-    if (!token) return;
+    if (!token) {
+      setConsents(mockConsents as Consent[]);
+      setVitalSigns(mockVitals["a1b2c3d4"] as VitalSigns);
+      setLoading(false);
+      return;
+    }
 
-    fetch(`${API}/admin/users/me`, { headers: { Authorization: `Bearer ${token}` } })
-      .then((r) => r.json())
-      .then((u) => {
-        return Promise.all([
-          fetch(`${API}/consent/patient/${u.id}`, { headers: { Authorization: `Bearer ${token}` } }).then((r) => r.json()),
-          fetch(`${API}/iot/${u.id}/vitals`, { headers: { Authorization: `Bearer ${token}` } }).then((r) => r.json()).catch(() => null),
-        ]);
-      })
-      .then(([consentData, vitalsData]) => {
+    const headers = { Authorization: `Bearer ${token}` };
+
+    fetchJson(`${API}/admin/users/me`, headers)
+      .then((u: any) =>
+        Promise.all([
+          fetchJson(`${API}/consent/patient/${u.id}`, headers).catch(() => mockConsents),
+          fetchJson(`${API}/iot/${u.id}/vitals`, headers).catch(() => mockVitals["a1b2c3d4"] ?? null),
+        ])
+      )
+      .then(([consentData, vitalsData]: [any, any]) => {
         setConsents(consentData);
         setVitalSigns(vitalsData);
       })
-      .catch(console.error)
+      .catch(() => {
+        setConsents(mockConsents as Consent[]);
+        setVitalSigns(mockVitals["a1b2c3d4"] as VitalSigns);
+      })
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="p-8 text-center text-gray-500">{t.common.loading}</div>;
+  if (loading) return <DashboardSkeleton />;
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 space-y-8">

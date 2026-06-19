@@ -34,7 +34,7 @@ export function useAuth() {
 
     authApi
       .me()
-      .then((data) => {
+      .then((data: any) => {
         setState({ user: data.user || data, loading: false, error: null, isAuthenticated: true });
       })
       .catch(() => {
