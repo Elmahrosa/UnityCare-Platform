@@ -1,94 +1,82 @@
-# UnityCare Sovereign Healthcare Infrastructure
+# UCH Sovereign Core
 
-## By Elmahrosa International
-
-UnityCare is a sovereign healthcare infrastructure platform developed by Elmahrosa International to support secure, compliant, and AI-ready healthcare operations across hospitals, healthcare networks, research institutions, and national health systems.
-
-The platform combines hospital operations, telemedicine, pharmacy management, emergency coordination, compliance automation, and healthcare interoperability into a unified deployment architecture designed for institutional ownership and long-term sovereignty.
-
-Unlike traditional SaaS healthcare platforms, UnityCare is built for private cloud, on-premise, and sovereign deployments, enabling organizations to retain full control over data governance, regulatory compliance, and operational workflows.
-
-### Core Capabilities
-
-- Hospital Information Management
-- Electronic Health Records (EHR)
-- Telemedicine Services
-- Pharmacy Operations
-- Emergency Dispatch Coordination
-- Clinical Workflow Management
-- Multi-Tenant Healthcare Operations
-- Healthcare Identity and Access Management
-- FHIR R4 Interoperability
-- Consent Management
-- Immutable Audit Logging
-- White-Label Institutional Deployments
-
-### Compliance Infrastructure
-
-UnityCare is designed to support healthcare compliance requirements including:
-
-- HIPAA
-- GDPR
-- EHDS
-- SMART-on-FHIR
-- Healthcare Audit Requirements
-- Sovereign Data Residency Policies
-
-The platform incorporates blockchain-backed audit trails, cryptographic integrity verification, and policy-driven consent management to establish verifiable trust across healthcare workflows.
-
-### AI Governance and Biomedical Infrastructure
-
-UnityCare serves as the compliance and operational infrastructure layer for next-generation biomedical AI ecosystems.
-
-The platform enables:
-- De-identified patient data pipelines
-- Clinical trial workflow support
-- AI consent enforcement
-- Model auditability
-- Human oversight workflows
-- Data provenance tracking
-- Reproducible healthcare AI operations
-
-This architecture allows healthcare organizations to safely participate in AI-assisted diagnostics, biomedical research, and drug discovery initiatives while maintaining regulatory compliance and institutional control.
-
-### Sovereign Healthcare Vision
-
-Healthcare data is a strategic national asset.
-
-UnityCare is designed to help healthcare providers, ministries of health, insurers, and biomedical research organizations maintain sovereignty over healthcare infrastructure while enabling secure participation in global healthcare innovation networks.
-
-### Market Position
-
-UnityCare is positioned as: **"The Compliance Infrastructure Layer for Biomedical AI."**
-
-Rather than competing with individual healthcare applications, UnityCare provides the trusted operational foundation required to safely deploy, govern, and scale healthcare AI systems across institutional and sovereign environments.
-
-### Project Origin
-
-UnityCare has been consolidated into a unified platform architecture from the following development repositories:
-
-- Unity-Care-Hospital-Sovereign
-- UCH-Backend
-- UCH-Buyer-Kit
-- salma-unity-care-hospital
-- U_C_H2
-
-These repositories now contribute to a single strategic roadmap focused on sovereign healthcare infrastructure, AI governance, interoperability, and institutional deployment.
-
-### Ownership
-
-UnityCare is owned and developed by Elmahrosa International.
-
-The platform is offered through:
-- Pilot Engagements
-- Institutional Licensing
-- Enterprise Deployments
-- Sovereign National Licensing
-
-Elmahrosa International retains ownership of the core intellectual property while supporting white-label and sovereign deployment models for healthcare organizations worldwide.
+Healthcare compliance and audit platform by **Elmahrosa International**. Part of the Elmahrosa TEOS stack (Trust, Ethics, Oversight, Sovereignty). Built for clinical/health data governance — consent management, tamper-evident audit trails, role-based access control, FHIR R4 interoperability, and policy-driven access enforcement across regulated health environments.
 
 ---
 
-**Deployment:** [health.elmahrosa.org](https://health.elmahrosa.org)
+## Built with Claude: Life Sciences, Builder Track
 
-**Contact:** [contact@elmahrosa.org](mailto:contact@elmahrosa.org)
+The `audit/` directory contains a **policy-consistency reasoning agent** — this is the hackathon deliverable.
+
+### Problem
+
+Standard audit logging tells you *who accessed what and when*. It does not tell you whether that access was *allowed*. In a healthcare setting, determining compliance requires reasoning across multiple dimensions simultaneously:
+
+- Does the actor's role permit this action on this resource type? (RBAC)
+- Does the patient own the data, or is the actor assigned to the patient? (horizontal access control)
+- Is there an active consent with a matching purpose for this specific access? (consent-policy alignment)
+- If consent exists for "treatment", does it extend to "cross-border data sharing"? (purpose mismatch)
+- Is this off-hours access accompanied by a valid emergency or on-call reason? (time-based policy)
+- Has this actor triggered the off-hours threshold requiring mandatory review? (frequency escalation)
+
+This is a **genuine multi-factor reasoning task**, not a hash lookup or regex match. The verifier reads `audit/policy.txt` (a structured healthcare access policy document) and `audit/access_logs.json` (synthetic log entries with deliberately mixed signals — compliant accesses next to subtle violations), then outputs one of three verdicts per event:
+
+- ✅ Compliant — all policy dimensions satisfied
+- ⚠️ Warning — policy-advisory condition (e.g., off-hours without reason code)
+- ❓ Violation — one or more policy rules breached
+
+Each verdict includes a one-sentence explanation identifying the specific rule triggered.
+
+### Run it
+
+```bash
+node audit/verify.js                    # full report
+node audit/verify.js --summary-only      # condensed
+node audit/verify.js --json             # machine-readable
+```
+
+The 18 synthetic events exercise RBAC, horizontal access control, consent-purpose alignment, off-hours restrictions, proximity rules, break-glass (emergency override), audit-read scoping, and cross-border data governance.
+
+**[Demo recording — link to be added once uploaded]**
+
+> This is a proof-of-concept for the policy reasoning layer, not the full platform. The verifier evaluates synthetic logs against a static policy. It does not enforce policy at runtime, connect to a live database, or replace the platform's production middleware.
+
+---
+
+## Platform Status
+
+**Verified as of July 2026:**
+
+| Dimension | Status |
+|---|---|
+| **Backend tests** | 39 tests across 6 modules: auth (10), consent (8), audit chain integrity (5), medical/ICD-10 (11), FHIR Patient CRUD (5), middleware/access control (6) |
+| **Frontend tests** | 15 tests across 5 suites (login, register, patient, doctor, admin) |
+| **Frontend build** | 0 errors (Next.js 15.5, TypeScript strict) |
+| **MFA enforcement** | TOTP enforcement on admin and provider roles; setup/enable/disable/verify endpoints |
+| **CI/CD** | GitHub Actions: lint + test + Docker build on push/PR; Railway deploy on main |
+| **Security headers** | 9 headers: HSTS, CSP (extended for Railway/assets), XFO, X-Content-Type-Options, X-XSS-Protection, Cache-Control, Pragma, Referrer-Policy, Permissions-Policy |
+| **Rate limiting** | Redis-backed fixed-window with in-memory graceful fallback |
+| **Horizontal access control** | Patient-scoped data access (8 endpoints); cross-patient access returns 403 |
+| **Audit chain** | SHA-256 hash-linked events; `verify_chain()` detects tampering |
+| **Consent management** | Versioned, jurisdiction-aware, purpose-scoped (treatment/data_sharing/ai_processing/research/cross_border) |
+| **ICD-10-CM** | Lookup table with search API; codes on MedicalRecord model |
+| **FHIR R4** | Patient resource CRUD, search with user_id scoping |
+| **Legacy Dependabot alerts** | 8 alerts in `modules/hospital-core/` — confirmed inactive, excluded from scans |
+| **Migrations** | Alembic (async) with initial schema; ICD-10 table created via lifespan handler |
+
+---
+
+## Architecture
+
+- **Deterministic verdicts.** Policy evaluation is rule-based and deterministic — same inputs always produce the same verdict. No ML, no probabilistic inference.
+- **SHA-256 chained audit trails.** Audit events are linked via `previous_hash → event_hash` chain using `sha256(prev_hash + canonical_json(event_data))`. Chain integrity is verifiable via `GET /audit/verify`. Tampering with any historical event breaks the chain.
+- **Fail-closed design.** Access requires explicit authorization. Missing consent, expired token, unlinked patient profile, or missing role all produce 403/401. No default-permit path exists at the middleware level.
+- **Layered enforcement.** Security headers → rate limiting → JWT authentication → RBAC → horizontal access control → consent check. Each layer is independent and can fail independently.
+
+---
+
+## Links
+
+- **Deployment:** [health.elmahrosa.org](https://health.elmahrosa.org)
+- **Source:** [github.com/Elmahrosa/UnityCare-Platform](https://github.com/Elmahrosa/UnityCare-Platform)
+- **Contact:** [contact@elmahrosa.org](mailto:contact@elmahrosa.org)
