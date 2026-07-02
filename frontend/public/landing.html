@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UnityCare Platform — Elmahrosa International</title>
+  <meta name="description" content="UnityCare is deployable sovereign healthcare infrastructure for hospitals, health networks, and health systems. Built by Elmahrosa International." />
+  <meta property="og:title" content="UnityCare Platform — Sovereign Healthcare Infrastructure" />
+  <meta property="og:description" content="Healthcare is sovereign. Your infrastructure should be too." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://health.elmahrosa.org" />
+
+  <style>
+    :root {
+      --bg: #05101f; --bg-soft: #0b1a30;
+      --card: rgba(255,255,255,0.05); --line: rgba(255,255,255,0.10);
+      --text: #eef4ff; --muted: #b0c4de;
+      --accent: #38bdf8; --accent-2: #2dd4bf;
+      --gold: #d4a853;
+      --shadow: 0 20px 50px rgba(0,0,0,0.4);
+      --radius: 20px; --max: 1180px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(ellipse at 80% 0%, rgba(56,189,248,0.15), transparent 50%), radial-gradient(ellipse at 20% 100%, rgba(45,212,191,0.10), transparent 40%), linear-gradient(180deg, #040e1c 0%, #09162a 100%);
+      color: var(--text); line-height: 1.65; min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      background: rgba(5, 16, 31, 0.78); border-bottom: 1px solid var(--line);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 0; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 18px; letter-spacing: 0.3px; }
+    .brand-badge {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #021018; font-weight: 800; font-size: 14px;
+      box-shadow: 0 0 20px rgba(56,189,248,0.2);
+    }
+    .nav-links { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .nav-links a {
+      padding: 6px 12px; border-radius: 8px; color: var(--muted); font-size: 13px; font-weight: 500;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+    .nav-links a.ext-link::after { content: '\2197'; margin-left: 3px; font-size: 11px; }
+    .cpn-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 8px; border-radius: 6px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--gold);
+      color: var(--gold); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .lang-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 8px; border-radius: 6px;
+      border: 1px solid var(--line); background: rgba(255,255,255,0.03);
+      color: var(--muted); font-size: 11px; cursor: pointer; transition: all 0.2s; user-select: none;
+    }
+    .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .lang-btn svg { width: 12px; height: 12px; }
+    .lang-btn svg path, .lang-btn svg circle { stroke: currentColor; fill: none; stroke-width: 1.5; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 10px 16px; border-radius: 10px;
+      border: 1px solid var(--line); color: var(--text);
+      background: rgba(255,255,255,0.04); transition: all 0.2s ease;
+      cursor: pointer; font-weight: 600; font-size: 13px;
+    }
+    .btn:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.25); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #03131a; border: none; font-weight: 700; }
+    .btn-primary:hover { box-shadow: 0 8px 28px rgba(56,189,248,0.3); }
+    .btn-outline-light { border-color: rgba(255,255,255,0.2); }
+    .btn-sm { padding: 7px 14px; font-size: 12px; }
+    .hero { padding: 72px 0 48px; position: relative; }
+    .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--line), transparent); }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px; padding: 7px 12px;
+      border-radius: 999px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.03); color: var(--muted); font-size: 13px; margin-bottom: 20px;
+    }
+    .eyebrow-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    h1 { font-size: clamp(32px, 5.5vw, 62px); line-height: 1.08; margin: 0 0 16px; letter-spacing: -1.5px; }
+    h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: 17px; color: var(--muted); max-width: 620px; margin: 0 0 28px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+    .pill-tags { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 12px; }
+    .pill-tags span { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.03); }
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+      border: 1px solid var(--line); border-radius: 24px; padding: 26px;
+      box-shadow: var(--shadow); backdrop-filter: blur(4px);
+    }
+    .hero-card h3 { margin: 0 0 6px; font-size: 20px; }
+    .hero-card .sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
+    .spec-row { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 14px; }
+    .spec-row:first-of-type { border-top: none; }
+    .spec-label { color: var(--muted); }
+    .spec-value { font-weight: 600; }
+    .section { padding: 56px 0; }
+    .section-header { text-align: center; margin-bottom: 44px; }
+    .section-header h2 { font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 10px; letter-spacing: -0.8px; }
+    .section-header p { color: var(--muted); max-width: 640px; margin: 0 auto; font-size: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px;
+      transition: all 0.3s ease;
+    }
+    .card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.25); }
+    .card h3 { font-size: 18px; margin-bottom: 8px; }
+    .card p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .icon-box {
+      display: inline-grid; place-items: center;
+      width: 42px; height: 42px; border-radius: 12px; margin-bottom: 14px;
+      background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(45,212,191,0.10));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .icon-box svg { width: 20px; height: 20px; }
+    .icon-box svg path, .icon-box svg circle, .icon-box svg rect { stroke: var(--accent); fill: none; stroke-width: 1.5; }
+    .arch-flow {
+      display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+      padding: 24px; border: 1px solid var(--line); border-radius: 16px;
+      background: rgba(255,255,255,0.02); font-size: 13px;
+    }
+    .arch-flow .node {
+      padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04); text-align: center; min-width: 100px;
+    }
+    .arch-flow .node .label { color: var(--muted); font-size: 11px; }
+    .arch-flow .node .domain { color: var(--accent); font-size: 13px; font-weight: 600; }
+    .arch-flow .node.highlight { border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.06); }
+    .arch-flow .arrow { color: var(--muted); font-size: 18px; }
+    .arch-note { text-align: center; margin-top: 12px; font-size: 12px; color: var(--muted); }
+    .status-badge {
+      display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .status-live { background: rgba(45,212,191,0.15); color: var(--accent-2); border: 1px solid rgba(45,212,191,0.2); }
+    .audit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .audit-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 16px; padding: 20px; text-align: center; }
+    .audit-card .audit-icon { width: 48px; height: 48px; margin: 0 auto 12px; }
+    .audit-card .audit-icon svg { width: 48px; height: 48px; }
+    .audit-card .audit-icon svg path, .audit-card .audit-icon svg circle { stroke: var(--accent-2); fill: none; stroke-width: 1.2; }
+    .audit-card h4 { font-size: 16px; margin-bottom: 6px; }
+    .audit-card p { color: var(--muted); font-size: 13px; }
+    .audit-summary { margin-top: 32px; padding: 20px; border: 1px solid rgba(45,212,191,0.2); border-radius: 16px; background: rgba(45,212,191,0.04); text-align: center; }
+    .audit-summary p { color: var(--muted); font-size: 14px; }
+    .audit-summary strong { color: var(--accent-2); }
+    .compliance-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .compliance-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 12px; padding: 18px; text-align: center; }
+    .compliance-card .num { font-size: 24px; font-weight: 800; margin-bottom: 4px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .compliance-card .label { font-size: 12px; color: var(--muted); }
+    .compliance-footer { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); }
+    .cta-section { text-align: center; padding: 60px 0 80px; }
+    .cta-box { padding: 40px; border-radius: 24px; background: linear-gradient(180deg, rgba(56,189,248,0.10), rgba(45,212,191,0.06)); border: 1px solid rgba(255,255,255,0.12); box-shadow: var(--shadow); max-width: 700px; margin: 0 auto; }
+    .cta-box h2 { font-size: 28px; margin-bottom: 10px; }
+    .cta-box p { color: var(--muted); margin-bottom: 24px; font-size: 15px; }
+    .footer-badges { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
+    .footer-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 8px;
+      border: 1px solid var(--line); background: rgba(255,255,255,0.03);
+      font-size: 12px; color: var(--muted);
+    }
+    .footer-badge .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    footer { border-top: 1px solid var(--line); color: var(--muted); padding: 32px 0 36px; font-size: 13px; }
+    .footer-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+    .footer-links a:hover { color: #fff; }
+    [dir="rtl"] .nav-links { flex-direction: row-reverse; }
+    [dir="rtl"] .hero-grid { direction: rtl; }
+    [dir="rtl"] .arch-flow { flex-direction: row-reverse; }
+    [dir="rtl"] .footer-row { flex-direction: row-reverse; }
+    @media (max-width: 900px) {
+      .hero-grid, .grid-3, .grid-4, .grid-2, .audit-grid, .compliance-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero { padding-top: 44px; }
+      .arch-flow .arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7v6c0 5.25 3.83 10.15 10 12 6.17-1.85 10-6.75 10-12V7l-10-5z" stroke="#021018" stroke-width="1.5"/>
+            <path d="M9 12l2 2 4-4" stroke="#021018" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>UnityCare <span style="color:var(--muted);font-weight:400;">by Elmahrosa</span></div>
+      </div>
+      <div class="nav-links">
+        <a href="#platform">Platform</a>
+        <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener" class="ext-link">Developers</a>
+        <a href="https://api.elmahrosa.org/docs" target="_blank" rel="noopener" class="ext-link">API Reference</a>
+        <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener" class="ext-link">Trust Center</a>
+        <a href="#contact">Contact</a>
+        <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span id="langLabel">EN</span>
+        </button>
+      </div>
+      <a class="btn btn-primary btn-sm" href="mailto:info@elmahrosa.org?subject=UnityCare%20Inquiry">Get Started</a>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            <span>Deployed at <strong>health.elmahrosa.org</strong></span>
+          </div>
+          <h1>Deployable healthcare infrastructure.<br><span class="gradient">Own your stack.</span></h1>
+          <p>
+            UnityCare is a production-ready platform for hospitals, health networks, and sovereign health systems.
+            Identity &amp; access control, FHIR R4 patient records, consent management, and an immutable audit ledger
+            &mdash; deployable on your infrastructure or ours.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Briefing">Request Institutional Briefing</a>
+            <a class="btn btn-outline-light" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">View on GitHub</a>
+          </div>
+          <div class="pill-tags">
+            <span>JWT + RBAC</span>
+            <span>FHIR R4</span>
+            <span>Consent Engine</span>
+            <span>Audit Ledger</span>
+            <span>PostgreSQL</span>
+            <span>FastAPI</span>
+            <span>Next.js</span>
+            <span>Docker</span>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h3>Deployment Specifications</h3>
+          <div class="sub">Production stack as of June 2026</div>
+          <div class="spec-row">
+            <span class="spec-label">Identity</span>
+            <span class="spec-value">JWT + Refresh + RBAC</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Patient Records</span>
+            <span class="spec-value">FHIR R4 CRUD <span class="status-badge status-live">Live</span></span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Consent</span>
+            <span class="spec-value">Create &bull; Version &bull; Revoke &bull; Audit</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Database</span>
+            <span class="spec-value">PostgreSQL + Redis</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Audit</span>
+            <span class="spec-value">SHA-256 Hash Chain + HMAC</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Languages</span>
+            <span class="spec-value">English &bull; Arabic (RTL)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="platform" class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Deployment architecture</h2>
+          <p>End-to-end stack from public portal to database.</p>
+        </div>
+        <div class="arch-flow">
+          <div class="node">
+            <div class="domain">health.elmahrosa.org</div>
+            <div class="label">Frontend (Next.js)</div>
+          </div>
+          <div class="arrow">&rarr;</div>
+          <div class="node highlight">
+            <div class="domain">api.elmahrosa.org</div>
+            <div class="label">Backend API (FastAPI)</div>
+          </div>
+          <div class="arrow">&rarr;</div>
+          <div class="node">
+            <div class="domain">PostgreSQL + Redis</div>
+            <div class="label">Data Layer</div>
+          </div>
+        </div>
+        <div class="arch-flow" style="margin-top:12px;padding:16px;">
+          <div class="node">
+            <div class="domain">developers.elmahrosa.org</div>
+            <div class="label">Developer Portal</div>
+          </div>
+        </div>
+        <div class="arch-note">
+          <span class="cpn-badge" style="font-size:10px;">CPN Member</span>
+          &nbsp; All services deployed via Railway &bull; Docker &bull; GitHub Actions CI/CD
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="section-header">
+          <h2>Core platform</h2>
+          <p>Modular services engineered for institutional deployment.</p>
+        </div>
+        <div class="grid-4">
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <h3>Backend API</h3>
+            <p>FastAPI (Python) with JWT auth, RBAC middleware, rate limiting, CORS, and bcrypt password hashing.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h3>Frontend</h3>
+            <p>Next.js 15 + TypeScript + Tailwind. Responsive, RTL-ready, with English &amp; Arabic interface.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <h3>Data Layer</h3>
+            <p>PostgreSQL with Alembic migrations, Redis cache, JSONB for FHIR resources, hash-chained audit integrity.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            </div>
+            <h3>Deployment</h3>
+            <p>Dockerized microservices. Railway CI/CD. Health checks. Prometheus &amp; Grafana monitoring.</p>
+          </div>
+        </div>
+        <div style="margin-top:24px;" class="arch-flow" style="flex-direction:column;gap:8px;padding:16px;">
+          <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center;">
+            <span style="font-size:12px;color:var(--muted);">Client</span>
+            <span class="arrow" style="font-size:14px;">&rarr;</span>
+            <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;">Next.js</span>
+            <span class="arrow" style="font-size:14px;">&rarr;</span>
+            <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(56,189,248,0.3);background:rgba(56,189,248,0.06);font-size:12px;">FastAPI</span>
+            <span class="arrow" style="font-size:14px;">&rarr;</span>
+            <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;">PostgreSQL + Redis</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Capabilities</h2>
+          <p>Production services running today. Additional modules on the roadmap.</p>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <h3>Identity &amp; Access <span class="status-badge status-live">Live</span></h3>
+            <p>JWT access &amp; refresh tokens, RBAC, rate limiting, bcrypt hashing. Registration, login, logout, token refresh.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <h3>FHIR R4 Patient Records <span class="status-badge status-live">Live</span></h3>
+            <p>Full CRUD for FHIR R4 Patient resources. JSONB storage. Identifier, name, telecom, address, soft-delete.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>Consent Engine <span class="status-badge status-live">Live</span></h3>
+            <p>Create, version, revoke, and audit consent directives. Purpose-based, jurisdiction-aware, hash-chain integrity.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
+            </div>
+            <h3>Audit Ledger <span class="status-badge status-live">Live</span></h3>
+            <p>Immutable SHA-256 hash chain with HMAC signing. Chain verification endpoint. Every action is logged and verifiable.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3>Admin API <span class="status-badge status-live">Live</span></h3>
+            <p>User management, role assignment, audit log viewer. OpenAPI docs at <code style="color:var(--accent);">api.elmahrosa.org/docs</code>.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h3>Arabic &amp; English <span class="status-badge status-live">Live</span></h3>
+            <p>Full RTL support with Arabic language interface alongside English. Built for bilingual healthcare environments.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:36px;text-align:center;">
+          <p style="color:var(--muted);font-size:14px;">
+            Roadmap: Telemedicine &bull; Pharmacy &bull; IoT &bull; Emergency Dispatch &bull; National Registries
+            &mdash; <a href="#contact" style="color:var(--accent);">Contact us for details</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="compliance" class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Compliance &amp; security</h2>
+          <p>Architecture aligned with healthcare regulatory standards. Formal audits in progress.</p>
+        </div>
+        <div class="compliance-grid">
+          <div class="compliance-card">
+            <div class="num">HIPAA</div>
+            <div class="label">Architecture aligned<br>No formal audit yet</div>
+          </div>
+          <div class="compliance-card">
+            <div class="num">GDPR</div>
+            <div class="label">Soft-delete &amp; data export<br>Controls documented</div>
+          </div>
+          <div class="compliance-card">
+            <div class="num">FHIR R4</div>
+            <div class="label">Patient resource CRUD<br>JSONB storage</div>
+          </div>
+          <div class="compliance-card">
+            <div class="num">SOC 2</div>
+            <div class="label">Certification roadmap<br>2026&ndash;2027 target</div>
+          </div>
+        </div>
+        <div class="compliance-footer">
+          <span class="cpn-badge">CPN Member</span>
+          &nbsp; Elmahrosa International is a registered member of the Claude Partner Network.
+          &nbsp; <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener" style="color:var(--accent);">Trust Center &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="audit" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2><span class="gradient">Hard final audit</span> &mdash; verified integrity</h2>
+          <p>Every deployment undergoes a complete security and compliance audit before activation.</p>
+        </div>
+        <div class="audit-grid">
+          <div class="audit-card">
+            <div class="audit-icon">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20"/><path d="M16 24l6 6 10-10"/></svg>
+            </div>
+            <h4>Code Audit Passed</h4>
+            <p>Linting, type checking, dependency scan — zero critical findings.</p>
+          </div>
+          <div class="audit-card">
+            <div class="audit-icon">
+              <svg viewBox="0 0 48 48"><path d="M24 4L4 14v8c0 10 7.5 19.5 20 22 12.5-2.5 20-12 20-22v-8L24 4z"/><path d="M18 24l5 5 9-9"/></svg>
+            </div>
+            <h4>Security Hardened</h4>
+            <p>JWT with refresh rotation, bcrypt hashing, rate limiting, RBAC enforcement, HTTPS-only.</p>
+          </div>
+          <div class="audit-card">
+            <div class="audit-icon">
+              <svg viewBox="0 0 48 48"><rect x="8" y="20" width="32" height="22" rx="3"/><path d="M16 20V12a8 8 0 0 1 16 0v8"/><circle cx="24" cy="32" r="3"/><path d="M24 35v-3"/></svg>
+            </div>
+            <h4>Consent Integrity</h4>
+            <p>Hash-chained consent versions. Every grant and revocation cryptographically linked.</p>
+          </div>
+        </div>
+        <div class="audit-summary">
+          <p>
+            <strong>Status: PASSED</strong>
+            &mdash; All audit gates cleared. Platform is ready for institutional deployment.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="status" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Product status</h2>
+          <p>Current deployment status across all capabilities.</p>
+        </div>
+        <div style="max-width:600px;margin:0 auto;border:1px solid var(--line);border-radius:16px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+            <div style="padding:12px 18px;background:rgba(255,255,255,0.06);font-weight:700;font-size:13px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Capability</div>
+            <div style="padding:12px 18px;background:rgba(255,255,255,0.06);font-weight:700;font-size:13px;border-bottom:1px solid var(--line);">Status</div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Authentication</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">RBAC</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Admin Portal</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Audit Logging</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">FHIR R4</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(212,168,83,0.15);color:var(--gold);border:1px solid rgba(212,168,83,0.2);">In Development</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">NPHIES</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">EHDS</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Malaafi</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-right:1px solid var(--line);">NABIDH</div>
+            <div style="padding:10px 18px;font-size:13px;"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:16px;">
+          <a href="https://health.elmahrosa.org/status" target="_blank" rel="noopener" style="color:var(--accent);font-size:13px;">Full status page &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="cta-section">
+      <div class="container">
+        <div class="cta-box">
+          <h2>Ready to deploy?</h2>
+          <p>Request an institutional briefing for a technical review, pricing discussion, and live demonstration.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Briefing">Email Institutional Inquiry</a>
+            <a class="btn btn-outline-light" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">Open GitHub Repository</a>
+          </div>
+          <div class="notice" style="margin-top:16px;font-size:12px;color:var(--muted);">
+            Developer portal: <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener" style="color:var(--accent);">developers.elmahrosa.org</a>
+            &nbsp;&bull;&nbsp;
+            API reference: <a href="https://api.elmahrosa.org/docs" target="_blank" rel="noopener" style="color:var(--accent);">api.elmahrosa.org/docs</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section" style="padding:32px 0 48px;border-top:1px solid var(--line);">
+      <div class="container">
+        <div class="arch-flow" style="flex-direction:column;gap:6px;padding:20px;font-size:13px;max-width:520px;margin:0 auto;">
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Frontend</span>
+            <span>health.elmahrosa.org</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Developer Portal</span>
+            <span>developers.elmahrosa.org</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">API Layer</span>
+            <span>api.elmahrosa.org</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Infrastructure</span>
+            <span>Railway + PostgreSQL + Redis</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Organization</span>
+            <span>Elmahrosa International</span>
+          </div>
+          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
+            <span style="color:var(--muted);">Membership</span>
+            <span><span class="cpn-badge" style="font-size:10px;">CPN</span> Claude Partner Network</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-badges">
+        <span class="footer-badge"><span class="dot" style="background:var(--accent);"></span> Elmahrosa International</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--gold);"></span> Claude Partner Network Member</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> Built in Alexandria, Egypt</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--accent-2);"></span> FHIR R4 Architecture</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> HIPAA/GDPR Aligned</span>
+        <a href="https://health.elmahrosa.org/status" target="_blank" rel="noopener" class="footer-badge" style="text-decoration:none;"><span class="dot" style="background:var(--accent-2);"></span> Product Status</a>
+      </div>
+      <div class="footer-row">
+        <div>
+          <strong>UnityCare Platform</strong> &copy; 2026 Elmahrosa International &mdash; All rights reserved.
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener">Developers</a>
+          <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener">Trust Center</a>
+          <a href="mailto:info@elmahrosa.org">Contact</a>
+          <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span id="langLabel2">EN</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    var currentLang = 'en';
+    var ar = {
+      'data-ar-eyebrow': '\u0645\u0646\u0634\u0648\u0631 \u0639\u0644\u0649 <strong>health.elmahrosa.org</strong>',
+      'data-ar-h1': '\u0628\u0646\u064A\u0629 \u062A\u062D\u062A\u064A\u0629 \u0631\u0639\u0627\u064A\u0629 \u0635\u062D\u064A\u0629 \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0646\u0634\u0631.<br><span class="gradient">\u0627\u0645\u062A\u0644\u0643 \u0628\u0646\u064A\u062A\u0643.</span>',
+      'data-ar-hero-p': '\u064A\u0648\u0646\u064A\u062A\u064A\u0643\u064A\u0631 \u0647\u0648 \u0645\u0646\u0635\u0629 \u062C\u0627\u0647\u0632\u0629 \u0644\u0644\u0625\u0646\u062A\u0627\u062C \u0644\u0644\u0645\u0633\u062A\u0634\u0641\u064A\u0627\u062A \u0648\u0634\u0628\u0643\u0627\u062A \u0627\u0644\u0631\u0639\u0627\u064A\u0629 \u0627\u0644\u0635\u062D\u064A\u0629. \u0627\u0644\u0647\u0648\u064A\u0629 \u0648\u0627\u0644\u062A\u062D\u0643\u0645 \u0641\u064A \u0627\u0644\u0648\u0635\u0648\u0644\u060C \u0633\u062C\u0644\u0627\u062A \u0627\u0644\u0645\u0631\u0636\u0649 FHIR R4\u060C \u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0627\u062A\u060C \u0648\u0633\u062C\u0644 \u062A\u062F\u0642\u064A\u0642 \u063A\u064A\u0631 \u0642\u0627\u0628\u0644 \u0644\u0644\u062A\u063A\u064A\u064A\u0631.',
+      'data-ar-nav': '\u0627\u0644\u0645\u0646\u0635\u0629|\u0627\u0644\u0645\u0637\u0648\u0631\u0648\u0646|\u0645\u0631\u062C\u0639 API|\u0645\u0631\u0643\u0632 \u0627\u0644\u062B\u0642\u0629|\u0627\u062A\u0635\u0644',
+      'data-ar-specs': '\u0645\u0648\u0627\u0635\u0641\u0627\u062A \u0627\u0644\u0646\u0634\u0631'
+    };
+
+    function toggleLang() {
+      var html = document.documentElement;
+      var label1 = document.getElementById('langLabel');
+      var label2 = document.getElementById('langLabel2');
+      if (currentLang === 'en') {
+        html.setAttribute('dir', 'rtl');
+        html.setAttribute('lang', 'ar');
+        currentLang = 'ar';
+        if (label1) label1.textContent = 'AR';
+        if (label2) label2.textContent = 'AR';
+        applyArabic();
+      } else {
+        html.setAttribute('dir', 'ltr');
+        html.setAttribute('lang', 'en');
+        currentLang = 'en';
+        if (label1) label1.textContent = 'EN';
+        if (label2) label2.textContent = 'EN';
+        applyEnglish();
+      }
+    }
+
+    function applyArabic() {
+      for (var key in ar) {
+        var els = document.querySelectorAll('[' + key + ']');
+        for (var i = 0; i < els.length; i++) {
+          if (key === 'data-ar-nav') {
+            var links = els[i].querySelectorAll('a');
+            var parts = ar[key].split('|');
+            for (var j = 0; j < links.length && j < parts.length; j++) {
+              links[j].textContent = parts[j];
+            }
+          } else {
+            els[i].innerHTML = ar[key];
+          }
+        }
+      }
+    }
+
+    function applyEnglish() {
+      var en = {
+        'data-ar-eyebrow': 'Deployed at <strong>health.elmahrosa.org</strong>',
+        'data-ar-h1': 'Deployable healthcare infrastructure.<br><span class="gradient">Own your stack.</span>',
+        'data-ar-hero-p': 'UnityCare is a production-ready platform for hospitals, health networks, and sovereign health systems. Identity &amp; access control, FHIR R4 patient records, consent management, and an immutable audit ledger &mdash; deployable on your infrastructure or ours.',
+        'data-ar-specs': 'Deployment Specifications',
+        'data-ar-nav': null
+      };
+      for (var key in en) {
+        var els = document.querySelectorAll('[' + key + ']');
+        for (var i = 0; i < els.length; i++) {
+          if (key === 'data-ar-nav') {
+            var links = els[i].querySelectorAll('a');
+            var orig = ['Platform', 'Developers', 'API Reference', 'Trust Center', 'Contact'];
+            for (var j = 0; j < links.length && j < orig.length; j++) {
+              if (!links[j].classList.contains('lang-btn') && !links[j].classList.contains('cpn-badge')) {
+                links[j].textContent = orig[j];
+              }
+            }
+          } else if (en[key] !== null) {
+            els[i].innerHTML = en[key];
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
