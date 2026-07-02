@@ -3,8 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Define environment variables
-export MONGODB_URI="mongodb://username:password@localhost:27017/salma_unity_care_hospital"
+# Set MONGODB_URI from environment or .env file
+# export MONGODB_URI="mongodb://user:pass@localhost:27017/salma_unity_care_hospital"
 
 # Define the directory containing migration scripts
 MIGRATION_DIR="./database/migrations" # Change this to your migrations directory

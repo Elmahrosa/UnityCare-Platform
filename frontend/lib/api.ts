@@ -6,11 +6,12 @@ import {
   mockConsents,
   mockAppointments,
   mockAuditEvents,
+  mockIcdCodes,
+  mockMedicalRecords,
 } from "./mock-data";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ||
-  process.env.API_URL ||
   "http://localhost:8000/api/v1";
 
 function getToken(): string | null {
@@ -20,7 +21,7 @@ function getToken(): string | null {
   );
 }
 
-async function request<T>(method: string, path: string, body?: any): Promise<T> {
+async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -53,7 +54,7 @@ async function request<T>(method: string, path: string, body?: any): Promise<T> 
     }
 
     return res.json();
-  } catch (err: any) {
+  } catch (err: unknown) {
     clearTimeout(timeout);
     if (DEMO_MODE) {
       return mockFallback<T>(method, path, body);
@@ -62,9 +63,9 @@ async function request<T>(method: string, path: string, body?: any): Promise<T> 
   }
 }
 
-function mockFallback<T>(method: string, path: string, body?: any): T {
+function mockFallback<T>(method: string, path: string, body?: unknown): T {
   if (path === "/auth/login") {
-    const data = body as any;
+    const data = body as Record<string, unknown>;
     const user =
       mockUsers.find((u) => u.email === data?.email) || mockUsers[0];
     return {
@@ -76,7 +77,7 @@ function mockFallback<T>(method: string, path: string, body?: any): T {
   }
 
   if (path === "/auth/register") {
-    return { id: crypto.randomUUID(), ...body } as T;
+    return { id: crypto.randomUUID(), ...(body as Record<string, unknown>) } as T;
   }
 
   if (path === "/users/me" || path === "/admin/users/me") {
@@ -108,11 +109,21 @@ function mockFallback<T>(method: string, path: string, body?: any): T {
   }
 
   if (method === "POST" && path.startsWith("/appointments")) {
-    return { id: crypto.randomUUID(), ...body } as T;
+    return { id: crypto.randomUUID(), ...(body as Record<string, unknown>) } as T;
   }
 
   if (method === "GET" && path.startsWith("/records/patient/")) {
-    return [] as T;
+    return mockMedicalRecords as T;
+  }
+
+  if (method === "GET" && path === "/icd-codes") {
+    return mockIcdCodes as T;
+  }
+
+  if (method === "GET" && path.startsWith("/icd-codes/")) {
+    const code = path.replace("/icd-codes/", "");
+    const found = mockIcdCodes.find((c) => c.code === code);
+    return (found || null) as T;
   }
 
   if (method === "GET" && path === "/audit/events") {
@@ -129,18 +140,18 @@ function mockFallback<T>(method: string, path: string, body?: any): T {
 export const authApi = {
   login: (email: string, password: string) =>
     request("POST", "/auth/login", { email, password }),
-  register: (data: any) => request("POST", "/auth/register", data),
+  register: (data: Record<string, unknown>) => request("POST", "/auth/register", data),
   logout: () => request("POST", "/auth/logout"),
-  me: () => request("GET", "/users/me"),
+  me: () => request("GET", "/admin/users/me"),
 };
 
 export const appointmentApi = {
-  create: (data: any) => request("POST", "/appointments", data),
+  create: (data: Record<string, unknown>) => request("POST", "/appointments", data),
   getByPatient: (patientId: string) =>
     request("GET", `/appointments/patient/${patientId}`),
   getByDoctor: (doctorId: string) =>
     request("GET", `/appointments/doctor/${doctorId}`),
-  update: (id: string, data: any) =>
+  update: (id: string, data: Record<string, unknown>) =>
     request("PATCH", `/appointments/${id}`, data),
   delete: (id: string) => request("DELETE", `/appointments/${id}`),
 };

@@ -44,3 +44,19 @@ npm-debug.log*
 
 # Coverage
 coverage/
+
+# Archive (legacy code with placeholder credentials)
+archive/
+
+# Landing page
+website/
+
+# Modules
+modules/
+
+# Archived — legacy UCH Sovereign Core (Node.js/SQLite), not part of active codebase
+modules/hospital-core/
+
+# IDE cache
+.eslintcache
+.jest-*/

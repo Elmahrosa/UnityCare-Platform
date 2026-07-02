@@ -31,10 +31,11 @@ if [ ! -f .env ]; then
     cat <<EOL > .env
 # Environment variables for Salma Unity Care Hospital
 NODE_ENV=development
-MONGODB_URI=mongodb://username:password@localhost:27017/salma_unity_care_hospital
+# Set MONGODB_URI to your MongoDB connection string
+# MONGODB_URI=mongodb://user:pass@localhost:27017/salma_unity_care_hospital
 PORT=3000
 EOL
-    echo ".env file created. Please update the database credentials."
+    echo ".env file created. Please set MONGODB_URI in .env."
 else
     echo ".env file already exists. Please check and update the database credentials if necessary."
 fi

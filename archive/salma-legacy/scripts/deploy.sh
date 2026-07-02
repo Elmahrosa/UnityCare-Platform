@@ -3,9 +3,9 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Define environment variables
+# Define environment variables — set MONGODB_URI from environment
 export NODE_ENV=production
-export MONGODB_URI="mongodb://username:password@localhost:27017/salma_unity_care_hospital"
+# export MONGODB_URI="mongodb://user:pass@localhost:27017/salma_unity_care_hospital"
 
 # Define the application directory
 APP_DIR="/path/to/your/app" # Change this to your application's directory

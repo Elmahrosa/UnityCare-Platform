@@ -8,9 +8,9 @@ import { DashboardSkeleton } from "@/components/shared/Skeleton";
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 interface Consent { id: string; purpose: string; status: string; jurisdiction: string; created_at: string }
-interface VitalSigns { heartRate?: number; oxygenSaturation?: number; bloodPressure?: string; temperature?: number }
+interface VitalSigns { heart_rate?: number; oxygen_saturation?: number; blood_pressure_systolic?: number; blood_pressure_diastolic?: number; temperature?: number }
 
-function fetchJson(url: string, headers: Record<string, string>): Promise<any> {
+function fetchJson<T>(url: string, headers: Record<string, string>): Promise<T> {
   return fetch(url, { headers }).then((r) => {
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return r.json();
@@ -34,14 +34,14 @@ export default function PatientDashboard() {
 
     const headers = { Authorization: `Bearer ${token}` };
 
-    fetchJson(`${API}/admin/users/me`, headers)
-      .then((u: any) =>
+    fetchJson<{ id: string }>(`${API}/admin/users/me`, headers)
+      .then((u) =>
         Promise.all([
-          fetchJson(`${API}/consent/patient/${u.id}`, headers).catch(() => mockConsents),
-          fetchJson(`${API}/iot/${u.id}/vitals`, headers).catch(() => mockVitals["a1b2c3d4"] ?? null),
+          fetchJson<Consent[]>(`${API}/consent/patient/${u.id}`, headers).catch(() => mockConsents),
+          fetchJson<VitalSigns>(`${API}/iot/${u.id}/vitals`, headers).catch(() => mockVitals["a1b2c3d4"] ?? null),
         ])
       )
-      .then(([consentData, vitalsData]: [any, any]) => {
+      .then(([consentData, vitalsData]) => {
         setConsents(consentData);
         setVitalSigns(vitalsData);
       })
@@ -60,22 +60,22 @@ export default function PatientDashboard() {
 
       {vitalSigns && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {vitalSigns.heartRate !== undefined && (
+          {vitalSigns.heart_rate !== undefined && (
             <div className="rounded-2xl border border-gray-200 bg-white p-4">
               <p className="text-sm text-gray-500">Heart Rate</p>
-              <p className="text-xl font-bold text-gray-900">{vitalSigns.heartRate} <span className="text-sm font-normal text-gray-500">bpm</span></p>
+              <p className="text-xl font-bold text-gray-900">{vitalSigns.heart_rate} <span className="text-sm font-normal text-gray-500">bpm</span></p>
             </div>
           )}
-          {vitalSigns.oxygenSaturation !== undefined && (
+          {vitalSigns.oxygen_saturation !== undefined && (
             <div className="rounded-2xl border border-gray-200 bg-white p-4">
               <p className="text-sm text-gray-500">O2 Saturation</p>
-              <p className="text-xl font-bold text-gray-900">{vitalSigns.oxygenSaturation} <span className="text-sm font-normal text-gray-500">%</span></p>
+              <p className="text-xl font-bold text-gray-900">{vitalSigns.oxygen_saturation} <span className="text-sm font-normal text-gray-500">%</span></p>
             </div>
           )}
-          {vitalSigns.bloodPressure && (
+          {vitalSigns.blood_pressure_systolic !== undefined && vitalSigns.blood_pressure_diastolic !== undefined && (
             <div className="rounded-2xl border border-gray-200 bg-white p-4">
               <p className="text-sm text-gray-500">Blood Pressure</p>
-              <p className="text-xl font-bold text-gray-900">{vitalSigns.bloodPressure} <span className="text-sm font-normal text-gray-500">mmHg</span></p>
+              <p className="text-xl font-bold text-gray-900">{vitalSigns.blood_pressure_systolic}/{vitalSigns.blood_pressure_diastolic} <span className="text-sm font-normal text-gray-500">mmHg</span></p>
             </div>
           )}
           {vitalSigns.temperature !== undefined && (

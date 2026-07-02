@@ -6,6 +6,7 @@ Usage:
     python scripts/seed.py --base-url https://backend.example.com
     python scripts/seed.py --clean                   # drop all data first
     python scripts/seed.py --dry-run                 # print actions only
+    python scripts/seed.py --railway                 # Railway mode (waits for API readiness)
 
 Idempotent — skips users whose email already exists.
 """
@@ -164,6 +165,19 @@ APPOINTMENTS: list[dict[str, Any]] = [
     {"patient": "Nora Al-Saud", "doctor": "Dr. Ahmed Al-Qahtani", "status": "pending", "reason": "ECG results review", "time": "14:00"},
 ]
 
+ICD_CODES: list[dict[str, str | None]] = [
+    {"code": "I10", "description": "Essential (primary) hypertension", "category": "Circulatory System"},
+    {"code": "E11.9", "description": "Type 2 diabetes mellitus without complications", "category": "Endocrine"},
+    {"code": "J45.0", "description": "Predominantly allergic asthma", "category": "Respiratory"},
+    {"code": "I25.10", "description": "Atherosclerotic heart disease of native coronary artery", "category": "Circulatory System"},
+    {"code": "N18.3", "description": "Chronic kidney disease, stage 3 (moderate)", "category": "Genitourinary"},
+    {"code": "M17.0", "description": "Bilateral primary osteoarthritis of knee", "category": "Musculoskeletal"},
+    {"code": "F32.9", "description": "Major depressive disorder, single episode, unspecified", "category": "Mental Health"},
+    {"code": "J44.9", "description": "Chronic obstructive pulmonary disease, unspecified", "category": "Respiratory"},
+    {"code": "E78.5", "description": "Hyperlipidemia, unspecified", "category": "Endocrine"},
+    {"code": "Z23", "description": "Encounter for immunization", "category": "Preventive Care"},
+]
+
 
 # ---------------------------------------------------------------------------
 # Client helpers
@@ -284,6 +298,66 @@ class SeedClient:
             return data
         return None
 
+    def create_vitals(self, user_id: str, vitals: dict, token: str) -> dict | None:
+        if self.dry_run:
+            log.info("[DRY] Vitals for user %s", user_id[:8])
+            return {"id": str(uuid.uuid4())}
+
+        systolic, diastolic = vitals["bloodPressure"].split("/")
+        resp = self._client.post(f"/iot/{user_id}/vitals", json={
+            "heart_rate": vitals["heartRate"],
+            "oxygen_saturation": vitals["oxygenSaturation"],
+            "blood_pressure_systolic": int(systolic),
+            "blood_pressure_diastolic": int(diastolic),
+            "temperature": vitals["temperature"],
+        }, headers=self._h(token))
+        data = self._check(resp, f"vitals for {user_id[:8]}")
+        if data:
+            log.info("  ✓ Created vitals for user %s", user_id[:8])
+            return data
+        return None
+
+    def create_appointment(self, appointment: dict, patient_id: str, doctor_email: str, tokens: dict) -> dict | None:
+        if self.dry_run:
+            log.info("[DRY] Appointment: %s", appointment["reason"])
+            return {"id": str(uuid.uuid4())}
+
+        doctor_token = tokens.get(doctor_email, "")
+        if not doctor_token:
+            log.warning("  ↳ No token for doctor %s", doctor_email)
+            return None
+
+        now = datetime.now(timezone.utc)
+        hour, minute = map(int, appointment["time"].split(":"))
+        scheduled_at = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+        if scheduled_at < now:
+            scheduled_at += timedelta(days=1)
+
+        resp = self._client.post("/appointments", json={
+            "patient_id": patient_id,
+            "doctor_id": "",  # resolved by backend from token
+            "scheduled_at": scheduled_at.isoformat(),
+            "reason": appointment["reason"],
+            "status": appointment["status"],
+        }, headers=self._h(doctor_token))
+        data = self._check(resp, f"appointment {appointment['reason']}")
+        if data:
+            log.info("  ✓ Created appointment: %s (%s)", appointment["reason"], appointment["status"])
+            return data
+        return None
+
+    def seed_icd_codes(self, token: str) -> None:
+        if self.dry_run:
+            log.info("[DRY] Seed %d ICD-10-CM codes", len(ICD_CODES))
+            return
+        for icd in ICD_CODES:
+            resp = self._client.post("/icd-codes", json=icd, headers=self._h(token))
+            data = self._check(resp, f"ICD-10 {icd['code']}")
+            if data:
+                log.info("  ✓ ICD-10 %s — %s", icd["code"], icd["description"][:50])
+            elif resp.status_code == 409:
+                log.info("  ∼ ICD-10 %s already exists", icd["code"])
+
     def create_audit_events(self, token: str) -> None:
         """Create sample audit events by performing known actions."""
         if self.dry_run:
@@ -302,6 +376,64 @@ class SeedClient:
         for ev in events:
             log.debug("    ∘ %s on %s", ev["action"], ev["resource_type"])
 
+    def wait_for_api(self, max_retries: int = 30, delay: int = 5) -> bool:
+        log.info("Waiting for API to become healthy ...")
+        for attempt in range(1, max_retries + 1):
+            try:
+                if self.health_check():
+                    log.info("API is ready after %d attempt(s)", attempt)
+                    return True
+            except Exception as exc:
+                log.debug("Attempt %d failed: %s", attempt, exc)
+            if attempt % 5 == 0:
+                log.info("  still waiting ... (attempt %d/%d)", attempt, max_retries)
+            if attempt < max_retries:
+                import time
+                time.sleep(delay)
+        log.error("API not reachable after %d attempts — aborting.", max_retries)
+        return False
+
+    def clean_data(self, admin_token: str) -> None:
+        log.info("Cleaning existing data ...")
+        # Try a generic cleanup endpoint first
+        if not self.dry_run:
+            resp = self._client.delete("/admin/seed-data",
+                                       headers=self._h(admin_token))
+            if resp.status_code in (200, 204):
+                log.info("  ✓ Cleanup via /admin/seed-data succeeded")
+                return
+            elif resp.status_code == 404:
+                log.info("  ∼ /admin/seed-data not available — attempting per-entity cleanup")
+            else:
+                log.info("  ∼ /admin/seed-data returned %s — falling back", resp.status_code)
+
+        # Fallback: delete in reverse dependency order (appointments → consents → patients → users)
+        # Fetch all users first
+        if not self.dry_run:
+            resp = self._client.get("/admin/users", headers=self._h(admin_token))
+            users = self._check(resp, "list users for cleanup") or []
+            if isinstance(users, list):
+                # Delete in reverse order: appointments, consents, patients, sessions, users
+                for u in reversed(users):
+                    uid = u.get("id", "")
+                    if not uid:
+                        continue
+                    for ep in [f"/appointments/by-patient/{uid}",
+                               f"/consent/patient/{uid}",
+                               f"/fhir/Patient/by-user/{uid}",
+                               f"/admin/users/{uid}"]:
+                        try:
+                            d = self._client.delete(ep, headers=self._h(admin_token))
+                            if d.status_code in (200, 204):
+                                log.debug("  ✓ Deleted %s for %s", ep, uid[:8])
+                        except Exception:
+                            pass
+                log.info("  ✓ Per-entity cleanup completed (best-effort)")
+            else:
+                log.info("  ∼ Could not list users for cleanup")
+        else:
+            log.info("[DRY] Would clean existing data")
+
     def close(self):
         self._client.close()
 
@@ -314,8 +446,9 @@ class SeedClient:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Seed UnityCare with demo data")
     parser.add_argument("--base-url", default=BASE_URL, help="API base URL (default: %(default)s)")
-    parser.add_argument("--clean", action="store_true", help="⚠  Wipe all data first (NYI)")
+    parser.add_argument("--clean", action="store_true", help="Wipe all data before seeding")
     parser.add_argument("--dry-run", action="store_true", help="Print actions without executing")
+    parser.add_argument("--railway", action="store_true", help="Railway deployment mode: waits for API readiness")
     return parser.parse_args()
 
 
@@ -323,8 +456,34 @@ def main():
     args = parse_args()
     client = SeedClient(base_url=args.base_url, dry_run=args.dry_run)
 
+    # Railway environment detection -------------------------------------------
+    if os.getenv("RAILWAY_SERVICE_NAME") or os.getenv("RAILWAY_ENVIRONMENT"):
+        log.info("Railway environment detected")
+    if args.railway:
+        log.info("Running in Railway mode — will wait for API readiness")
+        if not client.wait_for_api():
+            sys.exit(1)
+
     log.info("UnityCare Demo Seed  •  base_url=%s", args.base_url)
     log.info("")
+
+    # 0. Clean first ----------------------------------------------------------
+    if args.clean and not args.dry_run:
+        log.info("─" * 48)
+        log.info("STEP 0/8  Clean existing data")
+        admin_token = client.tokens.get("admin@unitycare.demo", "")
+        if not admin_token:
+            # Must login as admin first to get a token for cleanup
+            client.login("admin@unitycare.demo", "Demo@2026Admin")
+            admin_token = client.tokens.get("admin@unitycare.demo", "")
+        if admin_token:
+            client.clean_data(admin_token)
+        else:
+            log.warning("  ↳ Cannot obtain admin token — skipping cleanup")
+    elif args.clean and args.dry_run:
+        log.info("[DRY] Would clean existing data")
+    else:
+        log.info("Skipping cleanup (use --clean to wipe data first)")
 
     # 1. Health check --------------------------------------------------------
     if not args.dry_run and not client.health_check():
@@ -333,19 +492,19 @@ def main():
 
     # 2. Register users ------------------------------------------------------
     log.info("─" * 48)
-    log.info("STEP 1/5  Register users")
+    log.info("STEP 1/8  Register users")
     for user in USERS:
         client.register_user(user)
 
     # 3. Login ---------------------------------------------------------------
     log.info("─" * 48)
-    log.info("STEP 2/5  Login and capture tokens")
+    log.info("STEP 2/8  Login and capture tokens")
     for user in USERS:
         client.login(user["email"], user["password"])
 
     # 4. Create FHIR patients ------------------------------------------------
     log.info("─" * 48)
-    log.info("STEP 3/5  Create FHIR patient resources")
+    log.info("STEP 3/8  Create FHIR patient resources")
     admin_token = client.tokens.get("admin@unitycare.demo", "")
     for user in USERS:
         if user["role"] == "patient":
@@ -355,7 +514,7 @@ def main():
 
     # 5. Create consents ------------------------------------------------------
     log.info("─" * 48)
-    log.info("STEP 4/5  Create patient consents")
+    log.info("STEP 4/8  Create patient consents")
     admin_token = client.tokens.get("admin@unitycare.demo", "")
     for user in USERS:
         if user["role"] == "patient":
@@ -366,13 +525,52 @@ def main():
             elif uid == "exists":
                 log.info("  ∼ Skip consents for %s (already exists)", user["email"])
 
-    # 6. Audit events --------------------------------------------------------
+    # 6. ICD-10 codes --------------------------------------------------------
     log.info("─" * 48)
-    log.info("STEP 5/5  Seed audit trail")
+    log.info("STEP 5/8  Seed ICD-10-CM reference codes")
+    client.seed_icd_codes(admin_token)
+
+    # 7. Create vitals -------------------------------------------------------
+    log.info("─" * 48)
+    log.info("STEP 6/8  Seed vital signs")
+    admin_token = client.tokens.get("admin@unitycare.demo", "")
+    for user in USERS:
+        if user["role"] == "patient":
+            uid = client.user_ids.get(user["email"])
+            vitals_data = VITAL_SIGNS.get(user["full_name"])
+            if uid and uid != "exists" and vitals_data:
+                client.create_vitals(uid, vitals_data, admin_token)
+            elif uid == "exists":
+                log.info("  ∼ Skip vitals for %s (already exists)", user["email"])
+
+    # 7. Create appointments --------------------------------------------------
+    log.info("─" * 48)
+    log.info("STEP 7/8  Seed appointments")
+    for apt in APPOINTMENTS:
+        patient_user = next((u for u in USERS if u["full_name"] == apt["patient"]), None)
+        patient_uid = client.user_ids.get(patient_user["email"]) if patient_user else None
+        doctor_user = next((u for u in USERS if u["full_name"] == apt["doctor"]), None)
+        doctor_email = doctor_user["email"] if doctor_user else ""
+        if patient_uid and patient_uid != "exists":
+            client.create_appointment(apt, patient_uid, doctor_email, client.tokens)
+        else:
+            log.info("  ∼ Skip appointment for %s (patient not found)", apt["patient"])
+
+    # 8. Audit events --------------------------------------------------------
+    log.info("─" * 48)
+    log.info("STEP 8/8  Seed audit trail")
     client.create_audit_events(admin_token)
 
-    # 7. Summary -------------------------------------------------------------
+    # 9. Summary -------------------------------------------------------------
     log.info("─" * 48)
+    log.info("")
+    log.info("Summary:")
+    log.info(f"  Users registered:    {len([u for u in USERS])}")
+    log.info(f"  Patients created:    {len(FHIR_RESOURCES)}")
+    log.info(f"  Consents created:    {len(CONSENTS)} per patient")
+    log.info(f"  ICD-10 codes seeded: {len(ICD_CODES)}")
+    log.info(f"  Appointments created:{len(APPOINTMENTS)}")
+    log.info(f"  Vitals recorded:     {len(VITAL_SIGNS)}")
     log.info("")
     log.info("Demo accounts:")
     log.info("  Admin:     admin@unitycare.demo     / Demo@2026Admin")
@@ -381,10 +579,6 @@ def main():
     log.info("  Patient 1: patient.nora@unitycare.demo  / Demo@2026Pat")
     log.info("  Patient 2: patient.omar@unitycare.demo  / Demo@2026Pat")
     log.info("  Patient 3: patient.layla@unitycare.demo / Demo@2026Pat")
-    log.info("")
-    log.info("Frontend dashboards call missing endpoints")
-    log.info("  GET /iot/{userId}/vitals  — implement or use frontend demo mode")
-    log.info("  GET /appointments         — implement or use frontend demo mode")
     log.info("")
 
     client.close()

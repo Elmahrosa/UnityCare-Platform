@@ -3,8 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Define environment variables
-export MONGODB_URI="mongodb://username:password@localhost:27017/salma_unity_care_hospital"
+# MONGODB_URI must be set in the environment
+# export MONGODB_URI="mongodb://user:pass@localhost:27017/salma_unity_care_hospital"
 BACKUP_DIR="/path/to/backup/directory" # Change this to your desired backup directory
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 BACKUP_FILE="backup_$TIMESTAMP.gz"

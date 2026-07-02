@@ -4,8 +4,9 @@ from jose import jwt, JWTError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
-from app.models.user import User, Session, UserRole
+from app.models.user import User, UserRole
 from app.utils.security import hash_password, verify_password
+import pyotp
 
 
 class AuthService:
@@ -80,3 +81,32 @@ class AuthService:
     async def list_users(self, skip: int = 0, limit: int = 100) -> list[User]:
         result = await self.db.execute(select(User).offset(skip).limit(limit))
         return list(result.scalars().all())
+
+    def generate_mfa_secret(self, user: User) -> str:
+        secret = pyotp.random_base32()
+        user.mfa_secret = secret
+        totp = pyotp.TOTP(secret)
+        provisioning_uri = totp.provisioning_uri(name=user.email, issuer_name=settings.app_name)
+        return provisioning_uri
+
+    async def enable_mfa(self, user: User, code: str) -> bool:
+        if not user.mfa_secret:
+            return False
+        totp = pyotp.TOTP(user.mfa_secret)
+        if totp.verify(code):
+            user.mfa_enabled = True
+            await self.db.flush()
+            return True
+        return False
+
+    async def disable_mfa(self, user: User) -> None:
+        user.mfa_secret = None
+        user.mfa_enabled = False
+        await self.db.flush()
+
+    @staticmethod
+    def verify_mfa(user: User, code: str) -> bool:
+        if not user.mfa_secret:
+            return False
+        totp = pyotp.TOTP(user.mfa_secret)
+        return totp.verify(code)

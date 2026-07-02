@@ -1,68 +1,74 @@
-name: UnityCare CI/CD
+name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
     branches: [main]
 
 jobs:
-  backend-lint:
+  frontend:
+    name: Frontend Lint & Test
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  backend:
+    name: Backend Lint & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: unitycare
+          POSTGRES_PASSWORD: unitycare_test
+          POSTGRES_DB: unitycare_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: backend/requirements.txt
       - run: pip install -r requirements.txt
       - run: pip install ruff
-      - run: ruff check app/ --exit-zero
-
-  frontend-lint:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci
-      - run: npm run lint
-
-  frontend-type-check:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - run: npm ci
-      - run: npm run type-check
-
-  docker-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: docker build -t unitycare-backend ./backend
-      - run: docker build -t unitycare-frontend ./frontend
-
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    needs: [backend-lint, frontend-lint, frontend-type-check, docker-build]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Deploy to Railway
-        run: |
-          npx @railway/cli up --service backend --ci
-          npx @railway/cli up --service frontend --ci
+      - name: Lint with ruff
+        run: ruff check app/
+      - name: Run tests
         env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          DATABASE_URL: postgresql+asyncpg://unitycare:unitycare_test@localhost:5432/unitycare_test
+          JWT_SECRET: test-secret-key-for-ci-at-least-32-chars!!
+          ENCRYPTION_KEY: test-encryption-key-for-ci-12345678
+        run: pytest -v --tb=short
+
+  docker:
+    name: Docker Build Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build backend image
+        run: docker build -t unitycare-backend ./backend
+      - name: Build frontend image
+        run: docker build -t unitycare-frontend ./frontend

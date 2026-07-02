@@ -34,8 +34,9 @@ export function useAuth() {
 
     authApi
       .me()
-      .then((data: any) => {
-        setState({ user: data.user || data, loading: false, error: null, isAuthenticated: true });
+      .then((data: unknown) => {
+        const d = data as Record<string, unknown>;
+        setState({ user: (d.user || d) as User, loading: false, error: null, isAuthenticated: true });
       })
       .catch(() => {
         localStorage.removeItem("unitycare_token");

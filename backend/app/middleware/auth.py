@@ -1,6 +1,5 @@
-import uuid
 from datetime import datetime, timezone
-from fastapi import Depends, HTTPException, status, Request
+from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
@@ -31,3 +30,12 @@ def require_role(*roles: UserRole):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
         return current_user
     return role_checker
+
+
+async def require_mfa_enabled(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role in (UserRole.ADMIN, UserRole.PROVIDER) and not current_user.mfa_enabled:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="MFA must be enabled for this role. Call POST /auth/mfa/setup to configure.",
+        )
+    return current_user

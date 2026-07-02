@@ -7,12 +7,35 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { appointmentApi, authApi } from "@/lib/api";
 import { DashboardSkeleton } from "@/components/shared/Skeleton";
 
+interface DoctorProfile {
+  specialization: string;
+  rating: number;
+  licenseNumber: string;
+  yearsOfExperience: number;
+  consultationFee: number;
+  totalConsultations: number;
+  user?: Record<string, unknown>;
+}
+
+interface Appointment {
+  id: string;
+  _id?: string;
+  patientId?: string;
+  patient: string;
+  doctorId: string;
+  status: string;
+  reason?: string;
+  date: string;
+  scheduledAt: string;
+  notes?: string;
+}
+
 export default function DoctorDashboard() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const router = useRouter();
-  const [profile, setProfile] = useState<any>(null);
-  const [queue, setQueue] = useState<any[]>([]);
+  const [profile, setProfile] = useState<DoctorProfile | null>(null);
+  const [queue, setQueue] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,8 +46,14 @@ export default function DoctorDashboard() {
           user?.id ? appointmentApi.getByDoctor(user.id) : Promise.resolve([]),
         ]);
 
-        if (meRes.status === "fulfilled" && meRes.value) setProfile((meRes.value as any).user || meRes.value);
-        if (queueRes.status === "fulfilled" && queueRes.value) setQueue((queueRes.value as any).appointments || (queueRes.value as any[]));
+        if (meRes.status === "fulfilled" && meRes.value) {
+          const val = meRes.value as Record<string, unknown>;
+          setProfile((val.user as DoctorProfile) || (val as unknown as DoctorProfile));
+        }
+        if (queueRes.status === "fulfilled" && queueRes.value) {
+          const val = queueRes.value as Record<string, unknown>;
+          setQueue((val.appointments as Appointment[]) || (val as unknown as Appointment[]));
+        }
       } catch (err) {
         console.error("Failed to load dashboard data", err);
       } finally {

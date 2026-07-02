@@ -1,10 +1,12 @@
+import uuid
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.services.fhir import FHIRService
 from app.services.audit import AuditService
 from app.schemas.patient import PatientCreate, PatientResponse
-from app.middleware.auth import get_current_user, require_role
+from app.middleware.auth import require_role
+from app.middleware.access_control import get_patient_scope
 from app.models.user import User, UserRole
 
 router = APIRouter(prefix="/fhir/Patient", tags=["FHIR Patient"])
@@ -16,9 +18,10 @@ async def search_patients(
     limit: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_role(UserRole.ADMIN, UserRole.PROVIDER, UserRole.PATIENT)),
+    patient_scope: uuid.UUID | None = Depends(get_patient_scope),
 ):
     fhir = FHIRService(db)
-    return await fhir.search_patients(skip=skip, limit=limit)
+    return await fhir.search_patients(skip=skip, limit=limit, user_id=patient_scope)
 
 
 @router.get("/{fhir_id}", response_model=PatientResponse)
@@ -26,11 +29,14 @@ async def get_patient(
     fhir_id: str,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(require_role(UserRole.ADMIN, UserRole.PROVIDER, UserRole.PATIENT)),
+    patient_scope: uuid.UUID | None = Depends(get_patient_scope),
 ):
     fhir = FHIRService(db)
     patient = await fhir.get_patient(fhir_id)
     if not patient:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Patient not found")
+    if patient_scope and patient.user_id != patient_scope:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
     return patient
 
 

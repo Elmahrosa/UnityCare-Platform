@@ -1,13 +1,13 @@
 import uuid
 from datetime import datetime
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from typing import Optional
 from app.models.user import UserRole
 
 
 class UserCreate(BaseModel):
-    email: str
-    password: str
+    email: EmailStr
+    password: str = Field(..., min_length=8, max_length=128)
     full_name: str
     role: UserRole = UserRole.PATIENT
     locale: str = "en"
@@ -28,7 +28,7 @@ class UserResponse(BaseModel):
 
 class LoginRequest(BaseModel):
     email: str
-    password: str
+    password: str = Field(..., max_length=128)
 
 
 class TokenResponse(BaseModel):
@@ -44,6 +44,15 @@ class MFAEnableRequest(BaseModel):
 
 class MFAVerifyRequest(BaseModel):
     code: str
+
+
+class MFADisableRequest(BaseModel):
+    password: str = Field(..., max_length=128)
+
+
+class MFASetupResponse(BaseModel):
+    secret: str
+    provisioning_uri: str
 
 
 class UserUpdate(BaseModel):

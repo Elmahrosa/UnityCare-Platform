@@ -18,10 +18,10 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-// Environment variables (replace with your own values)
-const JWT_SECRET = 'your_jwt_secret';
-const EMAIL_USER = 'your-email@gmail.com';
-const EMAIL_PASS = 'your-email-password';
+// Environment variables — set these from your environment
+// const JWT_SECRET = process.env.JWT_SECRET;
+// const EMAIL_USER = process.env.EMAIL_USER;
+// const EMAIL_PASS = process.env.EMAIL_PASS;
 
 // Schema Definitions
 const roomSchema = new mongoose.Schema({

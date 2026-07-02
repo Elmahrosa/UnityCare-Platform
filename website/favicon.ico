@@ -1,45 +1,10 @@
-const request = require('supertest');
-const app = require('../../src/app'); // Adjust the path to your app
-
-describe('User  Flow Tests', () => {
-    let userId;
-    let authToken;
-
-    beforeAll(async () => {
-        // Register a new user
-        const response = await request(app)
-            .post('/api/users/register')
-            .send({
-                username: 'testuser',
-                password: 'password123',
-                email: 'testuser@example.com'
-            });
-        expect(response.status).toBe(201);
-        userId = response.body.userId;
-
-        // Authenticate the user
-        const loginResponse = await request(app)
-            .post('/api/users/login')
-            .send({
-                username: 'testuser',
-                password: 'password123'
-            });
-        expect(loginResponse.status).toBe(200);
-        authToken = loginResponse.body.token;
-    });
-
-    test('Get user profile', async () => {
-        const response = await request(app)
-            .get(`/api/users/${userId}`)
-            .set('Authorization', `Bearer ${authToken}`);
-        expect(response.status).toBe(200);
-        expect(response.body.username).toBe('testuser');
-    });
-
-    afterAll(async () => {
-        // Clean up: delete the user
-        await request(app)
-            .delete(`/api/users/${userId}`)
-            .set('Authorization', `Bearer ${authToken}`);
-    });
-});
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="a" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2563eb"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="12" fill="url(#a)"/>
+  <path d="M20 32h24M32 20v24" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+</svg>

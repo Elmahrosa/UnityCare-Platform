@@ -1,0 +1,148 @@
+UNITYCARE HEALTHCARE ACCESS CONTROL POLICY v1.0
+================================================================================
+Jurisdiction: Saudi Arabia (NCA, PDPL), Egypt (Law 151), EU (GDPR)
+Last Updated: 2026-07-02
+Authority: UnityCare Compliance & Security Board
+
+================================================================================
+1. SCOPE
+================================================================================
+This policy governs all electronic access to Protected Health Information (PHI),
+Patient Identifiable Data (PID), and UnityCare system resources. It applies to
+all users, automated processes, and third-party integrations.
+
+================================================================================
+2. ROLE-BASED ACCESS CONTROL (RBAC)
+================================================================================
+
+2.1 Patient Role
+  - CAN read: own demographics, own medical records, own vitals, own consents
+  - CAN write: own consent grants/revocations, own profile (limited fields)
+  - CANNOT read: any other patient's data, audit logs, system configuration
+  - MUST NOT: access clinical notes they are not the subject of
+
+2.2 Provider Role (Doctor/Nurse)
+  - CAN read: assigned patient demographics, medical records, vitals, consents
+  - CAN write: medical records for assigned patients, prescriptions, appointments
+  - CAN read: ICD-10 reference codes, clinical guidelines
+  - CANNOT read: financial data, other providers' private notes
+  - MUST: document all access to patient records with a clinical reason
+
+2.3 Admin Role
+  - CAN read/write: user accounts, role assignments, system configuration
+  - CAN read: audit logs
+  - CAN read: anonymized aggregate statistics
+  - CANNOT read: raw PHI without a documented administrative need
+  - MUST NOT: modify clinical records
+  - MUST: have MFA enabled at all times
+
+2.4 Auditor Role
+  - CAN read: audit events, consent versions, access logs
+  - CAN read: anonymized patient data for compliance review
+  - CANNOT write: any clinical or patient data
+  - CANNOT modify: audit logs (append-only)
+  - MUST NOT: disclose raw audit data outside of compliance procedures
+
+================================================================================
+3. PATIENT DATA PRIVACY (HORIZONTAL ACCESS CONTROL)
+================================================================================
+
+3.1 Data Ownership
+  - Every patient owns their own data. Access by any other role must be
+    justified by a treatment relationship, consent, or legal mandate.
+
+3.2 Consent-Based Access
+  - Provider access to patient data requires an active consent record
+    with matching purpose (treatment, data_sharing, research, etc.)
+  - Cross-border data access (different jurisdiction than consent) is
+    prohibited unless the consent specifically grants cross_border purpose.
+  - Consents can be revoked by patient at any time.
+  - Upon revocation, further access for that purpose must cease within
+    24 hours.
+
+3.3 Proximity Rule
+  - A provider may only access patients assigned to them or under their
+    department's care. Casual browsing of non-assigned patient records
+    is a violation.
+
+================================================================================
+4. TIME-BASED RESTRICTIONS
+================================================================================
+
+4.1 Business Hours
+  - Standard: Sunday-Thursday 08:00-18:00 (KSA working week)
+  - Access during business hours for assigned patients requires no
+    additional justification beyond the clinical reason.
+
+4.2 Off-Hours Access (18:00-08:00 + Friday/Saturday)
+  - Any access to PHI outside business hours must be accompanied by
+    an explicit reason code (EMERGENCY, ON_CALL, SCHEDULED_MAINTENANCE).
+  - Off-hours access without a valid reason code is flagged as suspicious.
+  - Repeated off-hours access without reason (3+ within 7 days) triggers
+    mandatory review.
+
+4.3 Emergency Override (Break-Glass)
+  - Any role may override access controls in a genuine emergency.
+  - Emergency access must be logged with reason=EMERGENCY and an
+    explanation.
+  - Emergency access must be reviewed by a compliance officer within 72 hours.
+  - False or frivolous use of emergency override is a policy violation.
+
+================================================================================
+5. DATA CLASSIFICATION & HANDLING
+================================================================================
+
+5.1 Classification Levels
+  - PUBLIC: System health, version info, ICD-10 reference codes
+  - INTERNAL: Aggregated statistics, departmental schedules
+  - CONFIDENTIAL: Patient demographics, non-clinical identifiers
+  - RESTRICTED: Medical records, clinical notes, consent data
+  - CRITICAL: Audit chain data, encryption keys, MFA secrets
+
+5.2 Handling Rules by Level
+  - PUBLIC: No restrictions
+  - INTERNAL: Authentication required
+  - CONFIDENTIAL: Authentication + role-based authorization + audit log
+  - RESTRICTED: Authentication + role-based authorization + consent check
+                + purpose specification + audit log
+  - CRITICAL: Authentication + MFA + role-based authorization + audit log
+              + dual-control (two-person rule) for modifications
+
+================================================================================
+6. AUDIT & ACCOUNTABILITY
+================================================================================
+
+6.1 Mandatory Audit Events
+  The following actions MUST be logged in the audit chain:
+  - All access to RESTRICTED or CRITICAL data
+  - All authentication events (login, logout, failed login)
+  - All consent lifecycle events (create, revoke, expire)
+  - All role assignments and permission changes
+  - All emergency override activations
+  - All configuration changes
+
+6.2 Audit Integrity
+  - Audit events MUST be tamper-evident (hash chain)
+  - Audit events MUST be immutable (append-only)
+  - Audit logs must be retained for minimum 6 years (Saudi PDPL),
+    10 years (Egypt Law 151), or duration of treatment + 3 years (GDPR)
+
+================================================================================
+7. NON-COMPLIANCE & ENFORCEMENT
+================================================================================
+
+7.1 Violation Severity Levels
+  - CRITICAL: Unauthorized PHI access, audit tampering, consent bypass
+  - HIGH: Off-hours access without reason, missing audit events
+  - MEDIUM: Access without active consent, proximity rule violations
+  - LOW: Missing clinical reason documentation, stale consent access
+
+7.2 Consequences
+  - CRITICAL: Immediate account suspension, mandatory reporting to authority
+  - HIGH: Written warning, mandatory retraining, 30-day enhanced monitoring
+  - MEDIUM: Notification to department head, corrective action plan
+  - LOW: Automated alert, logged for quarterly review
+
+================================================================================
+END OF POLICY
+================================================================================
