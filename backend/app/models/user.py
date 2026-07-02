@@ -31,7 +31,7 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
-    consents = relationship("Consent", back_populates="patient", lazy="selectin")
+    consents = relationship("Consent", back_populates="patient", lazy="selectin", foreign_keys="Consent.patient_id")
 
 
 class Role(Base):
