@@ -37,7 +37,7 @@ node audit/verify.js --json             # machine-readable
 
 The 18 synthetic events exercise RBAC, horizontal access control, consent-purpose alignment, off-hours restrictions, proximity rules, break-glass (emergency override), audit-read scoping, and cross-border data governance.
 
-**[Demo recording — link to be added once uploaded]**
+**[Demo recording](https://www.loom.com/share/db7822eab389414d84361fe49f8c2165)** — policy verifier walkthrough (6:42)
 
 > This is a proof-of-concept for the policy reasoning layer, not the full platform. The verifier evaluates synthetic logs against a static policy. It does not enforce policy at runtime, connect to a live database, or replace the platform's production middleware.
 
