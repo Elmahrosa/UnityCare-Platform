@@ -185,6 +185,36 @@
     .nav-toggle-btn{ display:block; }
   }
 
+  /* ---------- TICKER ---------- */
+  .ticker-wrap{
+    background:#0c1622;
+    border-bottom:1px solid var(--panel-line);
+    overflow:hidden;
+    white-space:nowrap;
+    padding:10px 0;
+  }
+  .ticker-track{
+    display:inline-flex;
+    gap:64px;
+    animation:tickerScroll 32s linear infinite;
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    color:var(--paper-dim);
+  }
+  .ticker-track span{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+  }
+  .ticker-track .ticker-accent{
+    color:#3ea6ff;
+  }
+  @keyframes tickerScroll{
+    0%{ transform:translateX(0); }
+    100%{ transform:translateX(-50%); }
+  }
+
   /* ---------- HERO ---------- */
   .hero{
     position:relative; z-index:1;
@@ -555,6 +585,23 @@
     </div>
   </div>
 </header>
+
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span>Built in Alexandria</span>
+    <span class="ticker-accent">Registered Member · Claude Partner Network</span>
+    <span>Sovereign Healthcare Infrastructure</span>
+    <span>Self-Hosted by Default</span>
+    <span>FHIR R4 · Consent Engine · Audit Ledger</span>
+    <span>Deployed for Institutions, Not Departments</span>
+    <span>Built in Alexandria</span>
+    <span class="ticker-accent">Registered Member · Claude Partner Network</span>
+    <span>Sovereign Healthcare Infrastructure</span>
+    <span>Self-Hosted by Default</span>
+    <span>FHIR R4 · Consent Engine · Audit Ledger</span>
+    <span>Deployed for Institutions, Not Departments</span>
+  </div>
+</div>
 
 <section class="hero" id="platform">
   <div class="wrap">
