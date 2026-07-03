@@ -21,15 +21,24 @@ function getToken(): string | null {
   );
 }
 
-async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
+function requestId(): string {
+  return `req_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+async function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+async function request<T>(method: string, path: string, body?: unknown, attempt = 1): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
+    "X-Request-Id": requestId(),
   };
   if (token) headers["Authorization"] = `Bearer ${token}`;
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
+  const timeout = setTimeout(() => controller.abort(), 10000);
 
   try {
     const res = await fetch(`${API_BASE}${path}`, {
@@ -58,6 +67,16 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
     clearTimeout(timeout);
     if (DEMO_MODE) {
       return mockFallback<T>(method, path, body);
+    }
+    const typed = err as Error;
+    const isRetryable =
+      typed.name === "AbortError" ||
+      typed.message.includes("Failed to fetch") ||
+      typed.message.includes("NetworkError") ||
+      typed.message.includes("5");
+    if (isRetryable && attempt < 3) {
+      await sleep(Math.min(200 * 2 ** attempt, 2000));
+      return request<T>(method, path, body, attempt + 1);
     }
     throw err;
   }
@@ -101,11 +120,11 @@ function mockFallback<T>(method: string, path: string, body?: unknown): T {
   }
 
   if (method === "GET" && path.startsWith("/appointments/doctor/")) {
-    return { appointments: mockAppointments } as T;
+    return mockAppointments as T;
   }
 
   if (method === "GET" && path.startsWith("/appointments/patient/")) {
-    return { appointments: mockAppointments.slice(0, 2) } as T;
+    return mockAppointments.slice(0, 2) as T;
   }
 
   if (method === "POST" && path.startsWith("/appointments")) {

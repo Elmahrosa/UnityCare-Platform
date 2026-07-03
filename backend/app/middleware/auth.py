@@ -29,6 +29,15 @@ def require_role(*roles: UserRole):
         if current_user.role not in roles:
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions")
         return current_user
+    async def role_with_mfa(current_user: User = Depends(role_checker)):
+        if current_user.role in (UserRole.ADMIN, UserRole.PROVIDER) and not current_user.mfa_enabled:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="MFA must be enabled for this role. Call POST /auth/mfa/setup to configure.",
+            )
+        return current_user
+    if UserRole.ADMIN in roles or UserRole.PROVIDER in roles:
+        return role_with_mfa
     return role_checker
 
 
