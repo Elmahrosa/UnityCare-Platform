@@ -7,8 +7,11 @@ from fastapi.responses import JSONResponse
 from app.config import settings
 from app.database import init_db, engine
 from app.api.v1 import auth_router, patients_router, consents_router, audit_router, admin_router, medical_router
+from app.middleware.request_id import RequestIDMiddleware
+from app.middleware.logging import JSONLogMiddleware
 from app.middleware.rate_limit import RateLimitMiddleware
 from app.middleware.security_headers import SecurityHeadersMiddleware
+from app.middleware.metrics import MetricsMiddleware, metrics_endpoint
 
 logger = logging.getLogger("unitycare")
 
@@ -41,15 +44,18 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.add_middleware(RequestIDMiddleware)
+app.add_middleware(JSONLogMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allow_headers=["Authorization", "Content-Type", "Accept", "X-Requested-With"],
+    allow_headers=["Authorization", "Content-Type", "Accept", "X-Requested-With", "X-Request-Id"],
 )
 app.add_middleware(RateLimitMiddleware, max_requests=settings.rate_limit_per_minute, redis_url=settings.redis_url)
 app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(MetricsMiddleware)
 
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(patients_router, prefix="/api/v1")
@@ -72,6 +78,31 @@ async def health():
         "status": "healthy" if db_ok else "degraded",
         "database": "connected" if db_ok else "disconnected",
         "app": "UnityCare MVP",
+    }
+
+
+@app.get("/ready")
+async def ready():
+    db_ok = False
+    try:
+        async with engine.connect() as conn:
+            await conn.execute(sqlalchemy.text("SELECT 1"))
+            db_ok = True
+    except Exception:
+        db_ok = False
+    redis_ok = True
+    if settings.redis_url:
+        try:
+            import redis.asyncio as aioredis
+            r = aioredis.from_url(settings.redis_url, socket_connect_timeout=2)
+            await r.ping()
+            await r.aclose()
+        except Exception:
+            redis_ok = False
+    return {
+        "ready": db_ok and redis_ok,
+        "database": "connected" if db_ok else "disconnected",
+        "redis": "connected" if redis_ok else "disconnected",
     }
 
 
@@ -100,6 +131,11 @@ async def version():
         "framework": "FastAPI",
         "python": "3.12",
     }
+
+
+@app.get("/metrics")
+async def metrics():
+    return await metrics_endpoint()
 
 
 @app.exception_handler(Exception)

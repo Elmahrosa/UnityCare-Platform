@@ -1,86 +1,74 @@
 # Contributing to UnityCare
 
-Thank you for your interest in contributing to UnityCare! We welcome contributions from everyone — whether you're fixing a bug, proposing a feature, or improving documentation.
+Thank you for your interest. This document covers everything you need to contribute effectively.
 
-## How to Report Bugs
+## Quick Start
 
-If you find a bug, please open a [GitHub Issue](https://github.com/Elmahrosa/UnityCare/issues) using the **Bug Report** template. Include:
+```bash
+# Backend
+cd backend && python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env        # edit DATABASE_URL, JWT_SECRET
+uvicorn app.main:app --reload --port 8000
 
-- A clear, descriptive title.
-- Steps to reproduce the issue.
-- Expected vs. actual behavior.
-- Screenshots or logs if applicable.
-- Environment details (OS, browser, Python/Node.js version).
-
-## How to Suggest Features
-
-Open a [GitHub Issue](https://github.com/Elmahrosa/UnityCare/issues) using the **Feature Request** template. Describe the problem you want to solve and your proposed solution. We encourage discussion before implementation.
-
-## Development Setup
-
-### Backend
-
-- **Python 3.12+** is required.
-- Navigate to `backend/` and create a virtual environment:
-  ```bash
-  python -m venv .venv
-  source .venv/bin/activate  # or .venv\Scripts\activate on Windows
-  ```
-- Install dependencies:
-  ```bash
-  pip install -r requirements.txt
-  ```
-
-### Frontend
-
-- **Node.js 22+** is required.
-- Navigate to `frontend/` and install dependencies:
-  ```bash
-  npm install
-  ```
-- Start the development server:
-  ```bash
-  npm run dev
-  ```
-
-## Code Style
-
-- **Python**: Follow [PEP 8](https://peps.python.org/pep-0008/). We enforce style via `ruff`. Run `ruff check app/` before committing.
-- **TypeScript**: Strict mode is enabled in `tsconfig.json`. Run `npm run lint` and `npm run typecheck` to catch issues early.
-
-## Commit Messages
-
-We follow [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-feat: add patient appointment scheduling
-fix: resolve 404 on doctor profile page
-docs: update API endpoints in README
+# Frontend
+cd frontend && npm install
+cp .env.example .env.local  # set NEXT_PUBLIC_API_URL
+npm run dev
 ```
 
-Use prefixes like `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `ci`.
+## Before You Commit
+
+```bash
+# Backend
+cd backend && pip install ruff && ruff check app/
+
+# Frontend
+cd frontend && npm run lint && npx tsc --noEmit && npm test
+```
 
 ## Pull Request Process
 
-1. Fork the repository and create a feature branch (`feat/your-feature` or `fix/your-bug`).
-2. Make your changes, keeping commits small and focused.
-3. Run linting and type checks locally.
-4. Write or update tests as needed.
-5. Open a Pull Request against `main`. Describe what you changed and why.
-6. A maintainer will review your PR. Address any feedback before merge.
+1. Create a feature branch: `feat/description` or `fix/description`
+2. Make focused commits using [Conventional Commits](https://www.conventionalcommits.org/):
+   - `feat:` new feature
+   - `fix:` bug fix
+   - `docs:` documentation
+   - `refactor:` code change without feature/fix
+   - `test:` adding tests
+   - `chore:` maintenance
+   - `ci:` CI/CD changes
+3. Run all checks from "Before You Commit" above
+4. Open PR against `main` with a clear description of what and why
+5. A maintainer will review — address all feedback before merge
+
+## Code Style
+
+- **Python**: PEP 8 enforced via `ruff`. Run `ruff check app/` before every commit.
+- **TypeScript**: Strict mode in `tsconfig.json`. Run `npx tsc --noEmit` to check types.
+- **No commented-out code** — delete it. Git history preserves it if needed.
+- **No hardcoded secrets** — use env vars. Add placeholders to `.env.example`.
 
 ## Testing
 
-- **Frontend tests** use Jest. Run them with:
-  ```bash
-  npm test
-  ```
-- All tests must pass before a PR is merged. Add tests for new functionality.
+- Backend: `cd backend && python -m pytest tests/ -v --tb=short`
+- Frontend: `cd frontend && npm test`
+- All tests must pass before merge. Add tests for new functionality.
 
-## Security Vulnerabilities
+## Documentation
 
-**Do not** report security issues publicly via GitHub Issues. Instead, email us at **security@elmahrosa.org** with details. We will respond promptly and coordinate a responsible disclosure.
+- Update relevant docs (`DEPLOYMENT.md`, `MONITORING.md`, etc.) when changing behavior
+- Keep `CHANGELOG.md` updated via `./scripts/release.sh`
+- For API changes, update the relevant endpoint documentation
 
----
+## Security
 
-Thank you for helping make UnityCare better for everyone!
+**Do not** report security issues publicly via GitHub Issues. Email **security@elmahrosa.org**. We will respond within 24 hours and coordinate disclosure.
+
+## Getting Help
+
+- Open a GitHub Discussion for questions
+- Tag maintainers on PRs for review
+- See `ARCHITECTURE.md` for system overview
+
+Thank you for contributing.
