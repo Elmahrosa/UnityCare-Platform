@@ -418,6 +418,41 @@
       </div>
     </section>
 
+    <section id="evidence" class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="section-header">
+          <h2>Evidence</h2>
+          <p>Concrete facts about the live deployment. Not roadmap &mdash; shipped code.</p>
+        </div>
+        <div style="max-width:600px;margin:0 auto;border:1px solid var(--line);border-radius:16px;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+            <div style="padding:12px 18px;background:rgba(255,255,255,0.06);font-weight:700;font-size:13px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Capability</div>
+            <div style="padding:12px 18px;background:rgba(255,255,255,0.06);font-weight:700;font-size:13px;border-bottom:1px solid var(--line);">Status</div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Production deployment</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Public GitHub repository</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Railway health monitoring</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">54+ automated tests</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">JWT authentication + MFA</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">RBAC + horizontal access control</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">FHIR R4 patient models</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">SHA-256 audit chain</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Research compliance API</div>
+            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
+            <div style="padding:10px 18px;font-size:14px;border-right:1px solid var(--line);">CI/CD pipeline (GitHub Actions)</div>
+            <div style="padding:10px 18px;font-size:13px;"><span class="status-badge status-live">Live</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="metrics" class="section">
       <div class="container">
         <div class="section-header">
@@ -483,6 +518,54 @@
           <p style="color:var(--muted);font-size:14px;">
             Claude explains decisions. It does not make them. All compliance evaluations are deterministic and auditable.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="ai-responsibility" class="section" style="padding-bottom:0;">
+      <div class="container">
+        <div class="section-header">
+          <h2>AI Responsibility</h2>
+          <p>How we use Claude and where the boundaries are.</p>
+        </div>
+        <div style="max-width:700px;margin:0 auto;padding:20px 24px;border:1px solid rgba(45,212,191,0.2);border-radius:16px;background:rgba(45,212,191,0.04);">
+          <p style="font-size:15px;line-height:1.7;color:var(--muted);">
+            UnityCare uses <strong>deterministic policy evaluation</strong> for all compliance and access control decisions.
+            Claude generates <strong>audit-ready explanations and summaries</strong> from those deterministic outputs.
+            <strong>Claude does not make compliance or regulatory decisions.</strong>
+            Every access verdict is rule-based, reproducible, and independently verifiable.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo-example" class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Real audit example</h2>
+          <p>A researcher requests access to the Gladstone PPI dataset. Claude generates the compliance narrative.</p>
+        </div>
+        <div style="max-width:700px;margin:0 auto;border:1px solid var(--line);border-radius:16px;overflow:hidden;">
+          <div style="padding:16px 20px;background:rgba(255,255,255,0.04);border-bottom:1px solid var(--line);font-size:13px;font-weight:600;">
+            <span class="status-badge status-live">Demo</span> &nbsp; Access Request &mdash; Gladstone PPI Dataset
+          </div>
+          <div style="padding:16px 20px;border-bottom:1px solid var(--line);font-size:13px;">
+            <div style="display:grid;grid-template-columns:100px 1fr;gap:6px 16px;">
+              <span style="color:var(--muted);">Study:</span><span>GLAD-2026-001 &mdash; SARS-CoV-2 Host Protein Interaction Network (Krogan Lab)</span>
+              <span style="color:var(--muted);">Request:</span><span>Download full interactome dataset</span>
+              <span style="color:var(--muted);">Purpose:</span><span>Research</span>
+              <span style="color:var(--muted);">Decision:</span><span style="color:var(--accent-2);font-weight:700;">Approved</span>
+            </div>
+          </div>
+          <div style="padding:16px 20px;font-size:13px;">
+            <div style="color:var(--muted);margin-bottom:8px;">Claude Narrative:</div>
+            <div style="font-style:italic;color:var(--text);line-height:1.7;border-left:3px solid var(--gold);padding-left:16px;">
+              "Access GRANTED for Dr. Ahmed Al-Qahtani to study 'SARS-CoV-2 Host Protein Interaction Network'
+              for purpose 'research'. All 7 compliance dimensions satisfied: IRB approved (expires 2027-10-31),
+              study active, role authorized (Provider), cohort accessible (open), purpose aligned with cohort
+              configuration, geographic scope compatible (US), data classification appropriate (confidential)."
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -598,6 +681,44 @@
         </div>
         <div style="text-align:center;margin-top:16px;">
           <a href="https://health.elmahrosa.org/status" target="_blank" rel="noopener" style="color:var(--accent);font-size:13px;">Full status page &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap" class="section" style="padding-bottom:0;">
+      <div class="container">
+        <div class="section-header">
+          <h2>Roadmap</h2>
+          <p>Completed, in progress, and planned capabilities.</p>
+        </div>
+        <div style="max-width:650px;margin:0 auto;">
+          <div style="margin-bottom:24px;">
+            <div style="font-size:13px;font-weight:700;color:var(--accent-2);margin-bottom:10px;">Completed</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(45,212,191,0.2);background:rgba(45,212,191,0.06);font-size:12px;color:var(--accent-2);">Compliance Engine</span>
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(45,212,191,0.2);background:rgba(45,212,191,0.06);font-size:12px;color:var(--accent-2);">SHA-256 Audit Chain</span>
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(45,212,191,0.2);background:rgba(45,212,191,0.06);font-size:12px;color:var(--accent-2);">Claude Audit Narratives</span>
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(45,212,191,0.2);background:rgba(45,212,191,0.06);font-size:12px;color:var(--accent-2);">FHIR R4 Support</span>
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(45,212,191,0.2);background:rgba(45,212,191,0.06);font-size:12px;color:var(--accent-2);">RBAC + MFA</span>
+            </div>
+          </div>
+          <div style="margin-bottom:24px;">
+            <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:10px;">In Progress</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(212,168,83,0.2);background:rgba(212,168,83,0.06);font-size:12px;color:var(--gold);">Research APIs</span>
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(212,168,83,0.2);background:rgba(212,168,83,0.06);font-size:12px;color:var(--gold);">Synthetic Research Models</span>
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(212,168,83,0.2);background:rgba(212,168,83,0.06);font-size:12px;color:var(--gold);">Research Dataset Governance</span>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px;">Planned</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;color:var(--muted);">Institution Deployments</span>
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;color:var(--muted);">External Integrations</span>
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;color:var(--muted);">Production Research Workflows</span>
+              <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;color:var(--muted);">Multi-Institution Collaboration</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
