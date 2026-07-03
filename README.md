@@ -1,99 +1,163 @@
-# UCH Sovereign Core
+# UnityCare Platform — Research Compliance Infrastructure
 
-Healthcare compliance and audit platform by **Elmahrosa International**. Part of the Elmahrosa TEOS stack (Trust, Ethics, Oversight, Sovereignty). Built for clinical/health data governance — consent management, tamper-evident audit trails, role-based access control, FHIR R4 interoperability, and policy-driven access enforcement across regulated health environments.
+Deterministic policy evaluation with Claude-generated audit narratives for regulated biomedical data.
+
+Built on a production-hardened healthcare platform: SHA-256 audit chains, FHIR R4, RBAC, MFA, consent management — extended for multi-site study governance and IRB-compliant data sharing.
+
+**Live deployment:** [backend-production-9705.up.railway.app](https://backend-production-9705.up.railway.app)  
+**Source:** [github.com/Elmahrosa/UnityCare-Platform](https://github.com/Elmahrosa/UnityCare-Platform)
 
 ---
 
-## Built with Claude: Life Sciences, Builder Track
+## Problem
 
-The `audit/` directory contains a **policy-consistency reasoning agent** — this is the hackathon deliverable.
+When life sciences institutions like Gladstone Institutes share datasets (e.g., Krogan Lab SARS-CoV-2 PPI networks, Pollard Lab MPRA data) with collaborators, there is **no audit trail** for who accessed what, for what purpose, and whether that access was IRB-compliant. An IRB audit today cannot answer "who downloaded the SARS-CoV-2 interactome and why?"
 
-### Problem
+## Solution
 
-Standard audit logging tells you *who accessed what and when*. It does not tell you whether that access was *allowed*. In a healthcare setting, determining compliance requires reasoning across multiple dimensions simultaneously:
+UnityCare adds a **Claude-powered compliance layer** on top of a production-hardened platform. Every data access request evaluates **7 policy dimensions** simultaneously:
 
-- Does the actor's role permit this action on this resource type? (RBAC)
-- Does the patient own the data, or is the actor assigned to the patient? (horizontal access control)
-- Is there an active consent with a matching purpose for this specific access? (consent-policy alignment)
-- If consent exists for "treatment", does it extend to "cross-border data sharing"? (purpose mismatch)
-- Is this off-hours access accompanied by a valid emergency or on-call reason? (time-based policy)
-- Has this actor triggered the off-hours threshold requiring mandatory review? (frequency escalation)
+| Dimension | Description |
+|-----------|-------------|
+| IRB Status | Approval current and not expired |
+| Study Active | Study enrollment not closed |
+| Role Authorization | Requester has appropriate role |
+| Cohort Scope | Access respects cohort blinding/control |
+| Purpose Alignment | Requested use matches allowed purposes |
+| Geographic Scope | Data transfer complies with jurisdiction |
+| Data Classification | Sensitivity level permits access |
 
-This is a **genuine multi-factor reasoning task**, not a hash lookup or regex match. The verifier reads `audit/policy.txt` (a structured healthcare access policy document) and `audit/access_logs.json` (synthetic log entries with deliberately mixed signals — compliant accesses next to subtle violations), then outputs one of three verdicts per event:
+Claude transforms the deterministic verdict into an **IRB-ready audit narrative** — human-readable explanations that compliance officers can actually use.
 
-- ✅ Compliant — all policy dimensions satisfied
-- ⚠️ Warning — policy-advisory condition (e.g., off-hours without reason code)
-- ❓ Violation — one or more policy rules breached
+---
 
-Each verdict includes a one-sentence explanation identifying the specific rule triggered.
+## Demo
 
-### Run it
+A researcher requests access to the Krogan Lab SARS-CoV-2 PPI interactome:
 
-```bash
-node audit/verify.js                    # full report
-node audit/verify.js --summary-only      # condensed
-node audit/verify.js --json             # machine-readable
+```
+Study:      GLAD-2026-001 — SARS-CoV-2 Host Protein Interaction Network
+Request:    Download full interactome dataset
+Purpose:    Research
+Decision:   ✅ Approved
+
+Claude Narrative:
+"Access GRANTED for Dr. Ahmed Al-Qahtani to study 'SARS-CoV-2 Host Protein 
+Interaction Network' for purpose 'research'. All 7 compliance dimensions 
+satisfied: IRB approved (expires 2027-10-31), study active, role authorized 
+(Provider), cohort accessible (open), purpose aligned with cohort configuration, 
+geographic scope compatible (US), data classification appropriate (confidential)."
 ```
 
-The 18 synthetic events exercise RBAC, horizontal access control, consent-purpose alignment, off-hours restrictions, proximity rules, break-glass (emergency override), audit-read scoping, and cross-border data governance.
+Try it: `POST /api/v1/research/access`
 
-**[Demo recording](https://www.loom.com/share/db7822eab389414d84361fe49f8c2165)** — policy verifier walkthrough (6:42)
+---
 
-> This is a proof-of-concept for the policy reasoning layer, not the full platform. The verifier evaluates synthetic logs against a static policy. It does not enforce policy at runtime, connect to a live database, or replace the platform's production middleware.
+## Built with Claude
+
+UnityCare uses **Claude Code** (Anthropic) for:
+
+- Backend API architecture and implementation
+- Security middleware and audit chain design
+- Policy reasoning engine logic
+- Test generation (54+ tests across 6 modules)
+- Documentation generation
+
+**Claude Science** is used for:
+
+- Research compliance explanation generation
+- Natural-language audit trail narratives
+- IRB-ready compliance reports
+
+### AI Responsibility
+
+UnityCare uses **deterministic policy evaluation** for all compliance and access control decisions. Claude generates **audit-ready explanations and summaries** from those deterministic outputs. **Claude does not make compliance or regulatory decisions.** Every access verdict is rule-based, reproducible, and independently verifiable.
 
 ---
 
 ## Platform Status
 
-**Verified as of July 2026:**
-
 | Dimension | Status |
 |---|---|
-| **Backend tests** | 39 tests across 6 modules: auth (10), consent (8), audit chain integrity (5), medical/ICD-10 (11), FHIR Patient CRUD (5), middleware/access control (6) |
-| **Frontend tests** | 15 tests across 5 suites (login, register, patient, doctor, admin) |
-| **Frontend build** | 0 errors (Next.js 15.5, TypeScript strict) |
-| **MFA enforcement** | TOTP enforcement on admin and provider roles; setup/enable/disable/verify endpoints |
-| **CI/CD** | GitHub Actions: lint + test + Docker build on push/PR; Railway deploy on main |
-| **Security headers** | 9 headers: HSTS, CSP (extended for Railway/assets), XFO, X-Content-Type-Options, X-XSS-Protection, Cache-Control, Pragma, Referrer-Policy, Permissions-Policy |
-| **Rate limiting** | Redis-backed fixed-window with in-memory graceful fallback |
-| **Horizontal access control** | Patient-scoped data access (8 endpoints); cross-patient access returns 403 |
-| **Audit chain** | SHA-256 hash-linked events; `verify_chain()` detects tampering |
-| **Consent management** | Versioned, jurisdiction-aware, purpose-scoped (treatment/data_sharing/ai_processing/research/cross_border) |
-| **ICD-10-CM** | Lookup table with search API; codes on MedicalRecord model |
-| **FHIR R4** | Patient resource CRUD, search with user_id scoping |
-| **Legacy Dependabot alerts** | 8 alerts in `modules/hospital-core/` — confirmed inactive, excluded from scans |
-| **Migrations** | Alembic (async) with initial schema; ICD-10 table created via lifespan handler |
-
----
-
-## 🤖 Built with Claude
-
-This project was developed using **Claude Code** (Anthropic) for:
-- Backend API architecture and implementation
-- Security middleware and audit chain design
-- Policy reasoning engine logic
-- Test generation (54 tests across 6 modules)
-- Documentation generation
-
-**Claude Science** is used for:
-- Research compliance explanation generation
-- Natural-language audit trail narratives
-- IRB-ready compliance reports
+| **Production deployment** | ✅ Live on Railway |
+| **Backend tests** | 39+ across 6 modules |
+| **Frontend tests** | 15 across 5 suites |
+| **MFA enforcement** | TOTP on admin and provider roles |
+| **CI/CD** | GitHub Actions + Railway auto-deploy |
+| **Security headers** | 9 headers (HSTS, CSP, XFO, etc.) |
+| **Rate limiting** | Redis-backed with in-memory fallback |
+| **Horizontal access control** | Patient-scoped on 8 endpoints |
+| **Audit chain** | SHA-256 hash-linked, tamper-evident |
+| **Research compliance API** | ✅ Studies, cohorts, access evaluation |
+| **Consent management** | Versioned, jurisdiction-aware, purpose-scoped |
+| **FHIR R4** | Patient resource CRUD with search |
+| **ICD-10-CM** | Lookup table with search API |
 
 ---
 
 ## Architecture
 
-- **Deterministic verdicts.** Policy evaluation is rule-based and deterministic — same inputs always produce the same verdict. No ML, no probabilistic inference.
-- **SHA-256 chained audit trails.** Audit events are linked via `previous_hash → event_hash` chain using `sha256(prev_hash + canonical_json(event_data))`. Chain integrity is verifiable via `GET /audit/verify`. Tampering with any historical event breaks the chain.
-- **Fail-closed design.** Access requires explicit authorization. Missing consent, expired token, unlinked patient profile, or missing role all produce 403/401. No default-permit path exists at the middleware level.
-- **Layered enforcement.** Security headers → rate limiting → JWT authentication → RBAC → horizontal access control → consent check. Each layer is independent and can fail independently.
+```
+Next.js (Frontend)
+     ↓
+FastAPI (Policy Engine + API)
+     ↓
+Claude (Audit Narrative Generation)
+     ↓
+SHA-256 Ledger (Immutable Audit Chain)
+     ↓
+PostgreSQL (Data + Audit Storage)
+```
+
+- **Deterministic verdicts.** Policy evaluation is rule-based — same inputs always produce the same verdict.
+- **SHA-256 chained audit trails.** Events linked via `previous_hash → event_hash` chain. Chain integrity verifiable via `GET /api/v1/audit/verify`.
+- **Fail-closed design.** No default-permit path. Missing consent, expired token, or missing role produces 403/401.
+- **Layered enforcement:** Security headers → rate limiting → JWT → RBAC → horizontal access control → consent → compliance evaluation.
+
+---
+
+## Roadmap
+
+**Completed:** Compliance Engine, SHA-256 Audit Chain, Claude Audit Narratives, FHIR R4, RBAC + MFA
+
+**In Progress:** Research APIs, Synthetic Research Models, Research Dataset Governance
+
+**Planned:** Institution Deployments, External Integrations, Production Research Workflows, Multi-Institution Collaboration
+
+---
+
+## Quick Start
+
+```bash
+# Backend
+cd backend
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env   # edit DATABASE_URL, JWT_SECRET
+uvicorn app.main:app --reload --port 8000
+
+# Frontend
+cd frontend
+cp .env.example .env.local   # set NEXT_PUBLIC_API_URL
+npm install && npm run dev
+```
+
+### Seed demo data
+
+```bash
+python backend/scripts/seed.py              # users + patients + consents
+python backend/scripts/seed_research.py     # Gladstone studies + cohorts
+```
 
 ---
 
 ## Links
 
-- **Deployment (backend):** [backend-production-9705.up.railway.app](https://backend-production-9705.up.railway.app)
-- **Deployment (frontend):** [frontend-production-c053.up.railway.app](https://frontend-production-c053.up.railway.app)
+- **API Reference:** [backend-production-9705.up.railway.app/docs](https://backend-production-9705.up.railway.app/docs)
+- **System Health:** [backend-production-9705.up.railway.app/health](https://backend-production-9705.up.railway.app/health)
+- **Research API:** `POST /api/v1/research/access`
 - **Source:** [github.com/Elmahrosa/UnityCare-Platform](https://github.com/Elmahrosa/UnityCare-Platform)
-- **Contact:** [contact@elmahrosa.org](mailto:contact@elmahrosa.org)
+
+---
+
+*Built by Elmahrosa International — participating in Anthropic's Claude Partner Network.*
