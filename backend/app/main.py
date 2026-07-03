@@ -6,7 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.config import settings
 from app.database import init_db, engine
-from app.api.v1 import auth_router, patients_router, consents_router, audit_router, admin_router, medical_router
+from app.models import research  # noqa: F401 — register models with SQLAlchemy metadata
+from app.api.v1 import auth_router, patients_router, consents_router, audit_router, admin_router, medical_router, research_router
 from app.middleware.request_id import RequestIDMiddleware
 from app.middleware.logging import JSONLogMiddleware
 from app.middleware.rate_limit import RateLimitMiddleware
@@ -63,6 +64,7 @@ app.include_router(consents_router, prefix="/api/v1")
 app.include_router(audit_router, prefix="/api/v1")
 app.include_router(admin_router, prefix="/api/v1")
 app.include_router(medical_router, prefix="/api/v1")
+app.include_router(research_router, prefix="/api/v1")
 
 
 @app.get("/health")

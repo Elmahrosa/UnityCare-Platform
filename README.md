@@ -66,6 +66,22 @@ The 18 synthetic events exercise RBAC, horizontal access control, consent-purpos
 
 ---
 
+## 🤖 Built with Claude
+
+This project was developed using **Claude Code** (Anthropic) for:
+- Backend API architecture and implementation
+- Security middleware and audit chain design
+- Policy reasoning engine logic
+- Test generation (54 tests across 6 modules)
+- Documentation generation
+
+**Claude Science** is used for:
+- Research compliance explanation generation
+- Natural-language audit trail narratives
+- IRB-ready compliance reports
+
+---
+
 ## Architecture
 
 - **Deterministic verdicts.** Policy evaluation is rule-based and deterministic — same inputs always produce the same verdict. No ML, no probabilistic inference.
@@ -77,6 +93,7 @@ The 18 synthetic events exercise RBAC, horizontal access control, consent-purpos
 
 ## Links
 
-- **Deployment:** [health.elmahrosa.org](https://health.elmahrosa.org)
+- **Deployment (backend):** [backend-production-9705.up.railway.app](https://backend-production-9705.up.railway.app)
+- **Deployment (frontend):** [frontend-production-c053.up.railway.app](https://frontend-production-c053.up.railway.app)
 - **Source:** [github.com/Elmahrosa/UnityCare-Platform](https://github.com/Elmahrosa/UnityCare-Platform)
 - **Contact:** [contact@elmahrosa.org](mailto:contact@elmahrosa.org)
