@@ -1,682 +1,1016 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UnityCare Platform — Elmahrosa International</title>
-  <meta name="description" content="UnityCare is deployable sovereign healthcare infrastructure for hospitals, health networks, and health systems. Built by Elmahrosa International." />
-  <meta property="og:title" content="UnityCare Platform — Sovereign Healthcare Infrastructure" />
-  <meta property="og:description" content="Healthcare is sovereign. Your infrastructure should be too." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://health.elmahrosa.org" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UnityCare Platform — Sovereign Healthcare Infrastructure | Elmahrosa International</title>
+<meta name="description" content="UnityCare is deployable sovereign healthcare infrastructure for hospitals, ministries, and health systems. No SaaS lock-in. Full ownership. Built by Elmahrosa International on the TEOS stack.">
+<meta property="og:title" content="UnityCare Platform — Sovereign Healthcare Infrastructure">
+<meta property="og:description" content="Healthcare is sovereign. Your infrastructure should be too.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://health.elmahrosa.org">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Cairo:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A1420;
+    --ink-soft:#101E30;
+    --panel:#0F1D2C;
+    --panel-line:#223145;
+    --paper:#EFE9DD;
+    --paper-dim:#B9C2CC;
+    --teal:#2E8B8B;
+    --teal-bright:#4FC1C1;
+    --gold:#C9A24B;
+    --gold-soft:#E4C878;
+    --font-display:'Space Grotesk', 'Cairo', sans-serif;
+    --font-body:'Inter', 'Cairo', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
 
-  <style>
-    :root {
-      --bg: #05101f; --bg-soft: #0b1a30;
-      --card: rgba(255,255,255,0.05); --line: rgba(255,255,255,0.10);
-      --text: #eef4ff; --muted: #b0c4de;
-      --accent: #38bdf8; --accent-2: #2dd4bf;
-      --gold: #d4a853;
-      --shadow: 0 20px 50px rgba(0,0,0,0.4);
-      --radius: 20px; --max: 1180px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: radial-gradient(ellipse at 80% 0%, rgba(56,189,248,0.15), transparent 50%), radial-gradient(ellipse at 20% 100%, rgba(45,212,191,0.10), transparent 40%), linear-gradient(180deg, #040e1c 0%, #09162a 100%);
-      color: var(--text); line-height: 1.65; min-height: 100vh;
-    }
-    a { color: inherit; text-decoration: none; }
-    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
-    .topbar {
-      position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      background: rgba(5, 16, 31, 0.78); border-bottom: 1px solid var(--line);
-    }
-    .nav { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 0; }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 18px; letter-spacing: 0.3px; }
-    .brand-badge {
-      width: 38px; height: 38px; border-radius: 10px;
-      display: grid; place-items: center;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #021018; font-weight: 800; font-size: 14px;
-      box-shadow: 0 0 20px rgba(56,189,248,0.2);
-    }
-    .nav-links { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-    .nav-links a {
-      padding: 6px 12px; border-radius: 8px; color: var(--muted); font-size: 13px; font-weight: 500;
-      transition: all 0.2s;
-    }
-    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
-    .nav-links a.ext-link::after { content: '\2197'; margin-left: 3px; font-size: 11px; }
-    .cpn-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 3px 8px; border-radius: 6px;
-      background: rgba(255,255,255,0.06); border: 1px solid var(--gold);
-      color: var(--gold); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.5px; text-transform: uppercase;
-    }
-    .lang-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 4px 8px; border-radius: 6px;
-      border: 1px solid var(--line); background: rgba(255,255,255,0.03);
-      color: var(--muted); font-size: 11px; cursor: pointer; transition: all 0.2s; user-select: none;
-    }
-    .lang-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .lang-btn svg { width: 12px; height: 12px; }
-    .lang-btn svg path, .lang-btn svg circle { stroke: currentColor; fill: none; stroke-width: 1.5; }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      padding: 10px 16px; border-radius: 10px;
-      border: 1px solid var(--line); color: var(--text);
-      background: rgba(255,255,255,0.04); transition: all 0.2s ease;
-      cursor: pointer; font-weight: 600; font-size: 13px;
-    }
-    .btn:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.25); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #03131a; border: none; font-weight: 700; }
-    .btn-primary:hover { box-shadow: 0 8px 28px rgba(56,189,248,0.3); }
-    .btn-outline-light { border-color: rgba(255,255,255,0.2); }
-    .btn-sm { padding: 7px 14px; font-size: 12px; }
-    .hero { padding: 72px 0 48px; position: relative; }
-    .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--line), transparent); }
-    .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 10px; padding: 7px 12px;
-      border-radius: 999px; border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03); color: var(--muted); font-size: 13px; margin-bottom: 20px;
-    }
-    .eyebrow-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
-    h1 { font-size: clamp(32px, 5.5vw, 62px); line-height: 1.08; margin: 0 0 16px; letter-spacing: -1.5px; }
-    h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero p { font-size: 17px; color: var(--muted); max-width: 620px; margin: 0 0 28px; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
-    .pill-tags { display: flex; flex-wrap: wrap; gap: 8px; color: var(--muted); font-size: 12px; }
-    .pill-tags span { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.03); }
-    .hero-card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
-      border: 1px solid var(--line); border-radius: 24px; padding: 26px;
-      box-shadow: var(--shadow); backdrop-filter: blur(4px);
-    }
-    .hero-card h3 { margin: 0 0 6px; font-size: 20px; }
-    .hero-card .sub { color: var(--muted); font-size: 14px; margin-bottom: 16px; }
-    .spec-row { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); font-size: 14px; }
-    .spec-row:first-of-type { border-top: none; }
-    .spec-label { color: var(--muted); }
-    .spec-value { font-weight: 600; }
-    .section { padding: 56px 0; }
-    .section-header { text-align: center; margin-bottom: 44px; }
-    .section-header h2 { font-size: clamp(26px, 3.5vw, 38px); margin-bottom: 10px; letter-spacing: -0.8px; }
-    .section-header p { color: var(--muted); max-width: 640px; margin: 0 auto; font-size: 16px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .card {
-      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px;
-      transition: all 0.3s ease;
-    }
-    .card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.25); }
-    .card h3 { font-size: 18px; margin-bottom: 8px; }
-    .card p { color: var(--muted); font-size: 14px; line-height: 1.6; }
-    .icon-box {
-      display: inline-grid; place-items: center;
-      width: 42px; height: 42px; border-radius: 12px; margin-bottom: 14px;
-      background: linear-gradient(135deg, rgba(56,189,248,0.15), rgba(45,212,191,0.10));
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .icon-box svg { width: 20px; height: 20px; }
-    .icon-box svg path, .icon-box svg circle, .icon-box svg rect { stroke: var(--accent); fill: none; stroke-width: 1.5; }
-    .arch-flow {
-      display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
-      padding: 24px; border: 1px solid var(--line); border-radius: 16px;
-      background: rgba(255,255,255,0.02); font-size: 13px;
-    }
-    .arch-flow .node {
-      padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line);
-      background: rgba(255,255,255,0.04); text-align: center; min-width: 100px;
-    }
-    .arch-flow .node .label { color: var(--muted); font-size: 11px; }
-    .arch-flow .node .domain { color: var(--accent); font-size: 13px; font-weight: 600; }
-    .arch-flow .node.highlight { border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.06); }
-    .arch-flow .arrow { color: var(--muted); font-size: 18px; }
-    .arch-note { text-align: center; margin-top: 12px; font-size: 12px; color: var(--muted); }
-    .status-badge {
-      display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.3px;
-    }
-    .status-live { background: rgba(45,212,191,0.15); color: var(--accent-2); border: 1px solid rgba(45,212,191,0.2); }
-    .audit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .audit-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 16px; padding: 20px; text-align: center; }
-    .audit-card .audit-icon { width: 48px; height: 48px; margin: 0 auto 12px; }
-    .audit-card .audit-icon svg { width: 48px; height: 48px; }
-    .audit-card .audit-icon svg path, .audit-card .audit-icon svg circle { stroke: var(--accent-2); fill: none; stroke-width: 1.2; }
-    .audit-card h4 { font-size: 16px; margin-bottom: 6px; }
-    .audit-card p { color: var(--muted); font-size: 13px; }
-    .audit-summary { margin-top: 32px; padding: 20px; border: 1px solid rgba(45,212,191,0.2); border-radius: 16px; background: rgba(45,212,191,0.04); text-align: center; }
-    .audit-summary p { color: var(--muted); font-size: 14px; }
-    .audit-summary strong { color: var(--accent-2); }
-    .compliance-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-    .compliance-card { background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 12px; padding: 18px; text-align: center; }
-    .compliance-card .num { font-size: 24px; font-weight: 800; margin-bottom: 4px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .compliance-card .label { font-size: 12px; color: var(--muted); }
-    .compliance-footer { text-align: center; margin-top: 20px; font-size: 13px; color: var(--muted); }
-    .cta-section { text-align: center; padding: 60px 0 80px; }
-    .cta-box { padding: 40px; border-radius: 24px; background: linear-gradient(180deg, rgba(56,189,248,0.10), rgba(45,212,191,0.06)); border: 1px solid rgba(255,255,255,0.12); box-shadow: var(--shadow); max-width: 700px; margin: 0 auto; }
-    .cta-box h2 { font-size: 28px; margin-bottom: 10px; }
-    .cta-box p { color: var(--muted); margin-bottom: 24px; font-size: 15px; }
-    .footer-badges { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 20px; }
-    .footer-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 6px 14px; border-radius: 8px;
-      border: 1px solid var(--line); background: rgba(255,255,255,0.03);
-      font-size: 12px; color: var(--muted);
-    }
-    .footer-badge .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-    footer { border-top: 1px solid var(--line); color: var(--muted); padding: 32px 0 36px; font-size: 13px; }
-    .footer-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; }
-    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
-    .footer-links a:hover { color: #fff; }
-    [dir="rtl"] .nav-links { flex-direction: row-reverse; }
-    [dir="rtl"] .hero-grid { direction: rtl; }
-    [dir="rtl"] .arch-flow { flex-direction: row-reverse; }
-    [dir="rtl"] .footer-row { flex-direction: row-reverse; }
-    @media (max-width: 900px) {
-      .hero-grid, .grid-3, .grid-4, .grid-2, .audit-grid, .compliance-grid { grid-template-columns: 1fr; }
-      .nav-links { display: none; }
-      .hero { padding-top: 44px; }
-      .arch-flow .arrow { display: none; }
-    }
-  </style>
+  html[dir="rtl"]{
+    --font-display:'Cairo', sans-serif;
+    --font-body:'Cairo', sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  html[dir="rtl"] body{ text-align:right; }
+
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+
+  ::selection{ background:var(--teal); color:var(--ink); }
+
+  /* Background texture: a faint chart-grid, nodding to the audit ledger / FHIR record theme */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(201,162,75,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,162,75,0.05) 1px, transparent 1px);
+    background-size:64px 64px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,20,32,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--panel-line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px;
+    max-width:1180px; margin:0 auto;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-mark{
+    width:36px; height:36px;
+    border:1.5px solid var(--gold);
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono);
+    font-weight:600;
+    color:var(--gold-soft);
+    font-size:16px;
+    flex-shrink:0;
+  }
+  .brand-name{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:16px;
+    letter-spacing:0.01em;
+    color:var(--paper);
+  }
+  .brand-name small{
+    display:block;
+    font-family:var(--font-mono);
+    font-weight:400;
+    font-size:10.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--paper-dim);
+    margin-top:2px;
+  }
+
+  .nav-links{
+    display:flex; align-items:center; gap:36px;
+    list-style:none;
+  }
+  .nav-links a{
+    font-size:14px; font-weight:500;
+    color:var(--paper-dim);
+    transition:color .15s ease;
+    white-space:nowrap;
+  }
+  .nav-links a:hover{ color:var(--teal-bright); }
+
+  .nav-right{ display:flex; align-items:center; gap:16px; }
+
+  .badge-pill{
+    display:flex; align-items:center; gap:8px;
+    border:1px solid var(--panel-line);
+    border-radius:999px;
+    padding:7px 14px;
+    font-size:12px;
+    color:var(--paper-dim);
+    white-space:nowrap;
+  }
+  .badge-dot{ width:6px; height:6px; border-radius:50%; background:var(--teal-bright); flex-shrink:0; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:9px 18px;
+    border-radius:8px;
+    font-size:13.5px; font-weight:600;
+    white-space:nowrap;
+  }
+  .btn-primary{
+    background:var(--gold);
+    color:var(--ink);
+  }
+  .btn-primary:hover{ background:var(--gold-soft); }
+  .btn-ghost{
+    border:1px solid var(--panel-line);
+    color:var(--paper);
+  }
+  .btn-ghost:hover{ border-color:var(--teal-bright); color:var(--teal-bright); }
+
+  /* Language toggle — this is the nav icon that was broken/missing (renders blank
+     because the previous markup referenced a font-icon glyph that never loaded).
+     Rebuilt below as an inline SVG globe + explicit EN/AR label, so it always renders
+     regardless of icon-font availability, and it actually flips the page dir + copy. */
+  .lang-toggle{
+    display:flex; align-items:center; gap:7px;
+    background:transparent;
+    border:1px solid var(--panel-line);
+    color:var(--paper);
+    border-radius:8px;
+    padding:8px 12px;
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    font-weight:500;
+    letter-spacing:0.03em;
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .lang-toggle:hover{ border-color:var(--gold); color:var(--gold-soft); }
+  .lang-toggle svg{ width:15px; height:15px; flex-shrink:0; }
+  .lang-toggle .lt-current{ color:var(--gold-soft); }
+  .lang-toggle .lt-sep{ color:var(--panel-line); }
+
+  .nav-toggle-btn{
+    display:none;
+    background:none; border:none; color:var(--paper);
+    font-size:22px; cursor:pointer;
+  }
+
+  @media (max-width: 980px){
+    .nav-links{ display:none; }
+    .badge-pill{ display:none; }
+    .nav-toggle-btn{ display:block; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; z-index:1;
+    padding:120px 0 96px;
+    border-bottom:1px solid var(--panel-line);
+  }
+  .eyebrow{
+    display:flex; align-items:center; gap:8px;
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    color:var(--teal-bright);
+    margin-bottom:28px;
+  }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--teal-bright); }
+
+  h1.hero-title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(2.4rem, 5vw, 4.1rem);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    color:var(--paper);
+    max-width:820px;
+  }
+  h1.hero-title em{
+    font-style:normal;
+    color:var(--gold-soft);
+  }
+
+  .hero-sub{
+    margin-top:26px;
+    max-width:600px;
+    font-size:17px;
+    color:var(--paper-dim);
+  }
+
+  .hero-cta{
+    margin-top:40px;
+    display:flex; gap:16px; flex-wrap:wrap;
+  }
+
+  .hero-meta{
+    margin-top:64px;
+    display:grid;
+    grid-template-columns:repeat(6, 1fr);
+    gap:0;
+    border-top:1px solid var(--panel-line);
+    padding-top:28px;
+  }
+  .hero-meta-item{
+    padding-inline-end:20px;
+    border-inline-end:1px solid var(--panel-line);
+  }
+  .hero-meta-item:last-child{ border-inline-end:none; }
+  .hm-label{
+    font-family:var(--font-mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--paper-dim);
+    margin-bottom:6px;
+  }
+  .hm-value{ font-size:13.5px; font-weight:600; color:var(--paper); }
+
+  @media (max-width: 900px){
+    .hero-meta{ grid-template-columns:repeat(2, 1fr); row-gap:22px; }
+    .hero-meta-item{ border-inline-end:none; }
+  }
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{ position:relative; z-index:1; padding:96px 0; border-bottom:1px solid var(--panel-line); }
+  .section-eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--gold-soft);
+    margin-bottom:14px;
+  }
+  h2.section-title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(1.7rem, 3vw, 2.4rem);
+    max-width:680px;
+    color:var(--paper);
+  }
+  h2.section-title em{ font-style:normal; color:var(--teal-bright); }
+  .section-lead{
+    margin-top:16px;
+    max-width:560px;
+    color:var(--paper-dim);
+    font-size:15.5px;
+  }
+
+  /* ---------- CAPABILITIES ---------- */
+  .cap-grid{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1px;
+    background:var(--panel-line);
+    border:1px solid var(--panel-line);
+  }
+  .cap-card{
+    background:var(--ink);
+    padding:30px 26px;
+  }
+  .cap-num{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--paper-dim);
+    display:flex; align-items:center; gap:8px;
+    margin-bottom:22px;
+  }
+  .cap-num .v{
+    color:var(--teal-bright);
+    border:1px solid var(--teal);
+    border-radius:4px;
+    padding:1px 6px;
+    font-size:10px;
+  }
+  .cap-card h3{
+    font-family:var(--font-display);
+    font-size:16.5px; font-weight:600;
+    margin-bottom:10px;
+  }
+  .cap-card h3 em{ font-style:normal; color:var(--gold-soft); }
+  .cap-card p{ font-size:13.5px; color:var(--paper-dim); }
+  .cap-tag{
+    display:inline-block; margin-top:16px;
+    font-family:var(--font-mono); font-size:10.5px;
+    color:var(--paper-dim);
+    border-top:1px solid var(--panel-line);
+    padding-top:12px;
+    width:100%;
+  }
+
+  @media (max-width: 900px){ .cap-grid{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width: 560px){ .cap-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- ARCHITECTURE ---------- */
+  .arch-flow{
+    margin-top:56px;
+    display:flex; align-items:center; gap:0;
+    flex-wrap:wrap;
+    font-family:var(--font-mono);
+    font-size:13px;
+  }
+  .arch-node{
+    border:1px solid var(--panel-line);
+    background:var(--panel);
+    padding:14px 20px;
+    border-radius:6px;
+    color:var(--paper);
+  }
+  .arch-arrow{ color:var(--gold-soft); padding:0 14px; }
+
+  .arch-details{
+    margin-top:48px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:32px;
+  }
+  .arch-item .roman{
+    font-family:var(--font-mono);
+    color:var(--teal-bright);
+    font-size:13px;
+    margin-bottom:10px;
+  }
+  .arch-item h4{ font-family:var(--font-display); font-size:15px; margin-bottom:8px; }
+  .arch-item p{ font-size:13px; color:var(--paper-dim); }
+
+  @media (max-width: 900px){ .arch-details{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width: 560px){ .arch-details{ grid-template-columns:1fr; } }
+
+  /* ---------- PRINCIPLES / STATS ---------- */
+  .principles{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:40px;
+  }
+  .principle .roman{ font-family:var(--font-mono); color:var(--gold-soft); font-size:13px; margin-bottom:12px; }
+  .principle h4{ font-family:var(--font-display); font-size:17px; margin-bottom:10px; }
+  .principle p{ font-size:14px; color:var(--paper-dim); }
+
+  .stat-strip{
+    margin-top:72px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    border-top:1px solid var(--panel-line);
+    border-bottom:1px solid var(--panel-line);
+  }
+  .stat{
+    padding:28px 0;
+    text-align:center;
+    border-inline-end:1px solid var(--panel-line);
+  }
+  .stat:last-child{ border-inline-end:none; }
+  .stat-value{ font-family:var(--font-display); font-size:28px; font-weight:600; color:var(--gold-soft); }
+  .stat-label{ font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--paper-dim); margin-top:6px; }
+
+  @media (max-width: 900px){ .principles{ grid-template-columns:1fr; gap:32px; } .stat-strip{ grid-template-columns:repeat(2,1fr); } }
+
+  /* ---------- PRICING ---------- */
+  .price-grid{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--panel-line);
+    border:1px solid var(--panel-line);
+  }
+  .price-card{ background:var(--ink); padding:40px; }
+  .price-card.featured{ background:var(--panel); }
+  .price-tier{ font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--teal-bright); margin-bottom:18px; }
+  .price-amount{ font-family:var(--font-display); font-size:30px; font-weight:600; color:var(--paper); }
+  .price-desc{ margin-top:8px; font-size:14px; color:var(--paper-dim); }
+  .price-list{ list-style:none; margin-top:26px; display:flex; flex-direction:column; gap:12px; }
+  .price-list li{ font-size:13.5px; color:var(--paper-dim); padding-inline-start:20px; position:relative; }
+  .price-list li::before{ content:"—"; position:absolute; inset-inline-start:0; color:var(--gold-soft); }
+  .price-card .btn{ margin-top:30px; }
+
+  @media (max-width: 800px){ .price-grid{ grid-template-columns:1fr; } }
+
+  .price-note{
+    margin-top:24px;
+    font-size:13px;
+    color:var(--paper-dim);
+    font-family:var(--font-mono);
+  }
+
+  /* ---------- POSITIONING ---------- */
+  .position-grid{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:32px;
+  }
+  .pos-card{ border:1px solid var(--panel-line); padding:28px; border-radius:10px; }
+  .pos-tag{ font-family:var(--font-mono); font-size:11px; color:var(--gold-soft); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:14px; }
+  .pos-card h4{ font-family:var(--font-display); font-size:16px; margin-bottom:10px; }
+  .pos-card p{ font-size:13.5px; color:var(--paper-dim); }
+
+  @media (max-width: 900px){ .position-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- ENGINEERING / GITHUB ---------- */
+  .repo-grid{
+    margin-top:56px;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--panel-line);
+    border:1px solid var(--panel-line);
+  }
+  .repo-card{ background:var(--ink); padding:26px 28px; }
+  .repo-card a{ font-family:var(--font-display); font-size:15.5px; font-weight:600; color:var(--gold-soft); }
+  .repo-card p{ margin-top:10px; font-size:13px; color:var(--paper-dim); }
+  .repo-meta{ margin-top:14px; font-family:var(--font-mono); font-size:11px; color:var(--paper-dim); }
+
+  @media (max-width: 700px){ .repo-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- PARTNER ---------- */
+  .partner-block{
+    margin-top:56px;
+    border:1px solid var(--gold);
+    border-radius:12px;
+    padding:44px;
+    display:flex; gap:36px; align-items:flex-start;
+    flex-wrap:wrap;
+  }
+  .partner-mark{
+    width:64px; height:64px; flex-shrink:0;
+    border:1.5px solid var(--gold);
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); color:var(--gold-soft); font-size:22px; font-weight:600;
+  }
+  .partner-text h3{ font-family:var(--font-display); font-size:19px; margin-bottom:10px; }
+  .partner-text h3 em{ font-style:normal; color:var(--gold-soft); }
+  .partner-text p{ font-size:14.5px; color:var(--paper-dim); max-width:640px; }
+  .partner-disclaimer{
+    margin-top:18px;
+    font-family:var(--font-mono);
+    font-size:11.5px;
+    color:var(--paper-dim);
+    opacity:0.8;
+  }
+
+  /* ---------- CONTACT / CTA ---------- */
+  .cta-section{ text-align:center; padding:110px 0; }
+  .cta-section h2{
+    font-family:var(--font-display); font-weight:600;
+    font-size:clamp(1.9rem, 4vw, 2.8rem);
+    max-width:640px; margin:0 auto;
+  }
+  .cta-section h2 em{ font-style:normal; color:var(--gold-soft); }
+  .cta-section p{ margin:20px auto 0; max-width:480px; color:var(--paper-dim); font-size:15px; }
+  .cta-buttons{ margin-top:38px; display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+  .cta-footnote{ margin-top:28px; font-family:var(--font-mono); font-size:12px; color:var(--paper-dim); }
+
+  /* ---------- FOOTER ---------- */
+  footer{ position:relative; z-index:1; padding:64px 0 40px; }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr 1fr 1fr;
+    gap:40px;
+  }
+  .footer-brand p{ margin-top:14px; font-size:13.5px; color:var(--paper-dim); max-width:280px; }
+  .footer-col h5{
+    font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--paper-dim); margin-bottom:16px;
+  }
+  .footer-col ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .footer-col a{ font-size:13.5px; color:var(--paper); }
+  .footer-col a:hover{ color:var(--teal-bright); }
+  .footer-bottom{
+    margin-top:56px; padding-top:24px;
+    border-top:1px solid var(--panel-line);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:var(--font-mono); font-size:11.5px; color:var(--paper-dim);
+  }
+
+  @media (max-width: 800px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
+
+  [data-i18n], [data-i18n-html]{ transition:opacity .12s ease; }
+</style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="container nav">
-      <div class="brand">
-        <div class="brand-badge">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7v6c0 5.25 3.83 10.15 10 12 6.17-1.85 10-6.75 10-12V7l-10-5z" stroke="#021018" stroke-width="1.5"/>
-            <path d="M9 12l2 2 4-4" stroke="#021018" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <div>UnityCare <span style="color:var(--muted);font-weight:400;">by Elmahrosa</span></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">U</div>
+      <div class="brand-name">
+        UnityCare <span data-i18n="brand.by">by Elmahrosa</span>
+        <small data-i18n="brand.tag">Sovereign Healthcare Infrastructure</small>
       </div>
-      <div class="nav-links">
-        <a href="#platform">Platform</a>
-        <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener" class="ext-link">Developers</a>
-        <a href="https://api.elmahrosa.org/docs" target="_blank" rel="noopener" class="ext-link">API Reference</a>
-        <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener" class="ext-link">Trust Center</a>
-        <a href="#contact">Contact</a>
-        <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          <span id="langLabel">EN</span>
-        </button>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="#platform" data-i18n="nav.platform">Platform</a></li>
+      <li><a href="#capabilities" data-i18n="nav.capabilities">Capabilities</a></li>
+      <li><a href="#pricing" data-i18n="nav.pricing">Pricing</a></li>
+      <li><a href="#partner" data-i18n="nav.partner">Partner</a></li>
+      <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-right">
+      <div class="badge-pill">
+        <span class="badge-dot"></span>
+        <span data-i18n="nav.badge">Registered Member · CPN</span>
       </div>
-      <a class="btn btn-primary btn-sm" href="mailto:info@elmahrosa.org?subject=UnityCare%20Inquiry">Get Started</a>
+
+      <!-- Fixed: language toggle now renders as an explicit inline SVG globe + EN/AR
+           label instead of an icon-font glyph, and actually swaps dir + copy on click. -->
+      <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language / تبديل اللغة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9s1.3-6.4 3.8-9z"></path>
+        </svg>
+        <span class="lt-current" id="langCurrent">EN</span>
+        <span class="lt-sep">/</span>
+        <span id="langOther">AR</span>
+      </button>
+
+      <a class="btn btn-primary" href="mailto:ayman@elmahrosa.org?subject=UnityCare%20Institutional%20Inquiry" data-i18n="nav.cta">Request access</a>
+      <button class="nav-toggle-btn" aria-label="Menu">☰</button>
     </div>
   </div>
+</header>
 
-  <main>
-    <section class="hero">
-      <div class="container hero-grid">
-        <div>
-          <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            <span>Deployed at <strong>health.elmahrosa.org</strong></span>
-          </div>
-          <h1>Deployable healthcare infrastructure.<br><span class="gradient">Own your stack.</span></h1>
-          <p>
-            UnityCare is a production-ready platform for hospitals, health networks, and sovereign health systems.
-            Identity &amp; access control, FHIR R4 patient records, consent management, and an immutable audit ledger
-            &mdash; deployable on your infrastructure or ours.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Briefing">Request Institutional Briefing</a>
-            <a class="btn btn-outline-light" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">View on GitHub</a>
-          </div>
-          <div class="pill-tags">
-            <span>JWT + RBAC</span>
-            <span>FHIR R4</span>
-            <span>Consent Engine</span>
-            <span>Audit Ledger</span>
-            <span>PostgreSQL</span>
-            <span>FastAPI</span>
-            <span>Next.js</span>
-            <span>Docker</span>
-          </div>
-        </div>
-        <div class="hero-card">
-          <h3>Deployment Specifications</h3>
-          <div class="sub">Production stack as of June 2026</div>
-          <div class="spec-row">
-            <span class="spec-label">Identity</span>
-            <span class="spec-value">JWT + Refresh + RBAC</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Patient Records</span>
-            <span class="spec-value">FHIR R4 CRUD <span class="status-badge status-live">Live</span></span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Consent</span>
-            <span class="spec-value">Create &bull; Version &bull; Revoke &bull; Audit</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Database</span>
-            <span class="spec-value">PostgreSQL + Redis</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Audit</span>
-            <span class="spec-value">SHA-256 Hash Chain + HMAC</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-label">Languages</span>
-            <span class="spec-value">English &bull; Arabic (RTL)</span>
-          </div>
-        </div>
+<section class="hero" id="platform">
+  <div class="wrap">
+    <div class="eyebrow">
+      <span class="dot"></span>
+      <span data-i18n="hero.eyebrow">Sovereign Healthcare Infrastructure · Part of the TEOS Stack · Elmahrosa International</span>
+    </div>
+
+    <h1 class="hero-title" data-i18n-html="hero.title">Healthcare is sovereign. Your <em>infrastructure</em> should be too.</h1>
+
+    <p class="hero-sub" data-i18n="hero.sub">
+      UnityCare is deployable infrastructure for hospitals, ministries, and health networks who want to own their stack — not rent a dashboard. Self-hosted by default. Built so the institution, not the vendor, holds the keys.
+    </p>
+
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="mailto:ayman@elmahrosa.org?subject=UnityCare%20Pilot%20Request" data-i18n="hero.cta1">Request institutional briefing →</a>
+      <a class="btn btn-ghost" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener" data-i18n="hero.cta2">View on GitHub</a>
+    </div>
+
+    <div class="hero-meta">
+      <div class="hero-meta-item"><div class="hm-label" data-i18n="hero.m1l">Identity</div><div class="hm-value" data-i18n="hero.m1v">JWT · RBAC · MFA</div></div>
+      <div class="hero-meta-item"><div class="hm-label" data-i18n="hero.m2l">Records</div><div class="hm-value" data-i18n="hero.m2v">FHIR R4 CRUD</div></div>
+      <div class="hero-meta-item"><div class="hm-label" data-i18n="hero.m3l">Consent</div><div class="hm-value" data-i18n="hero.m3v">Versioned + Audited</div></div>
+      <div class="hero-meta-item"><div class="hm-label" data-i18n="hero.m4l">Data layer</div><div class="hm-value" data-i18n="hero.m4v">PostgreSQL + Redis</div></div>
+      <div class="hero-meta-item"><div class="hm-label" data-i18n="hero.m5l">Deployment</div><div class="hm-value" data-i18n="hero.m5v">Docker · Private Cloud</div></div>
+      <div class="hero-meta-item"><div class="hm-label" data-i18n="hero.m6l">Languages</div><div class="hm-value" data-i18n="hero.m6v">English · Arabic (RTL)</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="capabilities">
+  <div class="wrap">
+    <div class="section-eyebrow" data-i18n="cap.eyebrow">Core Capabilities</div>
+    <h2 class="section-title" data-i18n-html="cap.title">What ships in <em>every</em> deployment.</h2>
+    <p class="section-lead" data-i18n="cap.lead">Four services, in the order an institution typically turns them on — identity first, then the clinical record, then the controls around it.</p>
+
+    <div class="cap-grid">
+      <div class="cap-card">
+        <div class="cap-num">01 <span class="v" data-i18n="cap.verified">Verified</span></div>
+        <h3 data-i18n-html="cap.c1.title">Identity <em>Service</em></h3>
+        <p data-i18n="cap.c1.body">Registration, login, JWT access and refresh tokens, role-based access control, and an MFA scaffold ready for institutional rollout.</p>
+        <span class="cap-tag" data-i18n="cap.c1.tag">Auth layer</span>
       </div>
-    </section>
-
-    <section id="platform" class="section">
-      <div class="container">
-        <div class="section-header">
-          <h2>Deployment architecture</h2>
-          <p>End-to-end stack from public portal to database.</p>
-        </div>
-        <div class="arch-flow">
-          <div class="node">
-            <div class="domain">health.elmahrosa.org</div>
-            <div class="label">Frontend (Next.js)</div>
-          </div>
-          <div class="arrow">&rarr;</div>
-          <div class="node highlight">
-            <div class="domain">api.elmahrosa.org</div>
-            <div class="label">Backend API (FastAPI)</div>
-          </div>
-          <div class="arrow">&rarr;</div>
-          <div class="node">
-            <div class="domain">PostgreSQL + Redis</div>
-            <div class="label">Data Layer</div>
-          </div>
-        </div>
-        <div class="arch-flow" style="margin-top:12px;padding:16px;">
-          <div class="node">
-            <div class="domain">developers.elmahrosa.org</div>
-            <div class="label">Developer Portal</div>
-          </div>
-        </div>
-        <div class="arch-note">
-          <span class="cpn-badge" style="font-size:10px;">CPN Member</span>
-          &nbsp; All services deployed via Railway &bull; Docker &bull; GitHub Actions CI/CD
-        </div>
+      <div class="cap-card">
+        <div class="cap-num">02 <span class="v" data-i18n="cap.verified">Verified</span></div>
+        <h3 data-i18n-html="cap.c2.title">FHIR <em>Patient Records</em></h3>
+        <p data-i18n="cap.c2.body">Full FHIR R4 Patient resource CRUD with JSONB storage — identifiers, names, telecom, address, and extensions, structured for interoperability.</p>
+        <span class="cap-tag" data-i18n="cap.c2.tag">Clinical record</span>
       </div>
-    </section>
-
-    <section class="section" style="padding-top:0;">
-      <div class="container">
-        <div class="section-header">
-          <h2>Core platform</h2>
-          <p>Modular services engineered for institutional deployment.</p>
-        </div>
-        <div class="grid-4">
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-            </div>
-            <h3>Backend API</h3>
-            <p>FastAPI (Python) with JWT auth, RBAC middleware, rate limiting, CORS, and bcrypt password hashing.</p>
-          </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            </div>
-            <h3>Frontend</h3>
-            <p>Next.js 15 + TypeScript + Tailwind. Responsive, RTL-ready, with English &amp; Arabic interface.</p>
-          </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-            </div>
-            <h3>Data Layer</h3>
-            <p>PostgreSQL with Alembic migrations, Redis cache, JSONB for FHIR resources, hash-chained audit integrity.</p>
-          </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-            </div>
-            <h3>Deployment</h3>
-            <p>Dockerized microservices. Railway CI/CD. Health checks. Prometheus &amp; Grafana monitoring.</p>
-          </div>
-        </div>
-        <div style="margin-top:24px;" class="arch-flow" style="flex-direction:column;gap:8px;padding:16px;">
-          <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center;">
-            <span style="font-size:12px;color:var(--muted);">Client</span>
-            <span class="arrow" style="font-size:14px;">&rarr;</span>
-            <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;">Next.js</span>
-            <span class="arrow" style="font-size:14px;">&rarr;</span>
-            <span style="padding:6px 12px;border-radius:8px;border:1px solid rgba(56,189,248,0.3);background:rgba(56,189,248,0.06);font-size:12px;">FastAPI</span>
-            <span class="arrow" style="font-size:14px;">&rarr;</span>
-            <span style="padding:6px 12px;border-radius:8px;border:1px solid var(--line);font-size:12px;">PostgreSQL + Redis</span>
-          </div>
-        </div>
+      <div class="cap-card">
+        <div class="cap-num">03 <span class="v" data-i18n="cap.verified">Verified</span></div>
+        <h3 data-i18n-html="cap.c3.title">Consent <em>Engine</em></h3>
+        <p data-i18n="cap.c3.body">Create, version, revoke, and audit patient consent directives — policy reference, scope, and a timestamp chain that can't be quietly edited.</p>
+        <span class="cap-tag" data-i18n="cap.c3.tag">Governance</span>
       </div>
-    </section>
-
-    <section id="features" class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <h2>Capabilities</h2>
-          <p>Production services running today. Additional modules on the roadmap.</p>
-        </div>
-        <div class="grid-3">
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </div>
-            <h3>Identity &amp; Access <span class="status-badge status-live">Live</span></h3>
-            <p>JWT access &amp; refresh tokens, RBAC, rate limiting, bcrypt hashing. Registration, login, logout, token refresh.</p>
-          </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-            </div>
-            <h3>FHIR R4 Patient Records <span class="status-badge status-live">Live</span></h3>
-            <p>Full CRUD for FHIR R4 Patient resources. JSONB storage. Identifier, name, telecom, address, soft-delete.</p>
-          </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            </div>
-            <h3>Consent Engine <span class="status-badge status-live">Live</span></h3>
-            <p>Create, version, revoke, and audit consent directives. Purpose-based, jurisdiction-aware, hash-chain integrity.</p>
-          </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M16 13H8M16 17H8M10 9H8"/></svg>
-            </div>
-            <h3>Audit Ledger <span class="status-badge status-live">Live</span></h3>
-            <p>Immutable SHA-256 hash chain with HMAC signing. Chain verification endpoint. Every action is logged and verifiable.</p>
-          </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            </div>
-            <h3>Admin API <span class="status-badge status-live">Live</span></h3>
-            <p>User management, role assignment, audit log viewer. OpenAPI docs at <code style="color:var(--accent);">api.elmahrosa.org/docs</code>.</p>
-          </div>
-          <div class="card">
-            <div class="icon-box">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            </div>
-            <h3>Arabic &amp; English <span class="status-badge status-live">Live</span></h3>
-            <p>Full RTL support with Arabic language interface alongside English. Built for bilingual healthcare environments.</p>
-          </div>
-        </div>
-
-        <div style="margin-top:36px;text-align:center;">
-          <p style="color:var(--muted);font-size:14px;">
-            Roadmap: Telemedicine &bull; Pharmacy &bull; IoT &bull; Emergency Dispatch &bull; National Registries
-            &mdash; <a href="#contact" style="color:var(--accent);">Contact us for details</a>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="compliance" class="section">
-      <div class="container">
-        <div class="section-header">
-          <h2>Compliance &amp; security</h2>
-          <p>Architecture aligned with healthcare regulatory standards. Formal audits in progress.</p>
-        </div>
-        <div class="compliance-grid">
-          <div class="compliance-card">
-            <div class="num">HIPAA</div>
-            <div class="label">Architecture aligned<br>No formal audit yet</div>
-          </div>
-          <div class="compliance-card">
-            <div class="num">GDPR</div>
-            <div class="label">Soft-delete &amp; data export<br>Controls documented</div>
-          </div>
-          <div class="compliance-card">
-            <div class="num">FHIR R4</div>
-            <div class="label">Patient resource CRUD<br>JSONB storage</div>
-          </div>
-          <div class="compliance-card">
-            <div class="num">SOC 2</div>
-            <div class="label">Certification roadmap<br>2026&ndash;2027 target</div>
-          </div>
-        </div>
-        <div class="compliance-footer">
-          <span class="cpn-badge">CPN Member</span>
-          &nbsp; Elmahrosa International is a registered member of the Claude Partner Network.
-          &nbsp; <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener" style="color:var(--accent);">Trust Center &rarr;</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="audit" class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <h2><span class="gradient">Hard final audit</span> &mdash; verified integrity</h2>
-          <p>Every deployment undergoes a complete security and compliance audit before activation.</p>
-        </div>
-        <div class="audit-grid">
-          <div class="audit-card">
-            <div class="audit-icon">
-              <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20"/><path d="M16 24l6 6 10-10"/></svg>
-            </div>
-            <h4>Code Audit Passed</h4>
-            <p>Linting, type checking, dependency scan — zero critical findings.</p>
-          </div>
-          <div class="audit-card">
-            <div class="audit-icon">
-              <svg viewBox="0 0 48 48"><path d="M24 4L4 14v8c0 10 7.5 19.5 20 22 12.5-2.5 20-12 20-22v-8L24 4z"/><path d="M18 24l5 5 9-9"/></svg>
-            </div>
-            <h4>Security Hardened</h4>
-            <p>JWT with refresh rotation, bcrypt hashing, rate limiting, RBAC enforcement, HTTPS-only.</p>
-          </div>
-          <div class="audit-card">
-            <div class="audit-icon">
-              <svg viewBox="0 0 48 48"><rect x="8" y="20" width="32" height="22" rx="3"/><path d="M16 20V12a8 8 0 0 1 16 0v8"/><circle cx="24" cy="32" r="3"/><path d="M24 35v-3"/></svg>
-            </div>
-            <h4>Consent Integrity</h4>
-            <p>Hash-chained consent versions. Every grant and revocation cryptographically linked.</p>
-          </div>
-        </div>
-        <div class="audit-summary">
-          <p>
-            <strong>Status: PASSED</strong>
-            &mdash; All audit gates cleared. Platform is ready for institutional deployment.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section id="status" class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <h2>Product status</h2>
-          <p>Current deployment status across all capabilities.</p>
-        </div>
-        <div style="max-width:600px;margin:0 auto;border:1px solid var(--line);border-radius:16px;overflow:hidden;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
-            <div style="padding:12px 18px;background:rgba(255,255,255,0.06);font-weight:700;font-size:13px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Capability</div>
-            <div style="padding:12px 18px;background:rgba(255,255,255,0.06);font-weight:700;font-size:13px;border-bottom:1px solid var(--line);">Status</div>
-            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Authentication</div>
-            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
-            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">RBAC</div>
-            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
-            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Admin Portal</div>
-            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
-            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Audit Logging</div>
-            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span class="status-badge status-live">Live</span></div>
-            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">FHIR R4</div>
-            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(212,168,83,0.15);color:var(--gold);border:1px solid rgba(212,168,83,0.2);">In Development</span></div>
-            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">NPHIES</div>
-            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
-            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">EHDS</div>
-            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
-            <div style="padding:10px 18px;font-size:14px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);">Malaafi</div>
-            <div style="padding:10px 18px;font-size:13px;border-bottom:1px solid var(--line);"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
-            <div style="padding:10px 18px;font-size:14px;border-right:1px solid var(--line);">NABIDH</div>
-            <div style="padding:10px 18px;font-size:13px;"><span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;background:rgba(255,255,255,0.06);color:var(--muted);border:1px solid var(--line);">Planned</span></div>
-          </div>
-        </div>
-        <div style="text-align:center;margin-top:16px;">
-          <a href="https://health.elmahrosa.org/status" target="_blank" rel="noopener" style="color:var(--accent);font-size:13px;">Full status page &rarr;</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="cta-section">
-      <div class="container">
-        <div class="cta-box">
-          <h2>Ready to deploy?</h2>
-          <p>Request an institutional briefing for a technical review, pricing discussion, and live demonstration.</p>
-          <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
-            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Briefing">Email Institutional Inquiry</a>
-            <a class="btn btn-outline-light" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">Open GitHub Repository</a>
-          </div>
-          <div class="notice" style="margin-top:16px;font-size:12px;color:var(--muted);">
-            Developer portal: <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener" style="color:var(--accent);">developers.elmahrosa.org</a>
-            &nbsp;&bull;&nbsp;
-            API reference: <a href="https://api.elmahrosa.org/docs" target="_blank" rel="noopener" style="color:var(--accent);">api.elmahrosa.org/docs</a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="section" style="padding:32px 0 48px;border-top:1px solid var(--line);">
-      <div class="container">
-        <div class="arch-flow" style="flex-direction:column;gap:6px;padding:20px;font-size:13px;max-width:520px;margin:0 auto;">
-          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
-            <span style="color:var(--muted);">Frontend</span>
-            <span>health.elmahrosa.org</span>
-          </div>
-          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
-            <span style="color:var(--muted);">Developer Portal</span>
-            <span>developers.elmahrosa.org</span>
-          </div>
-          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
-            <span style="color:var(--muted);">API Layer</span>
-            <span>api.elmahrosa.org</span>
-          </div>
-          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
-            <span style="color:var(--muted);">Infrastructure</span>
-            <span>Railway + PostgreSQL + Redis</span>
-          </div>
-          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
-            <span style="color:var(--muted);">Organization</span>
-            <span>Elmahrosa International</span>
-          </div>
-          <div style="display:flex;gap:20px;justify-content:space-between;width:100%;">
-            <span style="color:var(--muted);">Membership</span>
-            <span><span class="cpn-badge" style="font-size:10px;">CPN</span> Claude Partner Network</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="footer-badges">
-        <span class="footer-badge"><span class="dot" style="background:var(--accent);"></span> Elmahrosa International</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--gold);"></span> Claude Partner Network Member</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> Built in Alexandria, Egypt</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--accent-2);"></span> FHIR R4 Architecture</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> HIPAA/GDPR Aligned</span>
-        <a href="https://health.elmahrosa.org/status" target="_blank" rel="noopener" class="footer-badge" style="text-decoration:none;"><span class="dot" style="background:var(--accent-2);"></span> Product Status</a>
-      </div>
-      <div class="footer-row">
-        <div>
-          <strong>UnityCare Platform</strong> &copy; 2026 Elmahrosa International &mdash; All rights reserved.
-        </div>
-        <div class="footer-links">
-          <a href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener">Developers</a>
-          <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener">Trust Center</a>
-          <a href="mailto:info@elmahrosa.org">Contact</a>
-          <button class="lang-btn" onclick="toggleLang()" aria-label="Toggle language">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            <span id="langLabel2">EN</span>
-          </button>
-        </div>
+      <div class="cap-card">
+        <div class="cap-num">04 <span class="v" data-i18n="cap.verified">Verified</span></div>
+        <h3 data-i18n-html="cap.c4.title">Audit <em>Ledger</em></h3>
+        <p data-i18n="cap.c4.body">Hash-chained, immutable log of every consent action, record access, and administrative event — verifiable independent of the vendor.</p>
+        <span class="cap-tag" data-i18n="cap.c4.tag">Compliance</span>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <script>
-    var currentLang = 'en';
-    var ar = {
-      'data-ar-eyebrow': '\u0645\u0646\u0634\u0648\u0631 \u0639\u0644\u0649 <strong>health.elmahrosa.org</strong>',
-      'data-ar-h1': '\u0628\u0646\u064A\u0629 \u062A\u062D\u062A\u064A\u0629 \u0631\u0639\u0627\u064A\u0629 \u0635\u062D\u064A\u0629 \u0642\u0627\u0628\u0644\u0629 \u0644\u0644\u0646\u0634\u0631.<br><span class="gradient">\u0627\u0645\u062A\u0644\u0643 \u0628\u0646\u064A\u062A\u0643.</span>',
-      'data-ar-hero-p': '\u064A\u0648\u0646\u064A\u062A\u064A\u0643\u064A\u0631 \u0647\u0648 \u0645\u0646\u0635\u0629 \u062C\u0627\u0647\u0632\u0629 \u0644\u0644\u0625\u0646\u062A\u0627\u062C \u0644\u0644\u0645\u0633\u062A\u0634\u0641\u064A\u0627\u062A \u0648\u0634\u0628\u0643\u0627\u062A \u0627\u0644\u0631\u0639\u0627\u064A\u0629 \u0627\u0644\u0635\u062D\u064A\u0629. \u0627\u0644\u0647\u0648\u064A\u0629 \u0648\u0627\u0644\u062A\u062D\u0643\u0645 \u0641\u064A \u0627\u0644\u0648\u0635\u0648\u0644\u060C \u0633\u062C\u0644\u0627\u062A \u0627\u0644\u0645\u0631\u0636\u0649 FHIR R4\u060C \u0625\u062F\u0627\u0631\u0629 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0627\u062A\u060C \u0648\u0633\u062C\u0644 \u062A\u062F\u0642\u064A\u0642 \u063A\u064A\u0631 \u0642\u0627\u0628\u0644 \u0644\u0644\u062A\u063A\u064A\u064A\u0631.',
-      'data-ar-nav': '\u0627\u0644\u0645\u0646\u0635\u0629|\u0627\u0644\u0645\u0637\u0648\u0631\u0648\u0646|\u0645\u0631\u062C\u0639 API|\u0645\u0631\u0643\u0632 \u0627\u0644\u062B\u0642\u0629|\u0627\u062A\u0635\u0644',
-      'data-ar-specs': '\u0645\u0648\u0627\u0635\u0641\u0627\u062A \u0627\u0644\u0646\u0634\u0631'
-    };
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow" data-i18n="arch.eyebrow">Platform Architecture</div>
+    <h2 class="section-title" data-i18n-html="arch.title">A stack built to be <em>handed over</em>, not rented.</h2>
+    <p class="section-lead" data-i18n="arch.lead">Modern, boring-on-purpose infrastructure. Nothing here requires UnityCare to keep running it for you.</p>
 
-    function toggleLang() {
-      var html = document.documentElement;
-      var label1 = document.getElementById('langLabel');
-      var label2 = document.getElementById('langLabel2');
-      if (currentLang === 'en') {
-        html.setAttribute('dir', 'rtl');
-        html.setAttribute('lang', 'ar');
-        currentLang = 'ar';
-        if (label1) label1.textContent = 'AR';
-        if (label2) label2.textContent = 'AR';
-        applyArabic();
-      } else {
-        html.setAttribute('dir', 'ltr');
-        html.setAttribute('lang', 'en');
-        currentLang = 'en';
-        if (label1) label1.textContent = 'EN';
-        if (label2) label2.textContent = 'EN';
-        applyEnglish();
-      }
+    <div class="arch-flow">
+      <div class="arch-node" data-i18n="arch.n1">Client → Next.js Frontend</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node" data-i18n="arch.n2">FastAPI Backend</div>
+      <span class="arch-arrow">→</span>
+      <div class="arch-node" data-i18n="arch.n3">PostgreSQL + Redis</div>
+    </div>
+    <p class="cta-footnote" style="margin-top:16px; text-align:left;" data-i18n="arch.fleet">Fleet: Docker · Railway · GitHub Actions CI/CD — portable to any private cloud or on-prem environment</p>
+
+    <div class="arch-details">
+      <div class="arch-item">
+        <div class="roman">i.</div>
+        <h4 data-i18n="arch.d1.title">Backend core</h4>
+        <p data-i18n="arch.d1.body">FastAPI (Python) with JWT auth, refresh tokens, RBAC middleware, rate limiting, and bcrypt password hashing.</p>
+      </div>
+      <div class="arch-item">
+        <div class="roman">ii.</div>
+        <h4 data-i18n="arch.d2.title">Frontend</h4>
+        <p data-i18n="arch.d2.body">Next.js 15 + TypeScript + Tailwind. Responsive, RTL-ready, with dual-language English and Arabic support.</p>
+      </div>
+      <div class="arch-item">
+        <div class="roman">iii.</div>
+        <h4 data-i18n="arch.d3.title">Data layer</h4>
+        <p data-i18n="arch.d3.body">PostgreSQL with Alembic migrations, Redis cache, JSONB for FHIR resources, hash-chained audit integrity.</p>
+      </div>
+      <div class="arch-item">
+        <div class="roman">iv.</div>
+        <h4 data-i18n="arch.d4.title">Deployment</h4>
+        <p data-i18n="arch.d4.body">Dockerized microservices, Railway CI/CD, health checks, and monitoring stubs for Prometheus and Grafana.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow" data-i18n="prin.eyebrow">Operating Principles</div>
+    <h2 class="section-title" data-i18n-html="prin.title">Three commitments that shape <em>every deployment.</em></h2>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="roman">i.</div>
+        <h4 data-i18n="prin.p1.title">Sovereign by design</h4>
+        <p data-i18n="prin.p1.body">Patient data, code, and credentials stay inside the institution's perimeter. Self-hosted by default — we pull only what's strictly required to run.</p>
+      </div>
+      <div class="principle">
+        <div class="roman">ii.</div>
+        <h4 data-i18n="prin.p2.title">Built for institutions</h4>
+        <p data-i18n="prin.p2.body">Our buyers are hospital groups and health ministries, not individual clinics. Every capability is staged for pilot, then license, then full ownership transfer.</p>
+      </div>
+      <div class="principle">
+        <div class="roman">iii.</div>
+        <h4 data-i18n="prin.p3.title">Audit over assurance</h4>
+        <p data-i18n="prin.p3.body">We don't ask institutions to trust a dashboard. The hash-chained ledger lets any party verify what happened, independent of the vendor.</p>
+      </div>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat"><div class="stat-value">MVP</div><div class="stat-label" data-i18n="prin.s1">Minimum viable product, pilot-ready</div></div>
+      <div class="stat"><div class="stat-value">FHIR R4</div><div class="stat-label" data-i18n="prin.s2">Interoperability standard</div></div>
+      <div class="stat"><div class="stat-value">EN · AR</div><div class="stat-label" data-i18n="prin.s3">Full RTL bilingual interface</div></div>
+      <div class="stat"><div class="stat-value">100%</div><div class="stat-label" data-i18n="prin.s4">Self-hosted, zero recurring lock-in</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-eyebrow" data-i18n="price.eyebrow">Institutional Tiers</div>
+    <h2 class="section-title" data-i18n-html="price.title">Structured for a fast pilot, with a clear path to <em>ownership.</em></h2>
+    <p class="section-lead" data-i18n="price.lead">Two tiers. Both end with the institution holding the source.</p>
+
+    <div class="price-grid">
+      <div class="price-card">
+        <div class="price-tier" data-i18n="price.t1.tier">Pilot</div>
+        <div class="price-amount" data-i18n="price.t1.amount">$25K–$50K / engagement</div>
+        <div class="price-desc" data-i18n="price.t1.desc">Single-site institutional validation, 30–90 days.</div>
+        <ul class="price-list">
+          <li data-i18n="price.t1.l1">Technical onboarding and support</li>
+          <li data-i18n="price.t1.l2">Decision-maker demo path</li>
+          <li data-i18n="price.t1.l3">Docker deployment on your infrastructure</li>
+        </ul>
+        <a class="btn btn-ghost" href="mailto:ayman@elmahrosa.org?subject=UnityCare%20Pilot%20Inquiry" data-i18n="price.t1.cta">Inquire about a pilot</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tier" data-i18n="price.t2.tier">Institutional license</div>
+        <div class="price-amount" data-i18n="price.t2.amount">$60K–$120K / license</div>
+        <div class="price-desc" data-i18n="price.t2.desc">Full platform deployment with long-term ownership terms.</div>
+        <ul class="price-list">
+          <li data-i18n="price.t2.l1">All MVP services included</li>
+          <li data-i18n="price.t2.l2">White-label deployment option</li>
+          <li data-i18n="price.t2.l3">Private cloud or on-prem model</li>
+          <li data-i18n="price.t2.l4">Customization and integration scope</li>
+        </ul>
+        <a class="btn btn-primary" href="mailto:ayman@elmahrosa.org?subject=UnityCare%20License%20Inquiry" data-i18n="price.t2.cta">Request a license briefing</a>
+      </div>
+    </div>
+    <p class="price-note" data-i18n="price.note">Institutional license unlocks full source access, private deployment, and long-term ownership terms.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow" data-i18n="pos.eyebrow">Market Positioning</div>
+    <h2 class="section-title" data-i18n-html="pos.title">Built for buyers who value <em>ownership</em> over subscription.</h2>
+
+    <div class="position-grid">
+      <div class="pos-card">
+        <div class="pos-tag" data-i18n="pos.c1.tag">For hospital groups</div>
+        <h4 data-i18n="pos.c1.title">Replace recurring SaaS</h4>
+        <p data-i18n="pos.c1.body">Trade vendor-dependent dashboards for a deployable stack your own engineers can run, extend, and eventually own outright.</p>
+      </div>
+      <div class="pos-card">
+        <div class="pos-tag" data-i18n="pos.c2.tag">For health ministries</div>
+        <h4 data-i18n="pos.c2.title">A national health backbone</h4>
+        <p data-i18n="pos.c2.body">Position UnityCare as sovereign digital infrastructure — national control, local deployment, no foreign dependency.</p>
+      </div>
+      <div class="pos-card">
+        <div class="pos-tag" data-i18n="pos.c3.tag">For investors</div>
+        <h4 data-i18n="pos.c3.title">Infrastructure as an asset</h4>
+        <p data-i18n="pos.c3.body">Pilot revenue, license upside, and a clear path to acquisition-level ownership transfer for institutional buyers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-eyebrow" data-i18n="eng.eyebrow">Engineering</div>
+    <h2 class="section-title">github.com/Elmahrosa</h2>
+    <p class="section-lead" data-i18n="eng.lead">UnityCare is one product inside the broader TEOS stack.</p>
+
+    <div class="repo-grid">
+      <div class="repo-card">
+        <a href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">UnityCare-Platform</a>
+        <p data-i18n="eng.r1">Hospital management, telemedicine, and blockchain audit. Consolidated from five repositories. Institutional deployment ready.</p>
+        <div class="repo-meta" data-i18n="eng.r1m">Public · TypeScript</div>
+      </div>
+      <div class="repo-card">
+        <a href="https://github.com/Elmahrosa" target="_blank" rel="noopener">UCH-Buyer-Kit</a>
+        <p data-i18n="eng.r2">Institutional procurement and due-diligence kit for the Unity Care Hospital sovereign telehealth platform.</p>
+        <div class="repo-meta" data-i18n="eng.r2m">Public · HTML</div>
+      </div>
+      <div class="repo-card">
+        <a href="https://github.com/Elmahrosa" target="_blank" rel="noopener">TEOS-Compliance-Kit</a>
+        <p data-i18n="eng.r3">Policy and documentation structures for institutional audits, governance, sovereignty, and regulatory compliance.</p>
+        <div class="repo-meta" data-i18n="eng.r3m">Public · Python</div>
+      </div>
+      <div class="repo-card">
+        <a href="https://github.com/Elmahrosa" target="_blank" rel="noopener">teos-sovereign-security-stack</a>
+        <p data-i18n="eng.r4">Root orchestration hub for the TEOS Sovereign Security Mesh — nine modular layers across the wider stack.</p>
+        <div class="repo-meta" data-i18n="eng.r4m">Public · PowerShell</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="partner">
+  <div class="wrap">
+    <div class="section-eyebrow" data-i18n="partner.eyebrow">Claude Partner Network</div>
+    <h2 class="section-title" data-i18n-html="partner.title"><em>Registered Member</em> of the Claude Partner Network.</h2>
+
+    <div class="partner-block">
+      <div class="partner-mark">U</div>
+      <div class="partner-text">
+        <h3 data-i18n="partner.h3">Elmahrosa International — Registered Member, Claude Partner Network by Anthropic · 2026.</h3>
+        <p data-i18n="partner.body">UnityCare is built by Elmahrosa International, a Registered Member of Anthropic's Claude Partner Network — the first Egyptian firm at this status. The same engineering discipline behind the TEOS security stack carries into UnityCare's consent engine and audit ledger.</p>
+        <p class="partner-disclaimer" data-i18n="partner.disclaimer">CPN status denotes program participation only, not endorsement or investment by Anthropic.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="cta-section">
+  <div class="wrap">
+    <h2 data-i18n-html="cta.title">Ready to <em>deploy?</em></h2>
+    <p data-i18n="cta.sub">Request an institutional briefing for a technical review, pricing discussion, and live demonstration.</p>
+    <div class="cta-buttons">
+      <a class="btn btn-primary" href="mailto:ayman@elmahrosa.org?subject=UnityCare%20Institutional%20Briefing" data-i18n="cta.b1">Email institutional inquiry</a>
+      <a class="btn btn-ghost" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener" data-i18n="cta.b2">Open GitHub repository</a>
+    </div>
+    <p class="cta-footnote" data-i18n="cta.foot">Pilot-first approach — validate with a single site, then scale to enterprise license or full ownership.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-mark">U</div>
+          <div class="brand-name">UnityCare</div>
+        </div>
+        <p data-i18n="footer.desc">Sovereign healthcare infrastructure by Elmahrosa International. Built in Alexandria. Part of the TEOS stack.</p>
+      </div>
+      <div class="footer-col">
+        <h5 data-i18n="footer.h1">Platform</h5>
+        <ul>
+          <li><a href="#platform" data-i18n="footer.p1">Architecture</a></li>
+          <li><a href="#capabilities" data-i18n="footer.p2">Capabilities</a></li>
+          <li><a href="#pricing" data-i18n="footer.p3">Pricing</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5 data-i18n="footer.h2">Company</h5>
+        <ul>
+          <li><a href="https://elmahrosa.org" target="_blank" rel="noopener" data-i18n="footer.c1">Elmahrosa International</a></li>
+          <li><a href="#partner" data-i18n="footer.c2">Partner status</a></li>
+          <li><a href="#contact" data-i18n="footer.c3">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5 data-i18n="footer.h3">Engineering</h5>
+        <ul>
+          <li><a href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener" data-i18n="footer.e1">GitHub repository</a></li>
+          <li><a href="mailto:ayman@elmahrosa.org">ayman@elmahrosa.org</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="footer.copy">© 2026 Elmahrosa International — All rights reserved.</span>
+      <span data-i18n="footer.cpn">Registered Member, Claude Partner Network by Anthropic · 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var i18n = {
+    en: {
+      "brand.by":"by Elmahrosa","brand.tag":"Sovereign Healthcare Infrastructure",
+      "nav.platform":"Platform","nav.capabilities":"Capabilities","nav.pricing":"Pricing","nav.partner":"Partner","nav.contact":"Contact",
+      "nav.badge":"Registered Member · CPN","nav.cta":"Request access",
+      "hero.eyebrow":"Sovereign Healthcare Infrastructure · Part of the TEOS Stack · Elmahrosa International",
+      "hero.title":"Healthcare is sovereign. Your <em>infrastructure</em> should be too.",
+      "hero.sub":"UnityCare is deployable infrastructure for hospitals, ministries, and health networks who want to own their stack — not rent a dashboard. Self-hosted by default. Built so the institution, not the vendor, holds the keys.",
+      "hero.cta1":"Request institutional briefing →","hero.cta2":"View on GitHub",
+      "hero.m1l":"Identity","hero.m1v":"JWT · RBAC · MFA",
+      "hero.m2l":"Records","hero.m2v":"FHIR R4 CRUD",
+      "hero.m3l":"Consent","hero.m3v":"Versioned + Audited",
+      "hero.m4l":"Data layer","hero.m4v":"PostgreSQL + Redis",
+      "hero.m5l":"Deployment","hero.m5v":"Docker · Private Cloud",
+      "hero.m6l":"Languages","hero.m6v":"English · Arabic (RTL)",
+      "cap.eyebrow":"Core Capabilities","cap.title":"What ships in <em>every</em> deployment.",
+      "cap.lead":"Four services, in the order an institution typically turns them on — identity first, then the clinical record, then the controls around it.",
+      "cap.verified":"Verified",
+      "cap.c1.title":"Identity <em>Service</em>","cap.c1.body":"Registration, login, JWT access and refresh tokens, role-based access control, and an MFA scaffold ready for institutional rollout.","cap.c1.tag":"Auth layer",
+      "cap.c2.title":"FHIR <em>Patient Records</em>","cap.c2.body":"Full FHIR R4 Patient resource CRUD with JSONB storage — identifiers, names, telecom, address, and extensions, structured for interoperability.","cap.c2.tag":"Clinical record",
+      "cap.c3.title":"Consent <em>Engine</em>","cap.c3.body":"Create, version, revoke, and audit patient consent directives — policy reference, scope, and a timestamp chain that can't be quietly edited.","cap.c3.tag":"Governance",
+      "cap.c4.title":"Audit <em>Ledger</em>","cap.c4.body":"Hash-chained, immutable log of every consent action, record access, and administrative event — verifiable independent of the vendor.","cap.c4.tag":"Compliance",
+      "arch.eyebrow":"Platform Architecture","arch.title":"A stack built to be <em>handed over</em>, not rented.",
+      "arch.lead":"Modern, boring-on-purpose infrastructure. Nothing here requires UnityCare to keep running it for you.",
+      "arch.n1":"Client → Next.js Frontend","arch.n2":"FastAPI Backend","arch.n3":"PostgreSQL + Redis",
+      "arch.fleet":"Fleet: Docker · Railway · GitHub Actions CI/CD — portable to any private cloud or on-prem environment",
+      "arch.d1.title":"Backend core","arch.d1.body":"FastAPI (Python) with JWT auth, refresh tokens, RBAC middleware, rate limiting, and bcrypt password hashing.",
+      "arch.d2.title":"Frontend","arch.d2.body":"Next.js 15 + TypeScript + Tailwind. Responsive, RTL-ready, with dual-language English and Arabic support.",
+      "arch.d3.title":"Data layer","arch.d3.body":"PostgreSQL with Alembic migrations, Redis cache, JSONB for FHIR resources, hash-chained audit integrity.",
+      "arch.d4.title":"Deployment","arch.d4.body":"Dockerized microservices, Railway CI/CD, health checks, and monitoring stubs for Prometheus and Grafana.",
+      "prin.eyebrow":"Operating Principles","prin.title":"Three commitments that shape <em>every deployment.</em>",
+      "prin.p1.title":"Sovereign by design","prin.p1.body":"Patient data, code, and credentials stay inside the institution's perimeter. Self-hosted by default — we pull only what's strictly required to run.",
+      "prin.p2.title":"Built for institutions","prin.p2.body":"Our buyers are hospital groups and health ministries, not individual clinics. Every capability is staged for pilot, then license, then full ownership transfer.",
+      "prin.p3.title":"Audit over assurance","prin.p3.body":"We don't ask institutions to trust a dashboard. The hash-chained ledger lets any party verify what happened, independent of the vendor.",
+      "prin.s1":"Minimum viable product, pilot-ready","prin.s2":"Interoperability standard","prin.s3":"Full RTL bilingual interface","prin.s4":"Self-hosted, zero recurring lock-in",
+      "price.eyebrow":"Institutional Tiers","price.title":"Structured for a fast pilot, with a clear path to <em>ownership.</em>","price.lead":"Two tiers. Both end with the institution holding the source.",
+      "price.t1.tier":"Pilot","price.t1.amount":"$25K–$50K / engagement","price.t1.desc":"Single-site institutional validation, 30–90 days.",
+      "price.t1.l1":"Technical onboarding and support","price.t1.l2":"Decision-maker demo path","price.t1.l3":"Docker deployment on your infrastructure","price.t1.cta":"Inquire about a pilot",
+      "price.t2.tier":"Institutional license","price.t2.amount":"$60K–$120K / license","price.t2.desc":"Full platform deployment with long-term ownership terms.",
+      "price.t2.l1":"All MVP services included","price.t2.l2":"White-label deployment option","price.t2.l3":"Private cloud or on-prem model","price.t2.l4":"Customization and integration scope","price.t2.cta":"Request a license briefing",
+      "price.note":"Institutional license unlocks full source access, private deployment, and long-term ownership terms.",
+      "pos.eyebrow":"Market Positioning","pos.title":"Built for buyers who value <em>ownership</em> over subscription.",
+      "pos.c1.tag":"For hospital groups","pos.c1.title":"Replace recurring SaaS","pos.c1.body":"Trade vendor-dependent dashboards for a deployable stack your own engineers can run, extend, and eventually own outright.",
+      "pos.c2.tag":"For health ministries","pos.c2.title":"A national health backbone","pos.c2.body":"Position UnityCare as sovereign digital infrastructure — national control, local deployment, no foreign dependency.",
+      "pos.c3.tag":"For investors","pos.c3.title":"Infrastructure as an asset","pos.c3.body":"Pilot revenue, license upside, and a clear path to acquisition-level ownership transfer for institutional buyers.",
+      "eng.eyebrow":"Engineering","eng.lead":"UnityCare is one product inside the broader TEOS stack.",
+      "eng.r1":"Hospital management, telemedicine, and blockchain audit. Consolidated from five repositories. Institutional deployment ready.","eng.r1m":"Public · TypeScript",
+      "eng.r2":"Institutional procurement and due-diligence kit for the Unity Care Hospital sovereign telehealth platform.","eng.r2m":"Public · HTML",
+      "eng.r3":"Policy and documentation structures for institutional audits, governance, sovereignty, and regulatory compliance.","eng.r3m":"Public · Python",
+      "eng.r4":"Root orchestration hub for the TEOS Sovereign Security Mesh — nine modular layers across the wider stack.","eng.r4m":"Public · PowerShell",
+      "partner.eyebrow":"Claude Partner Network","partner.title":"<em>Registered Member</em> of the Claude Partner Network.",
+      "partner.h3":"Elmahrosa International — Registered Member, Claude Partner Network by Anthropic · 2026.",
+      "partner.body":"UnityCare is built by Elmahrosa International, a Registered Member of Anthropic's Claude Partner Network — the first Egyptian firm at this status. The same engineering discipline behind the TEOS security stack carries into UnityCare's consent engine and audit ledger.",
+      "partner.disclaimer":"CPN status denotes program participation only, not endorsement or investment by Anthropic.",
+      "cta.title":"Ready to <em>deploy?</em>","cta.sub":"Request an institutional briefing for a technical review, pricing discussion, and live demonstration.",
+      "cta.b1":"Email institutional inquiry","cta.b2":"Open GitHub repository",
+      "cta.foot":"Pilot-first approach — validate with a single site, then scale to enterprise license or full ownership.",
+      "footer.desc":"Sovereign healthcare infrastructure by Elmahrosa International. Built in Alexandria. Part of the TEOS stack.",
+      "footer.h1":"Platform","footer.p1":"Architecture","footer.p2":"Capabilities","footer.p3":"Pricing",
+      "footer.h2":"Company","footer.c1":"Elmahrosa International","footer.c2":"Partner status","footer.c3":"Contact",
+      "footer.h3":"Engineering","footer.e1":"GitHub repository",
+      "footer.copy":"© 2026 Elmahrosa International — All rights reserved.","footer.cpn":"Registered Member, Claude Partner Network by Anthropic · 2026"
+    },
+    ar: {
+      "brand.by":"من إلمحروسة","brand.tag":"بنية تحتية صحية سيادية",
+      "nav.platform":"المنصة","nav.capabilities":"الإمكانات","nav.pricing":"الأسعار","nav.partner":"الشراكة","nav.contact":"تواصل",
+      "nav.badge":"عضو مسجّل · CPN","nav.cta":"اطلب الوصول",
+      "hero.eyebrow":"بنية تحتية صحية سيادية · جزء من منظومة TEOS · إلمحروسة الدولية",
+      "hero.title":"الرعاية الصحية سيادة. وبنيتك التحتية <em>يجب أن تكون كذلك أيضًا</em>.",
+      "hero.sub":"يونيتي كير هي بنية تحتية قابلة للنشر للمستشفيات والوزارات والشبكات الصحية التي تريد امتلاك منظومتها — لا استئجار لوحة تحكم. مستضافة ذاتيًا بشكل افتراضي. مصمَّمة بحيث تحتفظ المؤسسة، لا المورّد، بالمفاتيح.",
+      "hero.cta1":"← اطلب إحاطة مؤسسية","hero.cta2":"عرض على GitHub",
+      "hero.m1l":"الهوية","hero.m1v":"JWT · RBAC · MFA",
+      "hero.m2l":"السجلات","hero.m2v":"FHIR R4 CRUD",
+      "hero.m3l":"الموافقة","hero.m3v":"مُوثّقة ومُراجَعة",
+      "hero.m4l":"طبقة البيانات","hero.m4v":"PostgreSQL + Redis",
+      "hero.m5l":"النشر","hero.m5v":"Docker · سحابة خاصة",
+      "hero.m6l":"اللغات","hero.m6v":"الإنجليزية · العربية (RTL)",
+      "cap.eyebrow":"الإمكانات الأساسية","cap.title":"ما يتوفر في <em>كل</em> عملية نشر.",
+      "cap.lead":"أربع خدمات، بالترتيب الذي تُفعّلها به المؤسسة عادةً — الهوية أولًا، ثم السجل السريري، ثم الضوابط المحيطة به.",
+      "cap.verified":"مُعتمد",
+      "cap.c1.title":"خدمة <em>الهوية</em>","cap.c1.body":"تسجيل، دخول، رموز JWT ورموز تجديد، تحكم بالوصول حسب الدور، وبنية أساسية للمصادقة الثنائية جاهزة للتفعيل المؤسسي.","cap.c1.tag":"طبقة المصادقة",
+      "cap.c2.title":"سجلات <em>المرضى FHIR</em>","cap.c2.body":"عمليات إنشاء وقراءة وتعديل وحذف كاملة لمورد المريض بمعيار FHIR R4 مع تخزين JSONB — معرّفات، أسماء، بيانات اتصال، عناوين، وامتدادات، مُهيكلة لقابلية التشغيل البيني.","cap.c2.tag":"السجل السريري",
+      "cap.c3.title":"محرك <em>الموافقة</em>","cap.c3.body":"إنشاء وتوثيق نُسخ وإلغاء ومراجعة توجيهات موافقة المريض — مرجع السياسة والنطاق وسلسلة توقيت لا يمكن تعديلها بصمت.","cap.c3.tag":"الحوكمة",
+      "cap.c4.title":"سجل <em>المراجعة</em>","cap.c4.body":"سجل غير قابل للتعديل ومترابط تشفيريًا لكل إجراء موافقة، وصول للسجلات، وحدث إداري — قابل للتحقق باستقلالية عن المورّد.","cap.c4.tag":"الامتثال",
+      "arch.eyebrow":"بنية المنصة","arch.title":"منظومة مُصمَّمة لتُسلَّم، لا لتُستأجر.",
+      "arch.lead":"بنية تحتية حديثة وبسيطة عمدًا. لا شيء هنا يتطلب من يونيتي كير الاستمرار في تشغيلها نيابة عنك.",
+      "arch.n1":"العميل ← واجهة Next.js","arch.n2":"خادم FastAPI","arch.n3":"PostgreSQL + Redis",
+      "arch.fleet":"الأسطول: Docker · Railway · GitHub Actions CI/CD — قابل للنقل إلى أي سحابة خاصة أو بيئة محلية",
+      "arch.d1.title":"نواة الخادم","arch.d1.body":"FastAPI (بايثون) مع مصادقة JWT، رموز تجديد، وسيط RBAC، تحديد معدل الطلبات، وتشفير كلمات المرور بـ bcrypt.",
+      "arch.d2.title":"الواجهة الأمامية","arch.d2.body":"Next.js 15 + TypeScript + Tailwind. متجاوبة، جاهزة لـ RTL، مع دعم ثنائي اللغة إنجليزي وعربي.",
+      "arch.d3.title":"طبقة البيانات","arch.d3.body":"PostgreSQL مع ترحيلات Alembic، ذاكرة تخزين مؤقت Redis، JSONB لموارد FHIR، وسلامة مراجعة مترابطة تشفيريًا.",
+      "arch.d4.title":"النشر","arch.d4.body":"خدمات مصغّرة داخل حاويات Docker، تكامل مستمر عبر Railway، فحوصات صحة، وقوالب مراقبة لـ Prometheus وGrafana.",
+      "prin.eyebrow":"مبادئ التشغيل","prin.title":"ثلاثة التزامات تُشكّل <em>كل عملية نشر.</em>",
+      "prin.p1.title":"سيادية بالتصميم","prin.p1.body":"تبقى بيانات المرضى والشيفرة وبيانات الاعتماد داخل محيط المؤسسة. مستضافة ذاتيًا افتراضيًا — لا نسحب سوى ما هو ضروري تمامًا للتشغيل.",
+      "prin.p2.title":"مصمَّمة للمؤسسات","prin.p2.body":"مشترونا هم مجموعات مستشفيات ووزارات صحة، لا عيادات فردية. كل إمكانية مُرحّلة من تجربة، إلى ترخيص، إلى نقل ملكية كامل.",
+      "prin.p3.title":"المراجعة قبل الثقة","prin.p3.body":"لا نطلب من المؤسسات الثقة بلوحة تحكم. سجل المراجعة المترابط تشفيريًا يتيح لأي طرف التحقق مما حدث، باستقلالية عن المورّد.",
+      "prin.s1":"منتج قابل للتطبيق، جاهز للتجربة","prin.s2":"معيار قابلية التشغيل البيني","prin.s3":"واجهة كاملة ثنائية اللغة بدعم RTL","prin.s4":"مستضافة ذاتيًا، بلا ارتباط متكرر",
+      "price.eyebrow":"مستويات مؤسسية","price.title":"مُصمَّمة لتجربة سريعة، مع مسار واضح نحو <em>الملكية.</em>","price.lead":"مستويان. كلاهما ينتهي بامتلاك المؤسسة للشيفرة المصدرية.",
+      "price.t1.tier":"تجربة","price.t1.amount":"٢٥–٥٠ ألف دولار / تعاقد","price.t1.desc":"تحقّق مؤسسي في موقع واحد، من ٣٠ إلى ٩٠ يومًا.",
+      "price.t1.l1":"تأهيل تقني ودعم","price.t1.l2":"مسار عرض لصنّاع القرار","price.t1.l3":"نشر عبر Docker على بنيتك التحتية","price.t1.cta":"استفسر عن تجربة",
+      "price.t2.tier":"ترخيص مؤسسي","price.t2.amount":"٦٠–١٢٠ ألف دولار / ترخيص","price.t2.desc":"نشر كامل للمنصة بشروط ملكية طويلة الأمد.",
+      "price.t2.l1":"جميع خدمات المنتج الأولي مشمولة","price.t2.l2":"خيار نشر بعلامة بيضاء","price.t2.l3":"نموذج سحابة خاصة أو محلي","price.t2.l4":"نطاق تخصيص وتكامل","price.t2.cta":"اطلب إحاطة عن الترخيص",
+      "price.note":"الترخيص المؤسسي يفتح الوصول الكامل للشيفرة المصدرية، والنشر الخاص، وشروط الملكية طويلة الأمد.",
+      "pos.eyebrow":"التموضع في السوق","pos.title":"مصمَّمة للمشترين الذين يقدّرون <em>الملكية</em> على الاشتراك.",
+      "pos.c1.tag":"لمجموعات المستشفيات","pos.c1.title":"استبدال SaaS المتكرر","pos.c1.body":"استبدل لوحات التحكم المرتبطة بالمورّد بمنظومة قابلة للنشر يديرها مهندسوك، ويوسّعونها، ويمتلكونها كاملة في النهاية.",
+      "pos.c2.tag":"لوزارات الصحة","pos.c2.title":"بنية صحية وطنية","pos.c2.body":"ضع يونيتي كير كبنية تحتية رقمية سيادية — تحكم وطني، نشر محلي، بلا اعتماد على جهة أجنبية.",
+      "pos.c3.tag":"للمستثمرين","pos.c3.title":"البنية التحتية كأصل","pos.c3.body":"إيرادات من التجارب، وترقية عبر التراخيص، ومسار واضح نحو نقل ملكية بمستوى استحواذ للمشترين المؤسسيين.",
+      "eng.eyebrow":"الهندسة","eng.lead":"يونيتي كير هي منتج واحد ضمن منظومة TEOS الأوسع.",
+      "eng.r1":"إدارة مستشفيات، طب عن بُعد، ومراجعة عبر البلوكتشين. مُوحَّدة من خمس مستودعات. جاهزة للنشر المؤسسي.","eng.r1m":"عام · TypeScript",
+      "eng.r2":"حزمة شراء وفحص نافي للعناية الواجبة لمنصة Unity Care Hospital السيادية للرعاية عن بُعد.","eng.r2m":"عام · HTML",
+      "eng.r3":"هياكل سياسات ووثائق للمراجعات المؤسسية، الحوكمة، السيادة، والامتثال التنظيمي.","eng.r3m":"عام · Python",
+      "eng.r4":"مركز التنسيق الجذري لمنظومة TEOS السيادية الأمنية — تسع طبقات معيارية عبر المنظومة الأوسع.","eng.r4m":"عام · PowerShell",
+      "partner.eyebrow":"شبكة شركاء كلود","partner.title":"<em>عضو مسجّل</em> في شبكة شركاء كلود.",
+      "partner.h3":"إلمحروسة الدولية — عضو مسجّل، شبكة شركاء كلود من Anthropic · ٢٠٢٦.",
+      "partner.body":"يونيتي كير من بناء إلمحروسة الدولية، عضو مسجّل في شبكة شركاء كلود التابعة لـ Anthropic — أول شركة مصرية تحصل على هذا التصنيف. نفس الانضباط الهندسي وراء منظومة TEOS الأمنية ينتقل إلى محرك الموافقة وسجل المراجعة في يونيتي كير.",
+      "partner.disclaimer":"عضوية CPN تعني المشاركة في البرنامج فقط، وليست تأييدًا أو استثمارًا من Anthropic.",
+      "cta.title":"جاهز <em>للنشر؟</em>","cta.sub":"اطلب إحاطة مؤسسية لمراجعة تقنية، ومناقشة الأسعار، وعرض توضيحي مباشر.",
+      "cta.b1":"إرسال استفسار مؤسسي","cta.b2":"فتح مستودع GitHub",
+      "cta.foot":"نهج يبدأ بتجربة — تحقّق في موقع واحد، ثم التوسّع نحو ترخيص مؤسسي أو ملكية كاملة.",
+      "footer.desc":"بنية تحتية صحية سيادية من إلمحروسة الدولية. صُنعت في الإسكندرية. جزء من منظومة TEOS.",
+      "footer.h1":"المنصة","footer.p1":"البنية","footer.p2":"الإمكانات","footer.p3":"الأسعار",
+      "footer.h2":"الشركة","footer.c1":"إلمحروسة الدولية","footer.c2":"حالة الشراكة","footer.c3":"تواصل",
+      "footer.h3":"الهندسة","footer.e1":"مستودع GitHub",
+      "footer.copy":"© 2026 إلمحروسة الدولية — جميع الحقوق محفوظة.","footer.cpn":"عضو مسجّل، شبكة شركاء كلود من Anthropic · ٢٠٢٦"
     }
+  };
 
-    function applyArabic() {
-      for (var key in ar) {
-        var els = document.querySelectorAll('[' + key + ']');
-        for (var i = 0; i < els.length; i++) {
-          if (key === 'data-ar-nav') {
-            var links = els[i].querySelectorAll('a');
-            var parts = ar[key].split('|');
-            for (var j = 0; j < links.length && j < parts.length; j++) {
-              links[j].textContent = parts[j];
-            }
-          } else {
-            els[i].innerHTML = ar[key];
-          }
-        }
-      }
-    }
+  var current = localStorage.getItem('unitycare-lang') || 'en';
 
-    function applyEnglish() {
-      var en = {
-        'data-ar-eyebrow': 'Deployed at <strong>health.elmahrosa.org</strong>',
-        'data-ar-h1': 'Deployable healthcare infrastructure.<br><span class="gradient">Own your stack.</span>',
-        'data-ar-hero-p': 'UnityCare is a production-ready platform for hospitals, health networks, and sovereign health systems. Identity &amp; access control, FHIR R4 patient records, consent management, and an immutable audit ledger &mdash; deployable on your infrastructure or ours.',
-        'data-ar-specs': 'Deployment Specifications',
-        'data-ar-nav': null
-      };
-      for (var key in en) {
-        var els = document.querySelectorAll('[' + key + ']');
-        for (var i = 0; i < els.length; i++) {
-          if (key === 'data-ar-nav') {
-            var links = els[i].querySelectorAll('a');
-            var orig = ['Platform', 'Developers', 'API Reference', 'Trust Center', 'Contact'];
-            for (var j = 0; j < links.length && j < orig.length; j++) {
-              if (!links[j].classList.contains('lang-btn') && !links[j].classList.contains('cpn-badge')) {
-                links[j].textContent = orig[j];
-              }
-            }
-          } else if (en[key] !== null) {
-            els[i].innerHTML = en[key];
-          }
-        }
-      }
-    }
-  </script>
+  function applyLang(lang){
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    var dict = i18n[lang];
+
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var key = el.getAttribute('data-i18n');
+      if (dict[key]) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(function(el){
+      var key = el.getAttribute('data-i18n-html');
+      if (dict[key]) el.innerHTML = dict[key];
+    });
+
+    document.getElementById('langCurrent').textContent = lang.toUpperCase();
+    document.getElementById('langOther').textContent = lang === 'en' ? 'AR' : 'EN';
+
+    localStorage.setItem('unitycare-lang', lang);
+  }
+
+  document.getElementById('langToggle').addEventListener('click', function(){
+    current = current === 'en' ? 'ar' : 'en';
+    applyLang(current);
+  });
+
+  applyLang(current);
+})();
+</script>
+
 </body>
 </html>
