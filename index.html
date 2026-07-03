@@ -223,11 +223,11 @@
             <span class="eyebrow-dot"></span>
             <span>Deployed at <strong>health.elmahrosa.org</strong></span>
           </div>
-          <h1>Deployable healthcare infrastructure.<br><span class="gradient">Own your stack.</span></h1>
+          <h1><span class="gradient">Research Compliance Infrastructure</span><br>for Regulated Biomedical Data</h1>
           <p>
-            UnityCare is a production-ready platform for hospitals, health networks, and sovereign health systems.
-            Identity &amp; access control, FHIR R4 patient records, consent management, and an immutable audit ledger
-            &mdash; deployable on your infrastructure or ours.
+            Deterministic policy evaluation with Claude-generated audit narratives for life sciences research.
+            Built on a production-hardened platform: SHA-256 audit chains, FHIR R4, RBAC, and consent management
+            &mdash; now extended for multi-site study governance and IRB-compliant data sharing.
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Briefing">Request Institutional Briefing</a>
@@ -245,27 +245,27 @@
           </div>
         </div>
         <div class="hero-card">
-          <h3>Deployment Specifications</h3>
-          <div class="sub">Production stack as of June 2026</div>
+          <h3>System Status</h3>
+          <div class="sub">Live deployment on Railway</div>
           <div class="spec-row">
-            <span class="spec-label">Identity</span>
-            <span class="spec-value">JWT + Refresh + RBAC</span>
+            <span class="spec-label"><span class="status-badge status-live">Live</span> Backend</span>
+            <span class="spec-value"><a href="https://backend-production-9705.up.railway.app/health" target="_blank" rel="noopener" style="color:var(--accent-2);">Healthy &rarr;</a></span>
           </div>
           <div class="spec-row">
-            <span class="spec-label">Patient Records</span>
-            <span class="spec-value">FHIR R4 CRUD <span class="status-badge status-live">Live</span></span>
+            <span class="spec-label"><span class="status-badge status-live">Live</span> Database</span>
+            <span class="spec-value" style="color:var(--accent-2);">Connected</span>
           </div>
           <div class="spec-row">
-            <span class="spec-label">Consent</span>
-            <span class="spec-value">Create &bull; Version &bull; Revoke &bull; Audit</span>
+            <span class="spec-label"><span class="status-badge status-live">Live</span> Research API</span>
+            <span class="spec-value" style="color:var(--accent-2);">Online</span>
           </div>
           <div class="spec-row">
-            <span class="spec-label">Database</span>
-            <span class="spec-value">PostgreSQL + Redis</span>
+            <span class="spec-label">Audit Chain</span>
+            <span class="spec-value">SHA-256 + HMAC</span>
           </div>
           <div class="spec-row">
-            <span class="spec-label">Audit</span>
-            <span class="spec-value">SHA-256 Hash Chain + HMAC</span>
+            <span class="spec-label">CI/CD</span>
+            <span class="spec-value">GitHub Actions + Railway</span>
           </div>
           <div class="spec-row">
             <span class="spec-label">Languages</span>
@@ -278,34 +278,32 @@
     <section id="platform" class="section">
       <div class="container">
         <div class="section-header">
-          <h2>Deployment architecture</h2>
-          <p>End-to-end stack from public portal to database.</p>
+          <h2>Architecture</h2>
+          <p>End-to-end stack from portal to audit ledger. Designed for research compliance workflows.</p>
         </div>
-        <div class="arch-flow">
-          <div class="node">
-            <div class="domain">health.elmahrosa.org</div>
-            <div class="label">Frontend (Next.js)</div>
-          </div>
+        <div class="arch-flow" style="padding:28px;">
+          <div class="node"><div class="domain">Next.js</div><div class="label">Frontend Portal</div></div>
           <div class="arrow">&rarr;</div>
-          <div class="node highlight">
-            <div class="domain">api.elmahrosa.org</div>
-            <div class="label">Backend API (FastAPI)</div>
-          </div>
+          <div class="node highlight"><div class="domain">FastAPI</div><div class="label">Policy Engine + API</div></div>
           <div class="arrow">&rarr;</div>
-          <div class="node">
-            <div class="domain">PostgreSQL + Redis</div>
-            <div class="label">Data Layer</div>
-          </div>
+          <div class="node"><div class="domain">Claude</div><div class="label">Audit Narrative Gen.</div></div>
+          <div class="arrow">&rarr;</div>
+          <div class="node highlight"><div class="domain">SHA-256 Ledger</div><div class="label">Immutable Audit Chain</div></div>
+          <div class="arrow">&rarr;</div>
+          <div class="node"><div class="domain">PostgreSQL</div><div class="label">Data + Audit Storage</div></div>
         </div>
-        <div class="arch-flow" style="margin-top:12px;padding:16px;">
-          <div class="node">
-            <div class="domain">developers.elmahrosa.org</div>
-            <div class="label">Developer Portal</div>
-          </div>
+        <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;">
+          <span style="padding:4px 10px;border-radius:6px;border:1px solid var(--line);font-size:11px;color:var(--muted);">FHIR R4</span>
+          <span style="padding:4px 10px;border-radius:6px;border:1px solid var(--line);font-size:11px;color:var(--muted);">RBAC</span>
+          <span style="padding:4px 10px;border-radius:6px;border:1px solid var(--line);font-size:11px;color:var(--muted);">JWT + MFA</span>
+          <span style="padding:4px 10px;border-radius:6px;border:1px solid var(--line);font-size:11px;color:var(--muted);">SHA-256 Audit</span>
+          <span style="padding:4px 10px;border-radius:6px;border:1px solid var(--line);font-size:11px;color:var(--muted);">Research Governance</span>
+          <span style="padding:4px 10px;border-radius:6px;border:1px solid var(--line);font-size:11px;color:var(--muted);">IRB Workflows</span>
+          <span style="padding:4px 10px;border-radius:6px;border:1px solid var(--line);font-size:11px;color:var(--muted);">Docker + CI/CD</span>
         </div>
         <div class="arch-note">
           <span class="cpn-badge" style="font-size:10px;">CPN Member</span>
-          &nbsp; All services deployed via Railway &bull; Docker &bull; GitHub Actions CI/CD
+          &nbsp; Deployed via Railway &bull; Docker &bull; GitHub Actions CI/CD
         </div>
       </div>
     </section>
@@ -420,34 +418,112 @@
       </div>
     </section>
 
-    <section id="compliance" class="section">
+    <section id="metrics" class="section">
       <div class="container">
         <div class="section-header">
-          <h2>Compliance &amp; security</h2>
-          <p>Architecture aligned with healthcare regulatory standards. Formal audits in progress.</p>
+          <h2>By the numbers</h2>
+          <p>Production-hardened platform measured across code, compliance, and security.</p>
         </div>
         <div class="compliance-grid">
           <div class="compliance-card">
-            <div class="num">HIPAA</div>
-            <div class="label">Architecture aligned<br>No formal audit yet</div>
-          </div>
-          <div class="compliance-card">
-            <div class="num">GDPR</div>
-            <div class="label">Soft-delete &amp; data export<br>Controls documented</div>
+            <div class="num">54+</div>
+            <div class="label">Automated Tests<br>6 modules</div>
           </div>
           <div class="compliance-card">
             <div class="num">FHIR R4</div>
-            <div class="label">Patient resource CRUD<br>JSONB storage</div>
+            <div class="label">Native Support<br>Patient CRUD</div>
           </div>
           <div class="compliance-card">
-            <div class="num">SOC 2</div>
-            <div class="label">Certification roadmap<br>2026&ndash;2027 target</div>
+            <div class="num">7</div>
+            <div class="label">Compliance Dimensions<br>Real-time evaluation</div>
+          </div>
+          <div class="compliance-card">
+            <div class="num">SHA-256</div>
+            <div class="label">Audit Chain<br>Tamper-evident</div>
           </div>
         </div>
         <div class="compliance-footer">
           <span class="cpn-badge">CPN Member</span>
-          &nbsp; Elmahrosa International is a registered member of the Claude Partner Network.
-          &nbsp; <a href="https://elmahrosa.org/trust" target="_blank" rel="noopener" style="color:var(--accent);">Trust Center &rarr;</a>
+          &nbsp; Elmahrosa International participates in the Claude Partner Network.
+          &nbsp; <a href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener" style="color:var(--accent);">View on GitHub &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="claude" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2><span class="gradient">Built with Claude</span></h2>
+          <p>Deterministic compliance decisions are made by UnityCare's policy engine. Claude transforms those decisions into audit-ready narratives.</p>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7v6c0 5.25 3.83 10.15 10 12 6.17-1.85 10-6.75 10-12V7l-10-5z"/><path d="M9 12l2 2 4-4"/></svg>
+            </div>
+            <h3>IRB-Ready Audit Narratives</h3>
+            <p>Claude generates human-readable explanations of compliance decisions that IRB boards and compliance officers can actually use &mdash; not just allow/deny logs.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h3>Research Compliance Explanations</h3>
+            <p>Each access request evaluates 7 policy dimensions simultaneously. Claude explains which dimension was decisive and why, in context of the specific study and dataset.</p>
+          </div>
+          <div class="card">
+            <div class="icon-box">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>Governance Summaries</h3>
+            <p>Periodic compliance reports generated by Claude for institutional review. Covers study-level IRB status, cohort access patterns, and data sharing compliance across collaborators.</p>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:24px;">
+          <p style="color:var(--muted);font-size:14px;">
+            Claude explains decisions. It does not make them. All compliance evaluations are deterministic and auditable.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="research" class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Research Compliance</h2>
+          <p>Governance infrastructure designed for multi-site life sciences studies and regulated biomedical data.</p>
+        </div>
+        <div class="grid-4">
+          <div class="card"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h3>Study Governance</h3><p>IRB status tracking, data classification (PHI/de-identified/research-only), and geographic scope enforcement per study.</p></div>
+          <div class="card"><div class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><h3>IRB Status Tracking</h3><p>Track approval, expiry, and pending renewals. Expired IRB automatically blocks data access across all cohorts.</p></div>
+          <div class="card"><div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Cohort Protection</h3><p>Open, blinded, and controlled cohort types. Blinded cohort access restricted to approved research purposes only.</p></div>
+          <div class="card"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M16 13H8M16 17H8M10 9H8"/></svg></div><h3>Audit Narratives</h3><p>Every access request generates a Claude-powered explanation suitable for IRB review, regulatory audit, or data use agreement compliance.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="workflow" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Demo workflow</h2>
+          <p>From data request to audit-ready compliance narrative in milliseconds.</p>
+        </div>
+        <div class="arch-flow" style="padding:32px;">
+          <div class="node highlight"><div class="domain">Researcher</div><div class="label">Requests dataset access</div></div>
+          <div class="arrow">&rarr;</div>
+          <div class="node"><div class="domain">7-Dimension Engine</div><div class="label">Compliance evaluation</div></div>
+          <div class="arrow">&rarr;</div>
+          <div class="node highlight"><div class="domain">Claude</div><div class="label">Audit narrative generation</div></div>
+          <div class="arrow">&rarr;</div>
+          <div class="node"><div class="domain">SHA-256 Chain</div><div class="label">Immutable audit record</div></div>
+          <div class="arrow">&rarr;</div>
+          <div class="node"><div class="domain">FHIR</div><div class="label">Standardized output</div></div>
+          <div class="arrow">&rarr;</div>
+          <div class="node"><div class="domain">Audit Export</div><div class="label">IRB-ready report</div></div>
+        </div>
+        <div class="arch-note">
+          <span class="status-badge status-live">Live</span>
+          &nbsp; Try it: <code style="color:var(--accent);">POST /api/v1/research/access</code> &mdash; see <a href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener" style="color:var(--accent);">docs on GitHub</a>
         </div>
       </div>
     </section>
@@ -532,13 +608,18 @@
           <h2>Ready to deploy?</h2>
           <p>Request an institutional briefing for a technical review, pricing discussion, and live demonstration.</p>
           <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;">
-            <a class="btn btn-primary" href="mailto:info@elmahrosa.org?subject=UnityCare%20Briefing">Email Institutional Inquiry</a>
-            <a class="btn btn-outline-light" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">Open GitHub Repository</a>
+            <a class="btn btn-primary" href="https://backend-production-9705.up.railway.app/api/v1/research/studies" target="_blank" rel="noopener">Live Demo &rarr;</a>
+            <a class="btn" href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener">View on GitHub</a>
+            <a class="btn btn-outline-light" href="mailto:info@elmahrosa.org?subject=UnityCare%20Briefing">Contact Us</a>
           </div>
           <div class="notice" style="margin-top:16px;font-size:12px;color:var(--muted);">
-            Developer portal: <a href="https://developers.elmahrosa.org" target="_blank" rel="noopener" style="color:var(--accent);">developers.elmahrosa.org</a>
+            <a href="https://backend-production-9705.up.railway.app/docs" target="_blank" rel="noopener" style="color:var(--accent);">API Reference</a>
             &nbsp;&bull;&nbsp;
-            API reference: <a href="https://api.elmahrosa.org/docs" target="_blank" rel="noopener" style="color:var(--accent);">api.elmahrosa.org/docs</a>
+            <a href="https://github.com/Elmahrosa/UnityCare-Platform" target="_blank" rel="noopener" style="color:var(--accent);">Architecture</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://backend-production-9705.up.railway.app/health" target="_blank" rel="noopener" style="color:var(--accent);">System Status</a>
+            &nbsp;&bull;&nbsp;
+            <a href="https://github.com/Elmahrosa/UnityCare-Platform/blob/main/ARCHITECTURE.md" target="_blank" rel="noopener" style="color:var(--accent);">Documentation</a>
           </div>
         </div>
       </div>
@@ -579,12 +660,12 @@
   <footer>
     <div class="container">
       <div class="footer-badges">
-        <span class="footer-badge"><span class="dot" style="background:var(--accent);"></span> Elmahrosa International</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--gold);"></span> Claude Partner Network Member</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> Built in Alexandria, Egypt</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--accent-2);"></span> FHIR R4 Architecture</span>
-        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> HIPAA/GDPR Aligned</span>
-        <a href="https://health.elmahrosa.org/status" target="_blank" rel="noopener" class="footer-badge" style="text-decoration:none;"><span class="dot" style="background:var(--accent-2);"></span> Product Status</a>
+        <span class="footer-badge"><span class="dot" style="background:var(--accent);"></span> Built in Alexandria, Egypt</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--gold);"></span> Claude Partner Network</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--accent-2);"></span> Open Source</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--muted);"></span> Production Deployment</span>
+        <span class="footer-badge"><span class="dot" style="background:var(--accent-2);"></span> Institutional Focus</span>
+        <a href="https://backend-production-9705.up.railway.app/health" target="_blank" rel="noopener" class="footer-badge" style="text-decoration:none;"><span class="dot" style="background:var(--accent-2);"></span> System Health</a>
       </div>
       <div class="footer-row">
         <div>
