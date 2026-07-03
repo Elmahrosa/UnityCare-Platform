@@ -33,6 +33,8 @@ class AuthService:
         user = result.scalar_one_or_none()
         if not user:
             return None
+        if user.locked_until and user.locked_until > datetime.now(timezone.utc):
+            return None
         if not verify_password(password, user.password_hash):
             user.failed_login_attempts += 1
             if user.failed_login_attempts >= 5:
@@ -47,6 +49,7 @@ class AuthService:
     def create_access_token(self, user: User) -> str:
         payload = {
             "sub": str(user.id),
+            "type": "access",
             "email": user.email,
             "role": user.role.value,
             "iat": datetime.now(timezone.utc),
@@ -66,10 +69,16 @@ class AuthService:
     async def verify_token(self, token: str) -> User | None:
         try:
             payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+            if payload.get("type") != "access":
+                return None
             user_id = payload.get("sub")
             if not user_id:
                 return None
-            result = await self.db.execute(select(User).where(User.id == user_id))
+            try:
+                user_uuid = uuid.UUID(user_id)
+            except (ValueError, TypeError):
+                return None
+            result = await self.db.execute(select(User).where(User.id == user_uuid))
             return result.scalar_one_or_none()
         except JWTError:
             return None

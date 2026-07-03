@@ -1,8 +1,8 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import String, Boolean, DateTime, ForeignKey, Enum as SAEnum, Integer
+from sqlalchemy import String, Boolean, DateTime, ForeignKey, Enum as SAEnum, Integer, JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID
 import enum
 from app.database import Base
 
@@ -39,7 +39,7 @@ class Role(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
-    permissions: Mapped[dict] = mapped_column(JSONB, default=dict)
+    permissions: Mapped[dict] = mapped_column(JSON, default=dict)
 
 
 class Session(Base):
@@ -48,7 +48,7 @@ class Session(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     refresh_token_hash: Mapped[str] = mapped_column(String(255), nullable=False)
-    device_info: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    device_info: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     ip_address: Mapped[str | None] = mapped_column(String(45), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

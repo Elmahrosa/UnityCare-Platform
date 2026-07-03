@@ -411,3 +411,29 @@ Recommended: Better Stack or UptimeRobot checking `GET /health` on both services
 ---
 
 *See also: `MONITORING.md` for the runbook, alert thresholds, and rollback procedures, and `docs/architecture-diagram.md` for the system context diagram.*
+
+---
+
+## 11. Release Process
+
+### Creating a Release
+
+```bash
+./scripts/release.sh v1.0.0
+```
+
+This runs the full test suite, creates an annotated git tag, and pushes it. GitHub Actions automatically generates a GitHub Release with changelog.
+
+### Emergency Rollback
+
+```bash
+./scripts/rollback.sh v0.9.0
+```
+
+Or without arguments to rollback to the previous tag:
+
+```bash
+./scripts/rollback.sh
+```
+
+The rollback script resets `main` to the target tag, force-pushes, and logs the event to `rollback_audit.log`.

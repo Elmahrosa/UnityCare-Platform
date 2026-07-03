@@ -108,3 +108,39 @@ class TestAuthTokens:
         headers = {"Authorization": "Bearer invalid-token"}
         resp = await client.get("/api/v1/admin/users/me", headers=headers)
         assert resp.status_code == 401
+
+    async def test_login_while_locked(self, db_session: AsyncSession, test_user: User):
+        auth = AuthService(db_session)
+        test_user.locked_until = datetime.now(timezone.utc) + timedelta(hours=1)
+        await db_session.flush()
+        user = await auth.authenticate(test_user.email, "TestPass123!")
+        assert user is None
+        await db_session.refresh(test_user)
+        assert test_user.failed_login_attempts == 0
+
+    async def test_refresh_token_rejected_as_access(self, db_session: AsyncSession, test_user: User):
+        auth = AuthService(db_session)
+        refresh_token = auth.create_refresh_token(test_user)
+        user = await auth.verify_token(refresh_token)
+        assert user is None
+
+    async def test_invalid_uuid_in_jwt_subject(self, db_session: AsyncSession, test_user: User):
+        auth = AuthService(db_session)
+        token = auth.create_access_token(test_user)
+        from jose import jwt
+        from app.config import settings
+        bad_payload = {
+            "sub": "not-a-uuid-at-all",
+            "type": "access",
+            "iat": datetime.now(timezone.utc),
+            "exp": datetime.now(timezone.utc) + timedelta(minutes=15),
+        }
+        bad_token = jwt.encode(bad_payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
+        user = await auth.verify_token(bad_token)
+        assert user is None
+
+    async def test_valid_uuid_uuid_conversion(self, db_session: AsyncSession, test_user: User):
+        auth = AuthService(db_session)
+        user = await auth.verify_token(auth.create_access_token(test_user))
+        assert user is not None
+        assert user.id == test_user.id

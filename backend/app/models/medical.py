@@ -1,8 +1,8 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import String, DateTime, ForeignKey, Enum as SAEnum, Integer, Float, Text, Boolean
+from sqlalchemy import String, DateTime, ForeignKey, Enum as SAEnum, Integer, Float, Text, Boolean, JSON
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID
 import enum
 from app.database import Base
 
@@ -53,7 +53,7 @@ class MedicalRecord(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     icd_code: Mapped[str | None] = mapped_column(String(20), nullable=True, index=True)
     icd_description: Mapped[str | None] = mapped_column(Text, nullable=True)
-    data: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
