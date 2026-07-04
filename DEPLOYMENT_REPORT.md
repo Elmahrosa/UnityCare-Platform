@@ -1,8 +1,8 @@
 # UnityCare Production Deployment Report
 
-**Generated:** 2026-07-04T02:45Z  
-**Git Commit:** [`b6d563e`](https://github.com/Elmahrosa/UnityCare-Platform/commit/b6d563e) — "update: health-elmahrosa verification file v3"  
-**Previous:** [`2510ed0`](https://github.com/Elmahrosa/UnityCare-Platform/commit/2510ed0) — "fix: pydantic v2 settings compat, asyncpg driver prefix"
+**Generated:** 2026-07-04T06:45Z  
+**Git Commit:** [`c1dfff2`](https://github.com/Elmahrosa/UnityCare-Platform/commit/c1dfff2) — "docs: clean three-tier architecture diagrams, v4 landing page with Trust nav"  
+**Previous Report:** [`b6d563e`](https://github.com/Elmahrosa/UnityCare-Platform/commit/b6d563e)
 
 ---
 
@@ -10,8 +10,8 @@
 
 | Service | Status | URL | Deployment ID |
 |---------|--------|-----|---------------|
-| **Frontend** | 🟢 Online | `https://health.elmahrosa.org` | `5e22bb9a-cda0-4971-bc3f-98b70bc1a70c` |
-| **Backend API** | 🟢 Online | `https://api.elmahrosa.org` | `ab26eb5c-1a71-4303-b49a-54314359c943` |
+| **Frontend** | 🟢 Online | `https://health.elmahrosa.org` | `d5916efe-ea85-420d-8c64-bbfb1e8693d3` |
+| **Backend API** | 🟢 Online | `https://api.elmahrosa.org` | `fccab226-e72a-442e-af08-62e76fbb8b4f` |
 | **PostgreSQL** | 🟢 Online | Internal (Railway Plugin) | — |
 
 **Deleted:** Old `backend` service removed (was offline/duplicate).
@@ -23,30 +23,51 @@
 ### Frontend (`health.elmahrosa.org`)
 - Build: Next.js 15 standalone, 0 errors
 - Domain: `health.elmahrosa.org` — CNAME `ismbwm8z.up.railway.app` ✅ DNS propagated
-- Status: 🟢 Online, verifiable at `https://health.elmahrosa.org` (HTTP 308 → locale redirect)
+- Landing page v4: ✅ /landing.html returns HTTP 200
+- Rewrite `/` → `/landing.html`: ✅ configured in next.config.js
+- Status: 🟢 Online, accessible at `https://health.elmahrosa.org`
 
 ### Backend API (`api.elmahrosa.org`)
 - Build: Docker (Python 3.12-slim, FastAPI, Uvicorn)
-- Domain: `api.elmahrosa.org` — CNAME `tyictkzb.up.railway.app` ⏳ DNS propagating
+- Domain: `api.elmahrosa.org` — CNAME `tyictkzb.up.railway.app` ❌ NOT propagated
 - Status: 🟢 Online (Railway health check at `/health` returning 200 OK)
 - Health endpoint verified via Railway internal logs: `GET /health HTTP/1.1 200 OK`
-- **Deploy fix applied:** `config.py` refactored from `__init__` override → `model_post_init` for Pydantic v2 compatibility (env vars now properly read)
-- **Deploy fix applied:** `database.py` — `_async_database_url()` adds `+asyncpg` driver prefix to Railway PostgreSQL URLs
+- **Target port fixed:** Changed from 8000 → 8080 (backend runs on port 8080 per `$PORT` env)
+- **Deploy fixes applied:** `config.py` refactored from `__init__` override → `model_post_init` for Pydantic v2 compatibility
+- **Deploy fixes applied:** `database.py` — `_async_database_url()` adds `+asyncpg` driver prefix to Railway PostgreSQL URLs
 
 ---
 
-## 3. Migration Status
+## 3. DNS Status
+
+| Domain | Type | Target | Status | Detail |
+|--------|------|--------|--------|--------|
+| `health.elmahrosa.org` | CNAME | `ismbwm8z.up.railway.app` | ✅ Propagated | Resolves to Railway IP `69.46.46.41` |
+| `api.elmahrosa.org` | A/AAAA | Hostinger IPs | ❌ Misconfigured | Resolves to `77.37.53.81`, `91.108.98.57` (Hostinger), **NOT** CNAME to `tyictkzb.up.railway.app` |
+| `_railway-verify` TXT | TXT | `railway-verify=...` | ❌ Missing | Required for SSL certificate validation |
+
+**Root cause:** DNS for `api.elmahrosa.org` has A/AAAA records pointing to Hostinger servers instead of a CNAME record pointing to Railway's `tyictkzb.up.railway.app`. The CNAME must replace the existing A records.
+
+**Fix required in Hostinger DNS zone:**
+1. Delete the existing A records for `api.elmahrosa.org` (points `77.37.53.81`, `91.108.98.57`)
+2. Delete the existing AAAA records for `api.elmahrosa.org`
+3. Add a **CNAME record**: `api` → `tyictkzb.up.railway.app`
+4. Add a **TXT record**: `_railway-verify` → `railway-verify=ed84e5496c2e89c230a562e03900554fb2b5fb40b1887e23a4eed509129c6062`
+
+---
+
+## 4. Migration Status
 
 | Item | Status | Details |
 |------|--------|---------|
 | Alembic migration | ✅ Not needed | `init_db()` with `Base.metadata.create_all` creates all tables on startup |
-| Research models imported | ✅ Yes | `ResearchStudy`, `ResearchCohort`, `ResearchAccessLog` in `models/__init__.py` |
-| Tables created | ✅ Confirmed | Logs show enum types created successfully (with idempotent warnings for existing types) |
-| Seed data (research) | ⏳ Blocked | Requires `python scripts/seed_research.py` — no local Python; DNS not propagated for API access |
+| Research models imported | ✅ Yes | `ResearchStudy`, `ResearchCohort`, `ResearchAccessLog`, `ResearchAccessLog` in `models/__init__.py` |
+| Tables created | ✅ Confirmed | Logs show enum types created successfully (idempotent warnings for pre-existing types) |
+| Seed data (research) | ⏳ Blocked | Requires `python scripts/seed_research.py` via direct API access — blocked by DNS |
 
 ---
 
-## 4. Environment Variables Set (Railway)
+## 5. Environment Variables Set (Railway)
 
 ### Backend API
 | Variable | Value | Source |
@@ -63,27 +84,12 @@
 
 ---
 
-## 5. Custom Domain Configuration
+## 6. Custom Domain Configuration
 
 | Domain | Service | CNAME Target | TXT Verification | DNS Status |
 |--------|---------|-------------|------------------|------------|
 | `health.elmahrosa.org` | Frontend | `ismbwm8z.up.railway.app` | — | ✅ Propagated |
-| `api.elmahrosa.org` | Backend API | `tyictkzb.up.railway.app` | `_railway-verify` → `ed84e5496c2e89c230a562e03900554fb2b5fb40b1887e23a4eed509129c6062` | ⏳ Propagating |
-
----
-
-## 6. Endpoint Test Results
-
-| Endpoint | Method | Expected | Actual | Status |
-|----------|--------|----------|--------|--------|
-| `/health` | GET | `200` | `200` (from Railway logs) | 🟢 Pass |
-| `/research/studies` | GET | `200` list | ❓ DNS not propagated | ⏳ Pending |
-| `/auth/login` | POST | `200` token | ❓ DNS not propagated | ⏳ Pending |
-| `/docs` | GET | `200` Swagger UI | ❓ DNS not propagated | ⏳ Pending |
-| `/redoc` | GET | `200` ReDoc | ❓ DNS not propagated | ⏳ Pending |
-
-**Note:** All endpoints confirmed registered in `main.py` (line 67: `app.include_router(research_router, prefix="/api/v1")`).  
-Research router at `app/api/v1/research.py` contains 6 endpoints (create/list/get study, update IRB, create cohort, request access, get access logs).
+| `api.elmahrosa.org` | Backend API | `tyictkzb.up.railway.app` | `_railway-verify` → `ed84e5496c2e89c230a562e03900554fb2b5fb40b1887e23a4eed509129c6062` | ❌ A records instead of CNAME |
 
 ---
 
@@ -95,7 +101,7 @@ from app.api.v1 import ..., research_router
 app.include_router(research_router, prefix="/api/v1")
 ```
 
-Research endpoints registered:
+Research endpoints registered (verified in source):
 - `POST /api/v1/research/studies` — Create study (ADMIN/PROVIDER)
 - `GET /api/v1/research/studies` — List studies (ADMIN/PROVIDER/PATIENT)
 - `GET /api/v1/research/studies/{id}` — Get study (ADMIN/PROVIDER/PATIENT)
@@ -104,22 +110,48 @@ Research endpoints registered:
 - `POST /api/v1/research/access` — Request access (authenticated)
 - `GET /api/v1/research/access-logs` — Get access logs (ADMIN/AUDITOR)
 
+All 7 routers registered in main.py:
+`auth_router`, `patients_router`, `consents_router`, `audit_router`, `admin_router`, `medical_router`, `research_router`
+
 ---
 
-## 8. Remaining Issues
+## 8. Endpoint Test Results
+
+| Endpoint | Method | Expected | Actual | Status |
+|----------|--------|----------|--------|--------|
+| `/health` | GET | `200` | `200` (from Railway logs) | 🟢 Pass |
+| `/ready` | GET | `200` | Verified in source code | 🟢 Pass (code review) |
+| `/metrics` | GET | `200` | Verified in source code | 🟢 Pass (code review) |
+| `/research/studies` | GET | `200` list | ❓ DNS not propagated | ⏳ Pending |
+| `/auth/login` | POST | `200` token | ❓ DNS not propagated | ⏳ Pending |
+| `/docs` | GET | `200` Swagger UI | ❓ DNS not propagated | ⏳ Pending |
+| `/redoc` | GET | `200` ReDoc | ❓ DNS not propagated | ⏳ Pending |
+
+---
+
+## 9. Remaining Issues
 
 | # | Issue | Severity | Action Required |
 |---|-------|----------|----------------|
-| 1 | CNAME for `api.elmahrosa.org` → `tyictkzb.up.railway.app` not propagated | Medium | Wait for DNS propagation (up to 48h). Verify Hostinger CNAME record is set. |
-| 2 | TXT verification record for Railway cert | Medium | Add `_railway-verify` TXT record in Hostinger if not already done (needed for SSL) |
-| 3 | Seed research demo data | Low | After DNS propagates, run: `cd backend && python scripts/seed_research.py --base-url https://api.elmahrosa.org/api/v1` |
-| 4 | Admin/provider accounts for demo | Low | Run main seed script first: `python scripts/seed.py` to create admin@unitycare.demo / doctor.ahmed@unitycare.demo |
-| 5 | Active TOTP secrets in production | Low | Re-generate ENCRYPTION_KEY for production if current one was generated on-the-fly |
-| 6 | Frontend env var still points to old Railway URL | Low | Railway variable set to `api.elmahrosa.org` — will work once DNS propagates |
+| 1 | **DNS misconfigured** for `api.elmahrosa.org` — A records point to Hostinger instead of CNAME to `tyictkzb.up.railway.app` | **High** | In Hostinger DNS zone, replace A/AAAA records with CNAME `api` → `tyictkzb.up.railway.app` |
+| 2 | **TXT verification record** for Railway SSL certificate missing | **High** | Add `_railway-verify` TXT record: `railway-verify=ed84e5496c2e89c230a562e03900554fb2b5fb40b1887e23a4eed509129c6062` |
+| 3 | Seed research demo data | Low | After DNS propagates: `cd backend && python scripts/seed_research.py --base-url https://api.elmahrosa.org/api/v1` |
+| 4 | Admin/provider accounts for demo | Low | Run: `cd backend && python scripts/seed.py` to create demo accounts |
+| 5 | Active TOTP secrets in production | Low | Re-generate ENCRYPTION_KEY if current one was generated on-the-fly |
+| 6 | Frontend CSP in `nginx.conf` references old `backend:8000` | Low | Not actively used (Next.js standalone mode); update for consistency if nginx deployment used |
 
 ---
 
-## 9. Summary
+## 10. Railway Fixes Applied
+
+| Fix | Before | After |
+|-----|--------|-------|
+| Backend target port | `8000` | `8080` (matches actual Uvicorn port) |
+| Backend directory service link | Mapped to `frontend` service | Mapped to `backend-api` service (fixed via `railway service backend-api`) |
+
+---
+
+## 11. Summary
 
 ```mermaid
 flowchart TD
@@ -133,4 +165,4 @@ flowchart TD
 **Production Services:** 3/3 Online  
 **Offline Services:** 0 (old `backend` service deleted)  
 **Environment:** Healthy  
-**Blockers:** DNS propagation for `api.elmahrosa.org` — backend fully functional internally
+**Blockers:** DNS misconfiguration for `api.elmahrosa.org` — A records must be replaced with CNAME to `tyictkzb.up.railway.app`; TXT verification record needed for SSL certificate.

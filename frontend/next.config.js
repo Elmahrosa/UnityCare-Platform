@@ -3,9 +3,9 @@ const nextConfig = {
   output: "standalone",
   poweredByHeader: false,
   images: { remotePatterns: [{ protocol: "https", hostname: "health.elmahrosa.org" }], unoptimized: true },
-  async redirects() {
+  async rewrites() {
     return [
-      { source: "/", destination: "/landing.html", permanent: true },
+      { source: "/", destination: "/landing.html" },
     ];
   },
 };
