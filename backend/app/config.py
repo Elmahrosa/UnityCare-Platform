@@ -1,9 +1,11 @@
 import sys
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+
     app_name: str = "UnityCare MVP"
     environment: str = "development"
     debug: bool = False
@@ -33,12 +35,7 @@ class Settings(BaseSettings):
     db_pool_size: int = 20
     db_max_overflow: int = 10
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def model_post_init(self, __context):
         errors = []
         if not self.database_url:
             errors.append("DATABASE_URL must be set")
