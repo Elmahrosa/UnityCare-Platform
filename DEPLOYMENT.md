@@ -2,6 +2,12 @@
 
 Sovereign healthcare infrastructure platform. Identity, consent, audit, and FHIR interoperability for regulated health environments.
 
+**Production URLs:**
+- Frontend: [health.elmahrosa.org](https://health.elmahrosa.org)
+- API: [api.elmahrosa.org](https://api.elmahrosa.org)
+- API Docs: [api.elmahrosa.org/docs](https://api.elmahrosa.org/docs)
+- Developer Portal: [developers.elmahrosa.org](https://developers.elmahrosa.org)
+
 ---
 
 ## 1. Deployment Models
@@ -252,49 +258,120 @@ All seed operations are idempotent. The script registers users, logs in, creates
 
 ## 7. Railway Deployment
 
+### Target Architecture
+
+```
+UnityCare Production
+├── frontend (Next.js)         — health.elmahrosa.org
+├── backend-api (FastAPI)      — api.elmahrosa.org
+├── developers (Dev Portal)    — developers.elmahrosa.org
+└── postgres (Plugin)          — internal only
+```
+
 ### Service Configuration
 
-| Property     | Backend (FastAPI)                 | Frontend (Next.js)               |
+| Property     | Backend (`backend-api`)           | Frontend (`frontend`)            |
 | ------------ | --------------------------------- | -------------------------------- |
+| Service name | `backend-api`                     | `frontend`                       |
 | Build        | `backend/Dockerfile`              | `frontend/Dockerfile`            |
 | Start cmd    | `./start.sh`                      | `node server.js`                 |
 | Healthcheck  | `/health` (30s timeout)           | `/health` (10s timeout)          |
 | Restart      | `always`                          | `always`                         |
+| Config file  | `backend/railway.toml`            | `frontend/railway.toml`          |
 | Root dir     | `./backend`                       | `./frontend`                     |
+
+### DNS Records (Hostinger)
+
+| Type | Name | Value | TTL |
+|------|------|-------|-----|
+| CNAME | `health` | `ismbwm8z.up.railway.app` | 300 |
+| CNAME | `api` | `[backend-railway-domain].up.railway.app` | 300 |
+| CNAME | `developers` | `[developers-railway-domain].up.railway.app` | 300 |
 
 ### Steps
 
 ```bash
 # 1. Login and create project
 railway login
-railway init --name "UnityCare Platform"
+railway init --name "UnityCare Production"
 
 # 2. Add services
-railway add --service backend     # set root dir to backend/
-railway add --service frontend    # set root dir to frontend/
+railway add --service frontend     # root dir = ./frontend
+railway add --service backend-api  # root dir = ./backend
 
 # 3. Add PostgreSQL plugin
 railway add --plugin postgresql
 
 # 4. Set backend env vars
-railway --service backend variables set JWT_SECRET=$(openssl rand -hex 48)
-railway --service backend variables set ENCRYPTION_KEY=$(openssl rand -hex 16)
-railway --service backend variables set ENVIRONMENT=production
-railway --service backend variables set DEBUG=false
-railway --service backend variables set CORS_ORIGINS='["https://frontend.railway.app"]'
+railway --service backend-api variables set JWT_SECRET=$(openssl rand -hex 48)
+railway --service backend-api variables set ENCRYPTION_KEY=$(openssl rand -hex 16)
+railway --service backend-api variables set ENVIRONMENT=production
+railway --service backend-api variables set DEBUG=false
+railway --service backend-api variables set CORS_ORIGINS='["https://health.elmahrosa.org"]'
 
 # 5. Set frontend env vars
-railway --service frontend variables set NEXT_PUBLIC_API_URL=https://backend.railway.app/api/v1
-railway --service frontend variables set NEXT_PUBLIC_SITE_URL=https://frontend.railway.app
+railway --service frontend variables set NEXT_PUBLIC_API_URL=https://api.elmahrosa.org/api/v1
+railway --service frontend variables set NEXT_PUBLIC_SITE_URL=https://health.elmahrosa.org
 
 # 6. Deploy
-railway up --service backend
+railway up --service backend-api
 railway up --service frontend
 
 # 7. Verify
-curl https://backend.railway.app/health
-curl https://frontend.railway.app/health
+curl https://api.elmahrosa.org/health
+curl https://health.elmahrosa.org/health
 ```
+
+### Custom Domains
+
+After deployment, configure custom domains in Railway dashboard:
+
+1. **Frontend**: Settings → Domains → Add `health.elmahrosa.org`
+2. **Backend API**: Settings → Domains → Add `api.elmahrosa.org`
+3. **Developer Portal**: Settings → Domains → Add `developers.elmahrosa.org`
+
+For each domain, Railway will generate:
+- A **CNAME record** target (e.g., `ismbwm8z.up.railway.app`)
+- Optional **TXT verification records** (if domain verification is required)
+
+Add the CNAME record in your DNS provider (Hostinger). If Railway generates a TXT verification record, add that first and wait for propagation before the domain is verified.
+
+### Custom Domain Verification
+
+```bash
+# Check DNS propagation
+nslookup health.elmahrosa.org 8.8.8.8
+nslookup api.elmahrosa.org 8.8.8.8
+nslookup developers.elmahrosa.org 8.8.8.8
+
+# Verify HTTPS certificates (issued automatically by Railway)
+curl -I https://health.elmahrosa.org
+curl -I https://api.elmahrosa.org
+curl -I https://developers.elmahrosa.org
+```
+
+### Remove Duplicate Services
+
+If the project has duplicate backend services:
+
+```bash
+# List services
+railway service list
+
+# Delete orphaned/duplicate services
+railway service delete <old-service-id> --yes
+
+# Verify only 3 services remain (frontend, backend-api, postgres)
+railway service list
+```
+
+### Seed Data on Railway
+
+```bash
+railway run --service backend-api python scripts/seed.py --railway
+```
+
+The `--railway` flag waits for the API to become healthy before seeding.
 
 ---
 

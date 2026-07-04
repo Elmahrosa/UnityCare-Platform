@@ -18,7 +18,7 @@ jobs:
         run: npm install -g @railway/cli
       - name: Deploy backend
         working-directory: ./backend
-        run: railway up --service backend
+        run: railway up --service backend-api
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       - name: Deploy frontend
@@ -28,7 +28,7 @@ jobs:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       - name: Run seed script
         run: |
-          curl -X POST https://backend.unitycare.railway.app/auth/login \
+          curl -X POST https://api.elmahrosa.org/auth/login \
             -H "Content-Type: application/json" \
             -d '{"email":"admin@unitycare.demo","password":"Demo@2026Admin"}' \
             --fail --silent --output /dev/null || echo "Seed skipped (API not ready)"

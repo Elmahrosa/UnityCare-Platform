@@ -1,14 +1,22 @@
 # UnityCare Platform — Session Context
 
-## Current Session (Jul 2, 2026)
+## Current Session (Jul 4, 2026)
 
-### Completed — Demo Readiness & Rule Ordering Fix
+### Completed — Production Custom Domains + Documentation Update
 
-1. **Rule ordering fix (verify.js/verify.py)** — Moved role-specific scope checks (admin/auditor audit_log read OK, provider audit_log FAIL, auditor write FAIL, admin config OK) above consent rule — EVT-008/013 now correctly resolved by role rather than incorrectly flagged as consent failures
-2. **Redundant rules removed** — Removed old rules 7-12 in verify.js and rules 7-13 in verify.py (duplicated by new scope checks); verifier output unchanged (6 ✅, 4 ⚠️, 8 ❓)
-3. **Demo link added** — Loom recording (6:42) linked in README at `README.md:40`
-4. **Railway staging verified** — Both services online: backend at `backend-production-9705.up.railway.app`, frontend at `frontend-production-c053.up.railway.app`; health endpoint returns `{"status":"healthy","database":"connected"}`
-5. **GitHub link fixed** — `anomalyco` → `Elmahrosa` in README (commit `db2b472`)
+1. **Hardcoded Railway URLs replaced** — 5 occurrences in `index.html` changed from `backend-production-9705.up.railway.app` to `api.elmahrosa.org`. Also updated `.github/workflows/deploy.yml`, `frontend/nginx.conf`, and `frontend/.env.example`.
+2. **Developer portal documented** — Added `developers.elmahrosa.org` to `DEPLOYMENT_REPORT.md` (architecture diagram, DNS records, env vars, verification checklist), `DEPLOYMENT.md` (CNAME record, custom domain setup), `README.md`, and `AGENTS.md`.
+3. **Frontend build** ✅ 0 errors — verified after all changes.
+
+### Completed — Backend Tests, MFA Frontend, CSP, Railway Consolidation
+
+1. **Backend tests (admin + research)** — Created `test_admin.py` (11 tests: me, list, get, update, RBAC) and `test_research.py` (14 tests: studies, cohorts, IRB, access, logs, compliance evaluation). 54+ total tests across 8 modules.
+2. **CSP extended** — Added `health.elmahrosa.org` to CSP directives (script-src, style-src, img-src, connect-src) in `security_headers.py:15`. Added `ws://localhost:*` for dev HMR.
+3. **MFA frontend** — Created `mfa-setup/page.tsx` (3-step flow: setup→verify QR code→done with disable option). Login page redirects admin/provider without MFA to `/mfa-setup`. Admin dashboard has new MFA tab showing per-user status.
+4. **Railway config consolidated** — New `backend/railway.toml` names service `backend-api`. Root `railway.json` simplified (NIXPACKS). `frontend/railway.toml` updated with `restartPolicyType`. Legacy `railpack.json` files removed. CORS defaults updated in `config.py`.
+5. **DNS documentation** — `DEPLOYMENT.md` updated with CNAME records (health→ismbwm8z.up.railway.app, api→backend Railway domain). `DEPLOYMENT_REPORT.md` created with full architecture diagram, env vars, DNS records, verification checklist.
+6. **README updated** — URLs point to `health.elmahrosa.org`/`api.elmahrosa.org`. Architecture diagram added. Test count updated (54+).
+7. **Frontend build** ✅ 0 errors (Next.js standalone). MFA setup page at 5.05 kB.
 
 ### Completed — Audit Remediation (22 items, prior session)
 
@@ -47,19 +55,19 @@
 - **Frontend build**: ✅ 0 errors (Next.js standalone)
 - **Frontend tests**: ✅ 15/15 passing (5 suites: login, patient, register, admin, doctor)
 - **Backend**: Python 3.12, FastAPI, SQLAlchemy async, asyncpg, PostgreSQL
+- **Backend tests**: ✅ 54+ tests across 8 modules (auth, medical, fhir, consent, audit, middleware, admin, research)
 - **Security**: Rate limiting (Redis + in-memory fallback) + 9 security headers + JWT/RBAC + SHA-256 audit chain
 - **Compliance**: ICD-10-CM, consent management (versioned, jurisdiction-aware), FHIR R4 Patient
-- **Documentation**: 9 procurement-grade documents in project root + 5 technical docs in docs/ + AUDIT_REPORT_v1.md
+- **Documentation**: 9 procurement-grade documents in project root + 5 technical docs in docs/ + AUDIT_REPORT_v1.md + DEPLOYMENT_REPORT.md
 - **Pentest gaps (all 3 resolved)**: HSTS typo fixed; horizontal access control implemented; distributed rate limiting deployed
 
 ### Known Items for Next Time
-1. Backend unit tests (pytest + httpx for API tests)
-2. Seed script deployment to Railway PostgreSQL
-3. Independent security audit/pentest (external)
-4. 8 legacy Dependabot alerts in `modules/hospital-core/` — not active code, can ignore
-5. Backend lint: `pip install ruff && ruff check app/`
-6. Extend CSP for frontend assets (script-src, style-src)
-7. Enforce MFA for provider/admin roles
+1. Seed script deployment to Railway PostgreSQL (`railway run --service backend-api python scripts/seed.py --railway`)
+2. Independent security audit/pentest (external)
+3. 8 legacy Dependabot alerts in `modules/hospital-core/` — not active code, can ignore
+4. Backend lint: `pip install ruff && ruff check app/`
+5. Railway production domains: verify `api.elmahrosa.org` CNAME points to backend Railway domain
+6. Configure custom domains in Railway dashboard (Networking → Domains) and DNS in Hostinger (health ✅, api, developers)
 
 ## Key Decisions
 - All procurement docs written to project root for visibility (not nested in docs/)

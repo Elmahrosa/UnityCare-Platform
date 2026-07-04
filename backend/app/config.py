@@ -21,7 +21,7 @@ class Settings(BaseSettings):
 
     fhir_base_url: str = "http://localhost:8000/fhir"
 
-    cors_origins: list[str] = ["http://localhost:3000"]
+    cors_origins: list[str] = ["http://localhost:3000", "https://health.elmahrosa.org"]
 
     otel_service_name: str = "unitycare-mvp"
     otel_exporter_otlp_endpoint: Optional[str] = None

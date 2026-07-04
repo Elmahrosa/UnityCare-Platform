@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useTranslation } from "@/hooks/useTranslation";
 import { mockUsers, mockAuditEvents } from "@/lib/mock-data";
 import { Skeleton } from "@/components/shared/Skeleton";
@@ -30,8 +31,8 @@ interface AuditEventItem {
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 export default function AdminDashboard() {
-  const { t } = useTranslation();
-  const [tab, setTab] = useState<"users" | "audit">("users");
+  const { t, locale } = useTranslation();
+  const [tab, setTab] = useState<"users" | "audit" | "mfa">("users");
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [auditEvents, setAuditEvents] = useState<AuditEventItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,6 +68,7 @@ export default function AdminDashboard() {
       <div className="mb-6 flex gap-2">
         <button onClick={() => setTab("users")} className={`rounded-lg px-4 py-2 text-sm font-medium ${tab === "users" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"}`}>{t.admin.users}</button>
         <button onClick={() => setTab("audit")} className={`rounded-lg px-4 py-2 text-sm font-medium ${tab === "audit" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"}`}>{t.admin.auditLogs}</button>
+        <button onClick={() => setTab("mfa")} className={`rounded-lg px-4 py-2 text-sm font-medium ${tab === "mfa" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700"}`}>MFA</button>
       </div>
       {loading ? (
         <div className="rounded-2xl border border-gray-200 bg-white p-6 space-y-3">
@@ -97,6 +99,33 @@ export default function AdminDashboard() {
               ))}
             </div>
           )}
+        </div>
+      ) : tab === "mfa" ? (
+        <div className="rounded-2xl border border-gray-200 bg-white p-6">
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">Multi-Factor Authentication</h2>
+          <p className="mb-4 text-sm text-gray-600">
+            MFA adds an extra layer of security by requiring a one-time code from your authenticator app when performing privileged actions. Admin and Provider roles are required to have MFA enabled.
+          </p>
+          {users.filter((u) => u.mfa_enabled).length === 0 ? (
+            <p className="py-4 text-sm text-gray-500">No users have MFA enabled yet.</p>
+          ) : (
+            <div className="space-y-2">
+              <p className="text-sm font-medium text-gray-700">MFA Status by User:</p>
+              {users.map((u) => (
+                <div key={u.id} className="flex items-center justify-between rounded-lg border border-gray-50 p-3 text-sm">
+                  <span className="text-gray-900">{u.full_name}</span>
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${u.mfa_enabled ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
+                    {u.mfa_enabled ? "Enabled" : "Disabled"}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="mt-6 border-t pt-4">
+            <Link href={`/${locale}/mfa-setup`} className="text-sm text-blue-600 hover:underline">
+              Manage your MFA settings →
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="rounded-2xl border border-gray-200 bg-white p-6">

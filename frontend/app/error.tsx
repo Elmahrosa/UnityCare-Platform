@@ -22,11 +22,13 @@ export default function GlobalError({
           userAgent: navigator.userAgent,
         }),
       });
-    } catch {}
+    } catch {
+      // Log error silently on the frontend
+    }
   }, [error]);
 
   return (
-    <html>
+    <html lang="en">
       <body className="flex items-center justify-center min-h-screen bg-gray-50 p-8">
         <div className="text-center max-w-md">
           <div className="text-5xl mb-6">⚠</div>

@@ -4,7 +4,9 @@ Deterministic policy evaluation with Claude-generated audit narratives for regul
 
 Built on a production-hardened healthcare platform: SHA-256 audit chains, FHIR R4, RBAC, MFA, consent management — extended for multi-site study governance and IRB-compliant data sharing.
 
-**Live deployment:** [backend-production-9705.up.railway.app](https://backend-production-9705.up.railway.app)  
+- **Live:** [health.elmahrosa.org](https://health.elmahrosa.org)
+- **API:** [api.elmahrosa.org](https://api.elmahrosa.org)
+- **Dev Portal:** [developers.elmahrosa.org](https://developers.elmahrosa.org)
 **Source:** [github.com/Elmahrosa/UnityCare-Platform](https://github.com/Elmahrosa/UnityCare-Platform)
 
 ---
@@ -60,7 +62,7 @@ UnityCare uses **Claude Code** (Anthropic) for:
 - Backend API architecture and implementation
 - Security middleware and audit chain design
 - Policy reasoning engine logic
-- Test generation (54+ tests across 6 modules)
+- Test generation (54+ tests across 8 modules)
 - Documentation generation
 
 **Claude Science** is used for:
@@ -80,7 +82,7 @@ UnityCare uses **deterministic policy evaluation** for all compliance and access
 | Dimension | Status |
 |---|---|
 | **Production deployment** | ✅ Live on Railway |
-| **Backend tests** | 39+ across 6 modules |
+| **Backend tests** | 54+ across 8 modules |
 | **Frontend tests** | 15 across 5 suites |
 | **MFA enforcement** | TOTP on admin and provider roles |
 | **CI/CD** | GitHub Actions + Railway auto-deploy |
@@ -95,18 +97,34 @@ UnityCare uses **deterministic policy evaluation** for all compliance and access
 
 ---
 
-## Architecture
+## Production Architecture
 
 ```
-Next.js (Frontend)
-     ↓
-FastAPI (Policy Engine + API)
-     ↓
-Claude (Audit Narrative Generation)
-     ↓
-SHA-256 Ledger (Immutable Audit Chain)
-     ↓
-PostgreSQL (Data + Audit Storage)
+                        ┌──────────────────────────┐
+                        │   health.elmahrosa.org    │
+                        │   Next.js (Frontend)      │
+                        │   Railway Service         │
+                        └─────────┬────────────────┘
+                                  │ HTTPS
+                                  ▼
+                        ┌──────────────────────────┐
+                        │   api.elmahrosa.org      │
+                        │   FastAPI (Backend)       │
+                        │   Railway Service         │
+                        └─────────┬────────────────┘
+                                  │
+                    ┌─────────────┴─────────────┐
+                    ▼                           ▼
+          ┌─────────────────┐         ┌─────────────────┐
+          │   PostgreSQL     │         │   Redis (opt.)   │
+          │   Railway Plugin │         │   Rate Limit     │
+          └─────────────────┘         └─────────────────┘
+
+                        ┌──────────────────────────┐
+                        │ developers.elmahrosa.org  │
+                        │   Developer Portal        │
+                        │   Railway Service         │
+                        └──────────────────────────┘
 ```
 
 - **Deterministic verdicts.** Policy evaluation is rule-based — same inputs always produce the same verdict.
@@ -118,9 +136,9 @@ PostgreSQL (Data + Audit Storage)
 
 ## Roadmap
 
-**Completed:** Compliance Engine, SHA-256 Audit Chain, Claude Audit Narratives, FHIR R4, RBAC + MFA
+**Completed:** Compliance Engine, SHA-256 Audit Chain, Claude Audit Narratives, FHIR R4, RBAC + MFA, ICD-10-CM, Horizontal Access Control, Rate Limiting
 
-**In Progress:** Research APIs, Synthetic Research Models, Research Dataset Governance
+**In Progress:** Backend Unit Tests (admin + research modules)
 
 **Planned:** Institution Deployments, External Integrations, Production Research Workflows, Multi-Institution Collaboration
 
@@ -153,9 +171,11 @@ python backend/scripts/seed_research.py     # Gladstone studies + cohorts
 
 ## Links
 
-- **API Reference:** [backend-production-9705.up.railway.app/docs](https://backend-production-9705.up.railway.app/docs)
-- **System Health:** [backend-production-9705.up.railway.app/health](https://backend-production-9705.up.railway.app/health)
-- **Research API:** `POST /api/v1/research/access`
+- **Frontend:** [health.elmahrosa.org](https://health.elmahrosa.org)
+- **API:** [api.elmahrosa.org](https://api.elmahrosa.org)
+- **API Docs:** [api.elmahrosa.org/docs](https://api.elmahrosa.org/docs)
+- **Developer Portal:** [developers.elmahrosa.org](https://developers.elmahrosa.org)
+- **Health Check:** [api.elmahrosa.org/health](https://api.elmahrosa.org/health)
 - **Source:** [github.com/Elmahrosa/UnityCare-Platform](https://github.com/Elmahrosa/UnityCare-Platform)
 
 ---

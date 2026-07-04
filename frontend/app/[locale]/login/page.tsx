@@ -8,7 +8,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 export default function LoginPage() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +31,12 @@ export default function LoginPage() {
       const me = await fetch(`${API}/admin/users/me`, { headers: { Authorization: `Bearer ${data.access_token}` } });
       if (me.ok) {
         const user = await me.json();
-        router.push(user.role === "admin" ? "/admin" : "/patient");
+        const isPrivileged = user.role === "admin" || user.role === "provider";
+        if (isPrivileged && !user.mfa_enabled) {
+          router.push(`/${locale}/mfa-setup`);
+        } else {
+          router.push(user.role === "admin" ? "/admin" : user.role === "provider" ? "/doctor" : "/patient");
+        }
       } else {
         router.push("/patient");
       }
