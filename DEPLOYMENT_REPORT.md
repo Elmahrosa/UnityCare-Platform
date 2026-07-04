@@ -122,17 +122,11 @@ Research endpoints registered:
 ## 9. Summary
 
 ```mermaid
-flowchart LR
-    Internet -->|HTTPS| Frontend
-    Internet -->|HTTPS - Pending DNS| Backend
-    Frontend -->|HTTPS| Backend
-    Backend -->|Internal| PostgreSQL
-    PostgreSQL -->|Volume| PersistentStorage
-    
-    subgraph Railway
-        Frontend["health.elmahrosa.org 🟢"]
-        Backend["api.elmahrosa.org 🟢"]
-        PostgreSQL[("PostgreSQL 16 🟢")]
+flowchart TD
+    subgraph Railway["Railway — UnityCare Production (3/3 Online)"]
+        direction TB
+        Frontend["health.elmahrosa.org 🟢"] -->|HTTPS| Backend["api.elmahrosa.org 🟢"]
+        Backend -->|Internal Network| PostgreSQL[("PostgreSQL 16 🟢")]
     end
 ```
 

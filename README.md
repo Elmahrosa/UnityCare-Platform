@@ -100,31 +100,22 @@ UnityCare uses **deterministic policy evaluation** for all compliance and access
 ## Production Architecture
 
 ```
-                        ┌──────────────────────────┐
-                        │   health.elmahrosa.org    │
-                        │   Next.js (Frontend)      │
-                        │   Railway Service         │
-                        └─────────┬────────────────┘
-                                  │ HTTPS
-                                  ▼
-                        ┌──────────────────────────┐
-                        │   api.elmahrosa.org      │
-                        │   FastAPI (Backend)       │
-                        │   Railway Service         │
-                        └─────────┬────────────────┘
-                                  │
-                    ┌─────────────┴─────────────┐
-                    ▼                           ▼
-          ┌─────────────────┐         ┌─────────────────┐
-          │   PostgreSQL     │         │   Redis (opt.)   │
-          │   Railway Plugin │         │   Rate Limit     │
-          └─────────────────┘         └─────────────────┘
-
-                        ┌──────────────────────────┐
-                        │ developers.elmahrosa.org  │
-                        │   Developer Portal        │
-                        │   Railway Service         │
-                        └──────────────────────────┘
+                         ┌──────────────────────┐
+                         │   health.elmahrosa   │ 🟢 Online
+                         │   Next.js Frontend   │   Healthy
+                         └──────────┬───────────┘
+                                    │ HTTPS
+                                    ▼
+                         ┌──────────────────────┐
+                         │   api.elmahrosa      │ 🟢 Online
+                         │   FastAPI Backend     │   Healthy
+                         └──────────┬───────────┘
+                                    │ Internal
+                                    ▼
+                         ┌──────────────────────┐
+                         │     PostgreSQL 16    │ 🟢 Online
+                         │   Railway Plugin     │   Healthy
+                         └──────────────────────┘
 ```
 
 - **Deterministic verdicts.** Policy evaluation is rule-based — same inputs always produce the same verdict.
