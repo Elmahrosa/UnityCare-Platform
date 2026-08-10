@@ -4,7 +4,8 @@ from app.database import get_db
 from app.services.auth import AuthService
 from app.services.audit import AuditService
 from app.schemas.user import UserCreate, UserResponse, LoginRequest, TokenResponse, MFAEnableRequest, MFAVerifyRequest, MFADisableRequest, MFASetupResponse
-from app.models.user import User
+from app.models.user import User, UserRole
+from app.models.consent import Consent, ConsentPurpose, ConsentStatus
 from app.middleware.auth import get_current_user
 from app.utils.security import verify_password
 
@@ -74,3 +75,43 @@ async def mfa_verify(data: MFAVerifyRequest, current_user: User = Depends(get_cu
     if not ok:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid MFA code")
     return {"detail": "MFA code is valid"}
+
+
+@router.get("/me/export")
+async def export_user_data(current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
+    """
+    Export the current user's personal data in JSON format for GDPR data portability.
+    """
+    # Fetch consents for the user
+    from sqlalchemy import select
+    result = await db.execute(select(Consent).where(Consent.patient_id == current_user.id))
+    consents = result.scalars().all()
+
+    # Build the export data
+    export_data = {
+        "user": {
+            "id": str(current_user.id),
+            "email": current_user.email,
+            "full_name": current_user.full_name,
+            "role": current_user.role.value,
+            "locale": current_user.locale,
+            "mfa_enabled": current_user.mfa_enabled,
+            "is_active": current_user.is_active,
+            "created_at": current_user.created_at.isoformat(),
+            "updated_at": current_user.updated_at.isoformat(),
+        },
+        "consents": [
+            {
+                "id": str(consent.id),
+                "purpose": consent.purpose.value,
+                "status": consent.status.value,
+                "jurisdiction": consent.jurisdiction,
+                "expires_at": consent.expires_at.isoformat() if consent.expires_at else None,
+                "version": consent.version,
+                "created_at": consent.created_at.isoformat(),
+                "updated_at": consent.updated_at.isoformat(),
+            }
+            for consent in consents
+        ],
+    }
+    return export_data

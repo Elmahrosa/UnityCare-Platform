@@ -32,10 +32,14 @@ export default function LoginPage() {
       if (me.ok) {
         const user = await me.json();
         const isPrivileged = user.role === "admin" || user.role === "provider";
-        if (isPrivileged && !user.mfa_enabled) {
-          router.push(`/${locale}/mfa-setup`);
+        if (isPrivileged) {
+          if (user.mfa_enabled) {
+            router.push(`/${locale}/mfa-verify`);
+          } else {
+            router.push(`/${locale}/mfa-setup`);
+          }
         } else {
-          router.push(user.role === "admin" ? "/admin" : user.role === "provider" ? "/doctor" : "/patient");
+          router.push("/patient");
         }
       } else {
         router.push("/patient");
